@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback, memo } from "react";
-import { useNavigate } from "react-router-dom";
 import PoodleList from "../components/PoodleComp/PoodleList";
 import axios, { AxiosResponse } from "axios";
 import { PoodleModel } from "../interfaces/IPoodleModel";
@@ -15,7 +14,6 @@ interface FilterProps {
 // import Layout from "../components/UI/Layout";
 
 const HomeComponent: React.FC = () => {
-  const navigate = useNavigate();
   const [poodles, setPoodles] = useState<PoodleModel[]>([]);
   const [loading, setLoading] = useState(true);
   const { selectSizeOption, setSelectedSizeOption, sizes, selectedSizeName } =
@@ -181,20 +179,13 @@ const HomeComponent: React.FC = () => {
     console.log(id);
   };
 
-  const navigateHandler = () => {
-    navigate(`/reservation`);
-  };
   if (loading) {
     return <div>Loading...</div>;
   }
   return (
     <>
       <PoodleFilter filteredPoodles={poodles} />
-      <PoodleList
-        poodles={poodles}
-        onSelect={navigateHandler}
-        onRemove={onRemoveHandler}
-      />
+      <PoodleList poodles={poodles} onRemove={onRemoveHandler} />
     </>
   );
 };

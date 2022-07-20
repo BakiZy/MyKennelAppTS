@@ -38,6 +38,5 @@ export interface ChildrenProp {
 
 export interface PoodleListProps {
   poodles: PoodleModel[];
-  onSelect: () => void;
   onRemove: (id: number) => void;
 }

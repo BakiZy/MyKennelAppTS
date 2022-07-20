@@ -4,6 +4,7 @@ import classes from "./PoodleList.module.css";
 import { PoodleListProps } from "../../interfaces/IPoodleModel";
 import AuthContext from "../../store/auth-context";
 import { Card, Col, Row, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const PoodleList: React.FC<PoodleListProps> = (props) => {
   const authContext = useContext(AuthContext);
@@ -32,16 +33,9 @@ const PoodleList: React.FC<PoodleListProps> = (props) => {
                 )}
                 <Card.Text>Size : {poodle.poodleSizeName}</Card.Text>
                 <Card.Text>Color : {poodle.poodleColorName}</Card.Text>
-                <Button
-                  onClick={() => props.onSelect}
-                  style={{
-                    backgroundColor: " rgb(107, 14, 117)",
-                    borderRadius: "1rem",
-                    borderColor: "rgb(107, 14, 117)",
-                  }}
-                >
+                <Link className={classes.linkZ} to={`/${poodle.id}`}>
                   Interested in this poodle pups?
-                </Button>
+                </Link>
                 {authContext.isAdmin && (
                   <Button
                     onClick={() => props.onRemove(poodle.id)}

@@ -12,3 +12,25 @@
   border-radius: 2px;
   margin-left: auto;
 }
+.cardProperty {
+  margin-left: 5rem;
+  background-color: rgba(216, 176, 226, 0.815);
+  border-radius: 1.5rem;
+  text-align: center;
+  box-sizing: border-box;
+  width: 30rem;
+  margin-bottom: 2.5rem;
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.26);
+}
+
+.imageProp {
+  border-radius: 1.5rem;
+  height: 30rem;
+  object-fit: cover;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.26);
+}
+
+.container {
+  display: flex;
+}

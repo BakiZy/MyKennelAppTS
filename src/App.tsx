@@ -32,7 +32,7 @@ const App: React.FC = () => {
         {authContext.isAdmin && (
           <Route path="/new-poodle" element={<NewPoodle />} />
         )}
-        <Route path="/reservation" element={<Reservation />} />
+        <Route path=":poodleId" element={<Reservation />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

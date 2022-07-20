@@ -22,6 +22,20 @@
   }
 }
 
+.linkZ {
+  background-color: rgb(107, 14, 117);
+  border-radius: 1rem;
+  border-color: rgb(107, 14, 117);
+  color: black;
+  font-size: 1.5rem;
+  padding: 0.4rem;
+  text-decoration: none;
+}
+
+.linkZ:hover {
+  color: white;
+}
+
 .cardProperty:hover,
 .cardProperty:active {
   transform: scale(1.1);
