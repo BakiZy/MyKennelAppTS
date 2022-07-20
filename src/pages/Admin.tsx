@@ -1,0 +1,88 @@
+import React, { useEffect, useState, useRef, useContext } from "react";
+import axios from "axios";
+import Layout from "../components/UI/Layout";
+import AuthContext from "../store/auth-context";
+import { IRoleModel } from "../interfaces/IAuthModel";
+
+const AdminPage: React.FC = () => {
+  const [roles, setRoles] = useState<IRoleModel[]>([]);
+  const [role, setRole] = useState<IRoleModel>({
+    id: "",
+    name: "",
+  });
+  const authContext = useContext(AuthContext);
+  const token = authContext.token;
+
+  const roleInputRef = useRef<HTMLSelectElement>(null);
+
+  useEffect(() => {
+    axios
+      .get<IRoleModel[]>("https://localhost:44373/api/Admin/allroles", {
+        headers: { Authorization: "Bearer " + token },
+      })
+      .then((response) => {
+        const loadedData: IRoleModel[] = [];
+        // console.log(roles);
+
+        for (let i = 0; i < response.data.length; i++) {
+          loadedData.push({
+            id: response.data[i].id,
+            name: response.data[i].name,
+          });
+        }
+        setRoles(loadedData);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [authContext.isAdmin, token]);
+
+  // const Dropdown = ({ options }) => {
+  //   const [selectedOption, setSelectedOption] = useState(options[0].value);
+  //   return (
+  //     <select
+  //       value={selectedOption}
+  //       onChange={(e) => setSelectedOption(e.target.value)}
+  //     >
+  //       {options.map((o) => (
+  //         <option key={o.value} value={o.value}>
+  //           {o.label}
+  //         </option>
+  //       ))}
+  //     </select>
+  //   );
+  // };
+
+  const RolesList = () => {
+    return (
+      <div>
+        <label htmlFor="roleName">Select role to update account</label>
+        <select
+          id="roleName"
+          name="roleName"
+          ref={roleInputRef}
+          value={role.id}
+          onChange={(e) =>
+            setRole({ id: e.target.value, name: e.target.value })
+          }
+        >
+          {roles.map((role) => (
+            <option id={role.id} key={role.id} value={role.id}>
+              {role.name}
+            </option>
+          ))}
+        </select>
+      </div>
+    );
+  };
+  if (!authContext.isAdmin) {
+    return <div>You are not admin</div>;
+  }
+  return (
+    <Layout>
+      <RolesList />
+    </Layout>
+  );
+};
+
+export default AdminPage;

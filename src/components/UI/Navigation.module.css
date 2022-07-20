@@ -1,0 +1,27 @@
+.social {
+  width: 10rem;
+  justify-content: center;
+  color: #ffe2ed;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+}
+span {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.navListMenu {
+  font: 5rem;
+}
+
+.navMain {
+  background-color: rgb(107, 14, 117);
+  margin-bottom: 2.5rem;
+}
+
+.mainMenu {
+  font-size: 1.8rem !important;
+  margin-right: 10rem !important;
+}
