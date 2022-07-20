@@ -54,6 +54,8 @@ const Reservation = () => {
           console.log(error.text);
         }
       );
+    alert("Email sent!");
+    formInputRef.current!.reset();
   };
   return (
     <div>
@@ -84,17 +86,21 @@ const Reservation = () => {
             onSubmit={sendEmail}
           >
             <div className={classes.formGroup}>
-              <label>Name</label>
-              <input type="text" name="user_name" />
+              <label>Your name</label>
+              <input type="text" name="from_name" />
             </div>
             <div className={classes.formGroup}>
-              <label>Email</label>
+              <label>Your email</label>
               <input type="email" name="user_email" />
             </div>
             <div className={classes.formGroup}>
               <label>Message</label>
-              <textarea name="message" />
-              <input type="submit" value="Send" />
+              <textarea
+                className={classes.textarea}
+                name="message"
+                placeholder="Tell us what kind of puppy would you like"
+              />
+              <button type="submit">Send</button>
             </div>
           </form>
         </Col>
