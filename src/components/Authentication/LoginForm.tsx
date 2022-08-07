@@ -5,6 +5,7 @@ import classes from "./LoginForm.module.css";
 import AuthContext from "../../store/auth-context";
 import { ILoginResponse } from "../../interfaces/IAuthModel";
 import { Button } from "react-bootstrap";
+import { validEmail, validPassword } from "./Regex";
 
 const LoginForm = () => {
   const usernameInputRef = useRef<HTMLInputElement>(null);
@@ -28,10 +29,7 @@ const LoginForm = () => {
       const enteredUsername = usernameInputRef.current!.value;
       const enteredPassword = passwordInputRef.current!.value;
 
-      if (
-        enteredUsername.trim().length < 4 ||
-        enteredPassword.trim().length < 7
-      ) {
+      if (!validPassword.test(enteredPassword)) {
         alert("entered values must be valid");
         setIsLoading(false);
         return;
@@ -46,9 +44,12 @@ const LoginForm = () => {
           }
         )
         .then((response) => {
-          authContext.login(response.data.token, response.data.username);
+          authContext.login(
+            response.data.token,
+            response.data.username,
+            response.data.expiration
+          );
           console.log(response.data);
-          console.log(typeof response.data.expiration);
           if (response.data.username === "AdminZ") {
             authContext.isAdmin = true;
           }
@@ -70,10 +71,8 @@ const LoginForm = () => {
       const enteredEmail = emailInputRef.current!.value;
 
       if (
-        enteredUsername.trim().length < 4 ||
-        enteredPassword.trim().length < 7 ||
-        enteredEmail.trim().length < 7 ||
-        !enteredEmail.includes("@")
+        !validEmail.test(enteredEmail) ||
+        !validPassword.test(enteredPassword)
       ) {
         alert("entered values must be valid");
         setIsLoading(false);

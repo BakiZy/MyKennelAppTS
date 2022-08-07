@@ -63,8 +63,30 @@ const HomeComponent: React.FC = () => {
     }, []);
 
     const onReset = useCallback(() => {
-      setSelectedColorOption(0);
-      setSelectedSizeOption(0);
+      axios
+        .get<PoodleModel[]>("https://localhost:44373/api/poodles")
+        .then((response: AxiosResponse<PoodleModel[]>) => {
+          const loadedData: PoodleModel[] = [];
+          console.log(response.data);
+          for (let i = 0; i < response.data.length; i++) {
+            loadedData.push({
+              id: response.data[i].id,
+              name: response.data[i].name,
+              dateOfBirth: response.data[i].dateOfBirth,
+              geneticTests: response.data[i].geneticTests,
+              pedigreeNumber: response.data[i].pedigreeNumber,
+              poodleSizeName: response.data[i].poodleSizeName,
+              poodleColorName: response.data[i].poodleColorName,
+              image: response.data[i].image,
+            });
+          }
+          setPoodles(loadedData);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.log(error);
+          setLoading(false);
+        });
     }, []);
 
     const changeSelectSizeHandler = (

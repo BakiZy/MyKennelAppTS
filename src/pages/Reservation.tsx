@@ -5,6 +5,7 @@ import emailjs from "@emailjs/browser";
 import classes from "./Reservation.module.css";
 import { PoodleModel } from "../interfaces/IPoodleModel";
 import { Card, Col, Row } from "react-bootstrap";
+//import { validEmail } from "../components/Authentication/Regex";
 
 //import axios from "axios";
 
@@ -28,9 +29,8 @@ const Reservation = () => {
         headers: { "Content-Type": "application/json" },
       })
         .then((response) => response.json())
-        .then((data) => {
+        .then((data: PoodleModel) => {
           console.log(data);
-
           setPoodle(data);
         });
     };
@@ -48,7 +48,8 @@ const Reservation = () => {
       )
       .then(
         (result) => {
-          console.log(result.text);
+          console.log(result.status);
+          console.log(formInputRef.current!.value);
         },
         (error) => {
           console.log(error.text);
@@ -86,20 +87,26 @@ const Reservation = () => {
             onSubmit={sendEmail}
           >
             <div className={classes.formGroup}>
-              <label>Your name</label>
-              <input type="text" name="from_name" />
+              <label htmlFor="name">Your name</label>
+              <input type="text" name="name" />
             </div>
             <div className={classes.formGroup}>
-              <label>Your email</label>
-              <input type="email" name="user_email" />
+              <label htmlFor="email">Your email</label>
+              <input type="email" name="mail" />
             </div>
             <div className={classes.formGroup}>
-              <label>Message</label>
+              <label htmlFor="message">Message</label>
               <textarea
                 className={classes.textarea}
                 name="message"
                 placeholder="Tell us what kind of puppy would you like"
               />
+            </div>
+            <div className={classes.formGroup}>
+              <label htmlFor="phone">Phone number</label>
+              <input type="tel" name="phone" />
+            </div>
+            <div className={classes.formGroup}>
               <button type="submit">Send</button>
             </div>
           </form>

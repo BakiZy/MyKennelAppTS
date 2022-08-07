@@ -12,6 +12,8 @@ const NewPoodle: React.FC = () => {
   const poodleNameRef = useRef<HTMLInputElement>(null);
   const poodleDateRef = useRef<HTMLInputElement>(null);
   const poodlePedigreeNumberRef = useRef<HTMLInputElement>(null);
+  const [geneticTest, setGeneticTest] = React.useState(false);
+  const [imageFile, setImageFile] = React.useState<File | undefined>(undefined);
 
   const { selectSizeOption, setSelectedSizeOption, sizes } = useGetSizes();
 
@@ -22,7 +24,7 @@ const NewPoodle: React.FC = () => {
     const enteredPoodleName = poodleNameRef.current!.value;
     const enteredPoodleDate = poodleDateRef.current!.value;
     const enteredPedigreeNumber = poodlePedigreeNumberRef.current!.value;
-
+    console.log(geneticTest);
     const addPoodle = async () => {
       await axios
         .post<AxiosResponse>(
@@ -30,8 +32,8 @@ const NewPoodle: React.FC = () => {
           {
             name: enteredPoodleName,
             dateOfBirth: enteredPoodleDate,
-            geneticTests: true,
-            image: "test123",
+            geneticTests: geneticTest,
+            image: imageFile?.name,
             pedigreeNumber: enteredPedigreeNumber,
             poodleSizeId: selectSizeOption,
             poodleColorId: selectColorOption,
@@ -52,9 +54,9 @@ const NewPoodle: React.FC = () => {
     addPoodle();
   };
 
-  // const geneticTestHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  //   setStatus(e.target.value);
-  // };
+  const geneticTestHandler = () => {
+    setGeneticTest((prevstate) => !prevstate);
+  };
 
   const changeSelectSizeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedSizeOption(parseInt(e.target.value));
@@ -64,6 +66,10 @@ const NewPoodle: React.FC = () => {
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setSelectedColorOption(parseInt(e.target.value));
+  };
+
+  const imgSelectedHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setImageFile(e.target.files?.[0]);
   };
 
   return (
@@ -80,11 +86,21 @@ const NewPoodle: React.FC = () => {
             <input type="date" id="poodleDate" required ref={poodleDateRef} />
           </div>
           <div className={classes.control}>
-            <label htmlFor="geneticTest">Genetic test</label>
-            <select id="geneticTest" name="geneticTest">
-              <option value="true">Yes</option>
-              <option value="false">No</option>
-            </select>
+            <label>Genetic test</label>
+
+            <label htmlFor="geneticTest">Yes</label>
+            <input
+              type="radio"
+              name="geneticTest"
+              onChange={geneticTestHandler}
+            />
+            <label htmlFor="geneticTest">No</label>
+            <input
+              type="radio"
+              name="geneticTest"
+              defaultChecked={true}
+              onChange={geneticTestHandler}
+            />
           </div>
           <div className={classes.control}>
             <label htmlFor="poodlePedigree">Number of pedigree</label>
@@ -93,6 +109,16 @@ const NewPoodle: React.FC = () => {
               id="poodlePedigree"
               required
               ref={poodlePedigreeNumberRef}
+            />
+          </div>
+          <div className={classes.control}>
+            <label htmlFor="img">Select image:</label>
+            <input
+              type="file"
+              id="img"
+              name="img"
+              accept="image/*"
+              onChange={imgSelectedHandler}
             />
           </div>
 
