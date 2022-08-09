@@ -5,6 +5,7 @@ import AuthContext from "../store/auth-context";
 import { Button } from "react-bootstrap";
 import useGetSizes from "../hooks/getSizesHook";
 import useGetColors from "../hooks/getColorsHook";
+import useGetImgUr from "../hooks/getImgUrHook";
 
 const NewPoodle: React.FC = () => {
   const authContext = useContext(AuthContext);
@@ -13,10 +14,10 @@ const NewPoodle: React.FC = () => {
   const poodleDateRef = useRef<HTMLInputElement>(null);
   const poodlePedigreeNumberRef = useRef<HTMLInputElement>(null);
   const [geneticTest, setGeneticTest] = React.useState(false);
-  const [imageFile, setImageFile] = React.useState<File | undefined>(undefined);
 
+  const { images, selectImgOption, selectedImgName, setSelectedImgOption } =
+    useGetImgUr();
   const { selectSizeOption, setSelectedSizeOption, sizes } = useGetSizes();
-
   const { selectColorOption, setSelectedColorOption, colors } = useGetColors();
 
   const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
@@ -24,6 +25,7 @@ const NewPoodle: React.FC = () => {
     const enteredPoodleName = poodleNameRef.current!.value;
     const enteredPoodleDate = poodleDateRef.current!.value;
     const enteredPedigreeNumber = poodlePedigreeNumberRef.current!.value;
+
     console.log(geneticTest);
     const addPoodle = async () => {
       await axios
@@ -33,7 +35,7 @@ const NewPoodle: React.FC = () => {
             name: enteredPoodleName,
             dateOfBirth: enteredPoodleDate,
             geneticTests: geneticTest,
-            image: imageFile?.name,
+            imageId: selectImgOption,
             pedigreeNumber: enteredPedigreeNumber,
             poodleSizeId: selectSizeOption,
             poodleColorId: selectColorOption,
@@ -68,8 +70,8 @@ const NewPoodle: React.FC = () => {
     setSelectedColorOption(parseInt(e.target.value));
   };
 
-  const imgSelectedHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setImageFile(e.target.files?.[0]);
+  const imgSelectedHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedImgOption(parseInt(e.target.value));
   };
 
   return (
@@ -112,17 +114,6 @@ const NewPoodle: React.FC = () => {
             />
           </div>
           <div className={classes.control}>
-            <label htmlFor="img">Select image:</label>
-            <input
-              type="file"
-              id="img"
-              name="img"
-              accept="image/*"
-              onChange={imgSelectedHandler}
-            />
-          </div>
-
-          <div className={classes.control}>
             <label htmlFor="sizeName">Select size of poodle</label>
             <select
               id="sizeName"
@@ -148,6 +139,21 @@ const NewPoodle: React.FC = () => {
               {colors.map((color) => (
                 <option key={color.id} value={color.id}>
                   {color.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className={classes.control}>
+            <label htmlFor="img">Select image</label>
+            <select
+              id="img"
+              name="img"
+              value={selectedImgName}
+              onChange={imgSelectedHandler}
+            >
+              {images.map((image) => (
+                <option key={image.id} value={image.id}>
+                  {image.name}
                 </option>
               ))}
             </select>

@@ -8,7 +8,7 @@ export interface PoodleModel {
   pedigreeNumber: string;
   poodleSizeName: string;
   poodleColorName: string;
-  image: string;
+  imageUrl: string;
   children?: React.ReactNode | React.PropsWithChildren;
 }
 

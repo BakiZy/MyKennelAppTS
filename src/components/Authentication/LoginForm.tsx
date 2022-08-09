@@ -89,8 +89,8 @@ const LoginForm = () => {
           }
         )
         .then((response) => {
-          console.log(response.data);
-          alert("register successful");
+          console.log(response.status);
+          alert("registration successful");
           setIsLoading(false);
           navigate("/");
         })

@@ -52,7 +52,7 @@ const HomeComponent: React.FC = () => {
               pedigreeNumber: response.data[key].pedigreeNumber,
               poodleSizeName: response.data[key].poodleSizeName,
               poodleColorName: response.data[key].poodleColorName,
-              image: response.data[key].image,
+              imageUrl: response.data[key].imageUrl,
             });
             setPoodles(loadedData);
           }
@@ -77,7 +77,7 @@ const HomeComponent: React.FC = () => {
               pedigreeNumber: response.data[i].pedigreeNumber,
               poodleSizeName: response.data[i].poodleSizeName,
               poodleColorName: response.data[i].poodleColorName,
-              image: response.data[i].image,
+              imageUrl: response.data[i].imageUrl,
             });
           }
           setPoodles(loadedData);
@@ -174,7 +174,7 @@ const HomeComponent: React.FC = () => {
             pedigreeNumber: response.data[i].pedigreeNumber,
             poodleSizeName: response.data[i].poodleSizeName,
             poodleColorName: response.data[i].poodleColorName,
-            image: response.data[i].image,
+            imageUrl: response.data[i].imageUrl,
           });
         }
         setPoodles(loadedData);

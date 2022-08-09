@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { PoodleSize } from "../interfaces/IPoodleModel";
 import axios from "axios";
+import AuthContext from "../store/auth-context";
 
 interface PoodleSizeProps {
   sizes: PoodleSize[];
@@ -13,11 +14,14 @@ const useGetSizes = (): PoodleSizeProps => {
   const [sizes, setSizes] = useState<PoodleSize[]>([]);
   //using 1 as default for size ID: 1 = toy
   const [selectSizeOption, setSelectedSizeOption] = useState<number>(1);
-
+  const authContext = useContext(AuthContext);
+  const token = authContext.token;
   useEffect(() => {
     const fetchSizes = async () => {
       await axios
-        .get<PoodleSize[]>("https://localhost:44373/api/poodles/list-sizes")
+        .get<PoodleSize[]>("https://localhost:44373/api/poodles/list-sizes", {
+          headers: { Authorization: "Bearer " + token },
+        })
         .then((response) => {
           const loadedData: PoodleSize[] = [];
           const responseData = response.data;

@@ -1,5 +1,5 @@
 import AuthContext from "./store/auth-context";
-// import Layout from "./components/UI/Layout";
+
 import { Route, Routes } from "react-router-dom";
 import React, { useContext } from "react";
 import Navigation from "./components/UI/Navigation";
@@ -20,6 +20,7 @@ const App: React.FC = () => {
       <Navigation />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path=":poodleId" element={<Reservation />} />
         <Route path="/about" element={<About />} />
         {authContext.isLoggedIn ? (
           <Route path="/profile" element={<Profile />} />
@@ -32,7 +33,7 @@ const App: React.FC = () => {
         {authContext.isAdmin && (
           <Route path="/new-poodle" element={<NewPoodle />} />
         )}
-        <Route path=":poodleId" element={<Reservation />} />
+
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

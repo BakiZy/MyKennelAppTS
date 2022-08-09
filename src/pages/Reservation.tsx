@@ -1,13 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-//import { Form } from "react-bootstrap";
 import emailjs from "@emailjs/browser";
 import classes from "./Reservation.module.css";
 import { PoodleModel } from "../interfaces/IPoodleModel";
 import { Card, Col, Row } from "react-bootstrap";
-//import { validEmail } from "../components/Authentication/Regex";
-
-//import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 const Reservation = () => {
   const formInputRef = useRef<HTMLFormElement>(null);
@@ -15,7 +12,7 @@ const Reservation = () => {
   const [poodle, setPoodle] = useState<PoodleModel>({
     id: 0,
     name: "",
-    image: "",
+    imageUrl: "",
     dateOfBirth: new Date(),
     pedigreeNumber: "",
     geneticTests: false,
@@ -25,13 +22,13 @@ const Reservation = () => {
 
   useEffect(() => {
     const fetchReservedPoodle = async () => {
-      await fetch(`https://localhost:44373/api/poodles/${poodleId}`, {
-        headers: { "Content-Type": "application/json" },
-      })
-        .then((response) => response.json())
-        .then((data: PoodleModel) => {
-          console.log(data);
-          setPoodle(data);
+      await axios
+        .get<PoodleModel>(`https://localhost:44373/api/poodles/${poodleId}`)
+        .then((response: AxiosResponse<PoodleModel>) => {
+          setPoodle(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
         });
     };
     fetchReservedPoodle();
@@ -64,7 +61,7 @@ const Reservation = () => {
         <Col key={poodle!.id}>
           <Card key={poodle!.id} className={classes.cardProperty}>
             <Card.Body>
-              <Card.Img src={poodle!.image} className={classes.imageProp} />
+              <Card.Img src={poodle!.imageUrl} className={classes.imageProp} />
               <Card.Title>
                 <h2>{poodle!.name}</h2>
               </Card.Title>
