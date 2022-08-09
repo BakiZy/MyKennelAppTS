@@ -23,7 +23,7 @@ const useGetImgUr = (): PoodleImageProps => {
 
   useEffect(() => {
     const getImages = async () => {
-      axios
+      await axios
         .get<Image[]>("https://localhost:44373/api/Images", {
           headers: { Authorization: "Bearer " + token },
         })
@@ -37,6 +37,7 @@ const useGetImgUr = (): PoodleImageProps => {
               name: responseData[key].name,
             });
           }
+          console.log(loadedData);
           setImgs(loadedData);
         })
         .catch((err) => {

@@ -15,8 +15,7 @@ const NewPoodle: React.FC = () => {
   const poodlePedigreeNumberRef = useRef<HTMLInputElement>(null);
   const [geneticTest, setGeneticTest] = React.useState(false);
 
-  const { images, selectImgOption, selectedImgName, setSelectedImgOption } =
-    useGetImgUr();
+  const { images, selectImgOption, setSelectedImgOption } = useGetImgUr();
   const { selectSizeOption, setSelectedSizeOption, sizes } = useGetSizes();
   const { selectColorOption, setSelectedColorOption, colors } = useGetColors();
 
@@ -148,7 +147,7 @@ const NewPoodle: React.FC = () => {
             <select
               id="img"
               name="img"
-              value={selectedImgName}
+              value={selectImgOption}
               onChange={imgSelectedHandler}
             >
               {images.map((image) => (

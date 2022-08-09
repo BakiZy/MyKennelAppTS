@@ -39,7 +39,7 @@ const useGetSizes = (): PoodleSizeProps => {
         });
     };
     fetchSizes();
-  }, []);
+  }, [token]);
   return {
     sizes: sizes,
     selectSizeOption: selectSizeOption,

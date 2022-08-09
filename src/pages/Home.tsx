@@ -191,14 +191,12 @@ const HomeComponent: React.FC = () => {
       .delete(`https://localhost:44373/api/poodles/${id}`, {
         headers: { Authorization: "Bearer " + localStorage.getItem("token") },
       })
-      .then((response) => {
-        console.log(response);
+      .then(() => {
         setPoodles(poodles.filter((poodle) => poodle.id !== id));
       })
       .catch((error) => {
         console.log(error);
       });
-    console.log(id);
   };
 
   if (loading) {
