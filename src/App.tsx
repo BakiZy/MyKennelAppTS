@@ -12,9 +12,12 @@ import NotFound from "./pages/NotFound";
 import NewPoodle from "./pages/NewPoodle";
 import Reservation from "./pages/Reservation";
 import "bootstrap/dist/css/bootstrap.min.css";
+import EditPoodle from "./pages/Edit";
+import ImagePage from "./pages/ImageUr";
 
 const App: React.FC = () => {
   const authContext = useContext(AuthContext);
+
   return (
     <>
       <Navigation />
@@ -33,7 +36,12 @@ const App: React.FC = () => {
         {authContext.isAdmin && (
           <Route path="/new-poodle" element={<NewPoodle />} />
         )}
-
+        {authContext.isAdmin && (
+          <Route path="/poodle/:poodleId" element={<EditPoodle />} />
+        )}
+        {authContext.isAdmin && (
+          <Route path="/images" element={<ImagePage />} />
+        )}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

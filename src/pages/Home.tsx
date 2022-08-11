@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, memo } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import PoodleList from "../components/PoodleComp/PoodleList";
 import axios, { AxiosResponse } from "axios";
 import { PoodleModel } from "../interfaces/IPoodleModel";
@@ -11,11 +11,10 @@ interface FilterProps {
   filteredPoodles: PoodleModel[];
 }
 
-// import Layout from "../components/UI/Layout";
-
-const HomeComponent: React.FC = () => {
+const Home: React.FC = () => {
   const [poodles, setPoodles] = useState<PoodleModel[]>([]);
   const [loading, setLoading] = useState(true);
+
   const { selectSizeOption, setSelectedSizeOption, sizes, selectedSizeName } =
     useGetSizes();
 
@@ -53,8 +52,10 @@ const HomeComponent: React.FC = () => {
               poodleSizeName: response.data[key].poodleSizeName,
               poodleColorName: response.data[key].poodleColorName,
               imageUrl: response.data[key].imageUrl,
+              imagePedigreeUrl: response.data[key].imagePedigreeUrl,
             });
             setPoodles(loadedData);
+            console.log("poodle filter done");
           }
         })
         .catch((error) => {
@@ -78,6 +79,7 @@ const HomeComponent: React.FC = () => {
               poodleSizeName: response.data[i].poodleSizeName,
               poodleColorName: response.data[i].poodleColorName,
               imageUrl: response.data[i].imageUrl,
+              imagePedigreeUrl: response.data[i].imagePedigreeUrl,
             });
           }
           setPoodles(loadedData);
@@ -175,6 +177,7 @@ const HomeComponent: React.FC = () => {
             poodleSizeName: response.data[i].poodleSizeName,
             poodleColorName: response.data[i].poodleColorName,
             imageUrl: response.data[i].imageUrl,
+            imagePedigreeUrl: response.data[i].imagePedigreeUrl,
           });
         }
         setPoodles(loadedData);
@@ -209,5 +212,5 @@ const HomeComponent: React.FC = () => {
     </>
   );
 };
-const Home = memo(HomeComponent);
+
 export default Home;

@@ -22,6 +22,16 @@
   }
 }
 
+.btn {
+  background-color: rgb(107, 14, 117) !important;
+  border-radius: 1rem !important;
+  border-color: rgb(107, 14, 117) !important;
+  color: black !important;
+  font-size: 1.5rem !important;
+  padding: 0.4rem !important;
+  text-decoration: none !important;
+}
+
 .linkZ {
   background-color: rgb(107, 14, 117);
   border-radius: 1rem;

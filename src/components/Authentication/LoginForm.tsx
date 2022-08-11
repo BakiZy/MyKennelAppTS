@@ -131,9 +131,14 @@ const LoginForm = () => {
             ref={passwordInputRef}
           />
         </div>
+        <br></br>
         <div className="col-md-12 text-center">
           {!isLoading && (
-            <Button type="submit" variant="outline-dark">
+            <Button
+              type="submit"
+              variant="outline-dark"
+              style={{ background: "rgba(216, 176, 226, 0.815)" }}
+            >
               {isLogin ? "Login" : "Create account"}
             </Button>
           )}
@@ -143,6 +148,7 @@ const LoginForm = () => {
             type="button"
             onClick={switchLoginHandler}
             variant="outline-dark"
+            style={{ background: "rgba(216, 176, 226, 0.815)" }}
           >
             {isLogin ? "Create a new account" : "Login with existing account"}
           </Button>

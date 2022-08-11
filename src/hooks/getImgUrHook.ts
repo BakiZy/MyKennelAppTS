@@ -6,6 +6,7 @@ interface Image {
   id: number;
   url: string;
   name: string;
+  pedigreeUrl: string;
 }
 
 interface PoodleImageProps {
@@ -35,6 +36,7 @@ const useGetImgUr = (): PoodleImageProps => {
               id: responseData[key].id,
               url: responseData[key].url,
               name: responseData[key].name,
+              pedigreeUrl: responseData[key].pedigreeUrl,
             });
           }
           console.log(loadedData);

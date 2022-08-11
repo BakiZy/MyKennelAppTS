@@ -100,10 +100,18 @@ const ProfileForm = () => {
         </div>
         <br />
         <div className="col-md-12 text-center">
-          <Button type="submit" variant="outline-dark">
+          <Button
+            type="submit"
+            variant="outline-dark"
+            style={{ background: "rgba(216, 176, 226, 0.815)" }}
+          >
             Change password
           </Button>
-          <Button onClick={logoutHandler} variant="outline-dark">
+          <Button
+            onClick={logoutHandler}
+            variant="outline-dark"
+            style={{ background: "rgba(216, 176, 226, 0.815)" }}
+          >
             Logout{" "}
           </Button>
         </div>

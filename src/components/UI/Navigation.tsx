@@ -51,6 +51,11 @@ const Navigation = () => {
               New Poodle
             </Nav.Link>
           )}
+          {authContext.isAdmin && (
+            <Nav.Link as={Link} to="/images">
+              Images
+            </Nav.Link>
+          )}
         </Nav>
       </Container>
       <Nav className={classes.social}>

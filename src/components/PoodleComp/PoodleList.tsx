@@ -31,22 +31,32 @@ const PoodleList: React.FC<PoodleListProps> = (props) => {
                 ) : (
                   <Card.Text> Genetic testings : no </Card.Text>
                 )}
+
                 <Card.Text>Size : {poodle.poodleSizeName}</Card.Text>
                 <Card.Text>Color : {poodle.poodleColorName}</Card.Text>
                 <Link className={classes.linkZ} to={`/${poodle.id}`}>
                   Interested in this poodle pups?
                 </Link>
+              </Card.Body>
+              <Card.Body>
                 {authContext.isAdmin && (
                   <Button
                     onClick={() => props.onRemove(poodle.id)}
                     style={{
-                      backgroundColor: " rgb(107, 14, 117)",
+                      backgroundColor: "rgb(107, 14, 117)",
                       borderRadius: "1rem",
                       borderColor: "rgb(107, 14, 117)",
+                      color: "black",
+                      font: "1.5rem",
                     }}
                   >
                     Remove (admin only!)
                   </Button>
+                )}
+                {authContext.isAdmin && (
+                  <Link className={classes.linkZ} to={`/poodle/${poodle.id}`}>
+                    Edit poodle data
+                  </Link>
                 )}
               </Card.Body>
             </Card>

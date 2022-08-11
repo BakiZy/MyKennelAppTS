@@ -1,42 +1,87 @@
-import axios, { AxiosResponse } from "axios";
-import classes from "./NewPoodle.module.css";
-import React, { useRef, useContext } from "react";
-import AuthContext from "../store/auth-context";
+import React, { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import classes from "./Edit.module.css";
 import { Button } from "react-bootstrap";
+import AuthContext from "../store/auth-context";
 import useGetSizes from "../hooks/getSizesHook";
 import useGetColors from "../hooks/getColorsHook";
 import useGetImgUr from "../hooks/getImgUrHook";
+import axios, { AxiosResponse } from "axios";
+import { PoodleModel } from "../interfaces/IPoodleModel";
 
-const NewPoodle: React.FC = () => {
+export interface PoodleModelEdit {
+  id: number;
+  name: string;
+  dateOfBirth: string;
+  geneticTests: boolean;
+  pedigreeNumber: string;
+  poodleSizeId: number;
+  poodleColorId: number;
+  imageId: number;
+}
+
+const EditPoodle: React.FC = () => {
+  const { poodleId } = useParams();
   const authContext = useContext(AuthContext);
   const token = authContext.token;
-  const poodleNameRef = useRef<HTMLInputElement>(null);
-  const poodleDateRef = useRef<HTMLInputElement>(null);
-  const poodlePedigreeNumberRef = useRef<HTMLInputElement>(null);
   const [geneticTest, setGeneticTest] = React.useState(false);
-
+  const [loading, setLoading] = React.useState(true);
   const { images, selectImgOption, setSelectedImgOption } = useGetImgUr();
   const { selectSizeOption, setSelectedSizeOption, sizes } = useGetSizes();
   const { selectColorOption, setSelectedColorOption, colors } = useGetColors();
+  const [poodle, setPoodle] = useState<PoodleModel>({
+    id: 0,
+    name: "",
+    imageUrl: "",
+    imagePedigreeUrl: "",
+    dateOfBirth: new Date(),
+    pedigreeNumber: "",
+    geneticTests: false,
+    poodleSizeName: "",
+    poodleColorName: "",
+  });
 
-  const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const enteredPoodleName = poodleNameRef.current!.value;
-    const enteredPoodleDate = poodleDateRef.current!.value;
-    const enteredPedigreeNumber = poodlePedigreeNumberRef.current!.value;
-
-    const addPoodle = async () => {
+  useEffect(() => {
+    const fetchReservedPoodle = async () => {
       await axios
-        .post<AxiosResponse>(
-          "https://localhost:44373/api/poodles",
+        .get<PoodleModel>(`https://localhost:44373/api/poodles/${poodleId}`)
+        .then((response: AxiosResponse<PoodleModel>) => {
+          console.log(response.data);
+          setPoodle(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    fetchReservedPoodle();
+    setLoading(false);
+  }, [poodleId]);
+
+  // const dateOfBirth = new Date(poodle.dateOfBirth);
+  // const parsedDate =
+  //   dateOfBirth.getFullYear() +
+  //   "-" +
+  //   (dateOfBirth.getMonth() + 1) +
+  //   "-" +
+  //   dateOfBirth.getDay();
+
+  const updateHandler = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = {
+      name: poodle.name,
+      dateOfBirth: poodle.dateOfBirth,
+      geneticTests: geneticTest,
+      imageId: selectImgOption,
+      pedigreeNumber: poodle.pedigreeNumber,
+      poodleSizeId: selectSizeOption,
+      poodleColorId: selectColorOption,
+    };
+    const updatePoodle = async () => {
+      await axios
+        .put<AxiosResponse>(
+          `https://localhost:44373/api/poodles/${poodleId}`,
           {
-            name: enteredPoodleName,
-            dateOfBirth: enteredPoodleDate,
-            geneticTests: geneticTest,
-            imageId: selectImgOption,
-            pedigreeNumber: enteredPedigreeNumber,
-            poodleSizeId: selectSizeOption,
-            poodleColorId: selectColorOption,
+            data,
           },
           {
             headers: { Authorization: "Bearer " + token },
@@ -44,14 +89,14 @@ const NewPoodle: React.FC = () => {
         )
         .then((response) => {
           console.log(response.data);
-
-          alert("added to DB");
+          alert("edited info in DB");
         })
         .catch((error: string) => {
           alert(error);
         });
     };
-    addPoodle();
+
+    updatePoodle();
   };
 
   const geneticTestHandler = () => {
@@ -72,35 +117,44 @@ const NewPoodle: React.FC = () => {
     setSelectedImgOption(parseInt(e.target.value));
   };
 
+  const setDateHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const date = new Date(e.target.value);
+    setPoodle({ ...poodle, dateOfBirth: date });
+  };
+
   if (!authContext.isAdmin) {
-    return <div>You are not authorized to access this page</div>;
+    return <div></div>;
   }
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
   return (
     <div>
-      <h1>Add new poodle do the database</h1>
-      <section>
-        <form onSubmit={submitHandler}>
+      <h1>Edit current poodle</h1>
+      <section className={classes.control}>
+        <form onSubmit={updateHandler}>
           <div className={classes.control}>
             <label htmlFor="poodleName">Name</label>
-            <input type="text" id="poodleName" required ref={poodleNameRef} />
-          </div>
-          <div className={classes.control}>
-            <label htmlFor="poodlePedigree">Number of pedigree</label>
             <input
               type="text"
-              id="poodlePedigree"
+              id="poodleName"
               required
-              ref={poodlePedigreeNumberRef}
+              value={poodle.name}
+              onChange={(e) => setPoodle({ ...poodle, name: e.target.value })}
             />
           </div>
           <div className={classes.control}>
             <label htmlFor="poodleDate">Date of birth</label>
-            <input type="date" id="poodleDate" required ref={poodleDateRef} />
+            <input
+              type="date"
+              id="poodleDate"
+              required
+              onChange={setDateHandler}
+            />
           </div>
           <div className={classes.control}>
             <label>Genetic test</label>
-
             <label htmlFor="geneticTest">Yes</label>
             <input
               type="radio"
@@ -113,6 +167,18 @@ const NewPoodle: React.FC = () => {
               name="geneticTest"
               defaultChecked={true}
               onChange={geneticTestHandler}
+            />
+          </div>
+          <div className={classes.control}>
+            <label htmlFor="poodlePedigree">Number of pedigree</label>
+            <input
+              type="text"
+              id="poodlePedigree"
+              required
+              value={poodle.pedigreeNumber}
+              onChange={(e) =>
+                setPoodle({ ...poodle, pedigreeNumber: e.target.value })
+              }
             />
           </div>
           <div className={classes.control}>
@@ -160,14 +226,13 @@ const NewPoodle: React.FC = () => {
               ))}
             </select>
           </div>
-          <br></br>
-          <div className="col-md-12 text-center">
+          <div className={classes.control}>
             <Button
               type="submit"
               variant="outline-dark"
               style={{ background: "rgba(216, 176, 226, 0.815)" }}
             >
-              Add new poodle
+              Update info
             </Button>
           </div>
         </form>
@@ -176,4 +241,4 @@ const NewPoodle: React.FC = () => {
   );
 };
 
-export default NewPoodle;
+export default EditPoodle;
