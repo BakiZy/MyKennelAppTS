@@ -11,7 +11,12 @@ const PoodleList: React.FC<PoodleListProps> = (props) => {
   return (
     <Row lg={3} className={classes.rowContent}>
       {props.poodles.map((poodle) => {
-        const parseDate = new Date(poodle.dateOfBirth).toLocaleDateString();
+        const parseDate = new Date(poodle.dateOfBirth).toLocaleDateString(
+          "en-UK"
+        );
+
+        //change date format from yyyy-mm-dd to dd-mm-yyyy
+
         return (
           <Col key={poodle.id}>
             <Card key={poodle.id} className={classes.cardProperty}>

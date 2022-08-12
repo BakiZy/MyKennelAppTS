@@ -30,7 +30,7 @@ const ImagePage: React.FC = () => {
       );
     };
     addNewImage();
-    console.log("test");
+    alert("Image added");
   };
   return (
     <div>

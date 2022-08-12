@@ -11,3 +11,9 @@
   text-align: center;
   border-radius: 2px;
 }
+
+body {
+  background-image: url("https://i.imgur.com/BLbQkuY.jpeg");
+  position: relative;
+  background-size: cover;
+}
