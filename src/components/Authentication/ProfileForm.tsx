@@ -50,9 +50,8 @@ const ProfileForm = () => {
           bodyParameters,
           config
         )
-        .then(function (response) {
-          console.log(response);
-          alert("password succesffully changed");
+        .then(function () {
+          alert("password successfully  changed");
           navigate("/");
         })
         .catch((error) => {

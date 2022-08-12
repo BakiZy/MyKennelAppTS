@@ -32,15 +32,12 @@ const Home: React.FC = () => {
         colorName: selectedColorName,
         sizeName: selectedSizeName,
       };
-      console.log(selectedColorName + "color params send");
-      console.log(selectedSizeName + "size params send");
       axios
         .get<PoodleModel[]>(
           "https://localhost:44373/api/filters/color-and-size",
           { params }
         )
         .then((response) => {
-          console.log(response.data);
           const loadedData: PoodleModel[] = [];
           for (const key in response.data) {
             loadedData.push({
@@ -55,7 +52,6 @@ const Home: React.FC = () => {
               imagePedigreeUrl: response.data[key].imagePedigreeUrl,
             });
             setPoodles(loadedData);
-            console.log("poodle filter done");
           }
         })
         .catch((error) => {
@@ -68,7 +64,6 @@ const Home: React.FC = () => {
         .get<PoodleModel[]>("https://localhost:44373/api/poodles")
         .then((response: AxiosResponse<PoodleModel[]>) => {
           const loadedData: PoodleModel[] = [];
-          console.log(response.data);
           for (let i = 0; i < response.data.length; i++) {
             loadedData.push({
               id: response.data[i].id,
@@ -166,7 +161,6 @@ const Home: React.FC = () => {
       .get<PoodleModel[]>("https://localhost:44373/api/poodles")
       .then((response: AxiosResponse<PoodleModel[]>) => {
         const loadedData: PoodleModel[] = [];
-        console.log(response.data);
         for (let i = 0; i < response.data.length; i++) {
           loadedData.push({
             id: response.data[i].id,

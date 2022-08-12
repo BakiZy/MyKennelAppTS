@@ -28,7 +28,6 @@ const useGetColors = (): PoodleColorProps => {
         .then((response) => {
           const loadedData: PoodleColor[] = [];
           const responseData = response.data;
-          console.log(responseData);
           for (const key in responseData) {
             loadedData.push({
               id: responseData[key].id,

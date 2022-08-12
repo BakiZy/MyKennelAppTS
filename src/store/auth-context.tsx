@@ -39,7 +39,6 @@ const retrieveStoredUserInfo = () => {
 };
 
 const calculateExpirationTime = (tokenExpiration: string) => {
-  console.log("current expiration time", tokenExpiration);
   const currentTime = new Date().getTime();
   const tokenExpirationTime = new Date(tokenExpiration).getTime();
   const expirationTime = tokenExpirationTime - currentTime;
@@ -93,7 +92,6 @@ export const AuthContextProvider: React.FC<ChildrenProp> = ({ children }) => {
   useEffect(() => {
     if (tokenData != null) {
       logoutTimer = setTimeout(logoutHandler, Number(tokenData.expiration));
-      console.log(tokenData.expiration);
       clearTimeout(logoutTimer);
     }
   }, [tokenData, logoutHandler]);

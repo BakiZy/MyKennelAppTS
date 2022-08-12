@@ -39,7 +39,6 @@ const useGetImgUr = (): PoodleImageProps => {
               pedigreeUrl: responseData[key].pedigreeUrl,
             });
           }
-          console.log(loadedData);
           setImgs(loadedData);
         })
         .catch((err) => {

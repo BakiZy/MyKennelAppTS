@@ -25,7 +25,6 @@ const useGetSizes = (): PoodleSizeProps => {
         .then((response) => {
           const loadedData: PoodleSize[] = [];
           const responseData = response.data;
-          console.log(response.data);
           for (const key in responseData) {
             loadedData.push({
               id: responseData[key].id,

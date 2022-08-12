@@ -73,7 +73,9 @@ const LoginForm = () => {
         !validEmail.test(enteredEmail) ||
         !validPassword.test(enteredPassword)
       ) {
-        alert("entered values must be valid");
+        alert(
+          "entered values must be valid, password must contain at least 1 number, 1 uppercase and one special character"
+        );
         setIsLoading(false);
         return;
       }
@@ -87,8 +89,7 @@ const LoginForm = () => {
             email: enteredEmail,
           }
         )
-        .then((response) => {
-          console.log(response.status);
+        .then(() => {
           alert("registration successful");
           setIsLoading(false);
           navigate("/");
