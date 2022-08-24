@@ -46,7 +46,9 @@ const EditPoodle: React.FC = () => {
   useEffect(() => {
     const fetchReservedPoodle = async () => {
       await axios
-        .get<PoodleModel>(`https://localhost:44373/api/poodles/${poodleId}`)
+        .get<PoodleModel>(
+          `http://bakisan-001-site1.ctempurl.com/api/poodles/${poodleId}`
+        )
         .then((response: AxiosResponse<PoodleModel>) => {
           console.log(response.data);
           setPoodle(response.data);
@@ -67,7 +69,7 @@ const EditPoodle: React.FC = () => {
     const updatePoodle = async () => {
       await axios
         .put<AxiosResponse>(
-          `https://localhost:44373/api/poodles/${poodleId}`,
+          `http://bakisan-001-site1.ctempurl.com/api/poodles/${poodleId}`,
           {
             id: poodleId,
             name: enteredPoodleName,

@@ -25,7 +25,7 @@ const useGetImgUr = (): PoodleImageProps => {
   useEffect(() => {
     const getImages = async () => {
       await axios
-        .get<Image[]>("https://localhost:44373/api/Images", {
+        .get<Image[]>("http://bakisan-001-site1.ctempurl.com/api/Images", {
           headers: { Authorization: "Bearer " + token },
         })
         .then((res) => {

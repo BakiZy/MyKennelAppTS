@@ -34,7 +34,7 @@ const Home: React.FC = () => {
       };
       axios
         .get<PoodleModel[]>(
-          "https://localhost:44373/api/filters/color-and-size",
+          "http://bakisan-001-site1.ctempurl.com/api/filters/color-and-size",
           { params }
         )
         .then((response) => {
@@ -61,7 +61,7 @@ const Home: React.FC = () => {
 
     const onReset = useCallback(() => {
       axios
-        .get<PoodleModel[]>("https://localhost:44373/api/poodles")
+        .get<PoodleModel[]>("http://bakisan-001-site1.ctempurl.com/api/poodles")
         .then((response: AxiosResponse<PoodleModel[]>) => {
           const loadedData: PoodleModel[] = [];
           for (let i = 0; i < response.data.length; i++) {
@@ -158,7 +158,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get<PoodleModel[]>("https://localhost:44373/api/poodles")
+      .get<PoodleModel[]>("http://bakisan-001-site1.ctempurl.com/api/poodles")
       .then((response: AxiosResponse<PoodleModel[]>) => {
         const loadedData: PoodleModel[] = [];
         for (let i = 0; i < response.data.length; i++) {
@@ -185,7 +185,7 @@ const Home: React.FC = () => {
 
   const onRemoveHandler = (id) => {
     axios
-      .delete(`https://localhost:44373/api/poodles/${id}`, {
+      .delete(`http://bakisan-001-site1.ctempurl.com/api/poodles/${id}`, {
         headers: { Authorization: "Bearer " + localStorage.getItem("token") },
       })
       .then(() => {

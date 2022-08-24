@@ -37,7 +37,7 @@ const LoginForm = () => {
 
       await axios
         .post<ILoginResponse>(
-          "https://localhost:44373/api/Authentication/login",
+          "http://bakisan-001-site1.ctempurl.com/api/Authentication/login",
           {
             username: enteredUsername,
             password: enteredPassword,

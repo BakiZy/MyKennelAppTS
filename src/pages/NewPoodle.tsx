@@ -28,7 +28,7 @@ const NewPoodle: React.FC = () => {
     const addPoodle = async () => {
       await axios
         .post<AxiosResponse>(
-          "https://localhost:44373/api/poodles",
+          "http://bakisan-001-site1.ctempurl.com/api/poodles",
           {
             name: enteredPoodleName,
             dateOfBirth: enteredPoodleDate,

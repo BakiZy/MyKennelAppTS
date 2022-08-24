@@ -19,9 +19,12 @@ const useGetSizes = (): PoodleSizeProps => {
   useEffect(() => {
     const fetchSizes = async () => {
       await axios
-        .get<PoodleSize[]>("https://localhost:44373/api/poodles/list-sizes", {
-          headers: { Authorization: "Bearer " + token },
-        })
+        .get<PoodleSize[]>(
+          "http://bakisan-001-site1.ctempurl.com/api/poodles/list-sizes",
+          {
+            headers: { Authorization: "Bearer " + token },
+          }
+        )
         .then((response) => {
           const loadedData: PoodleSize[] = [];
           const responseData = response.data;

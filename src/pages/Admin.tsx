@@ -17,9 +17,12 @@ const AdminPage: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get<IRoleModel[]>("https://localhost:44373/api/Admin/allroles", {
-        headers: { Authorization: "Bearer " + token },
-      })
+      .get<IRoleModel[]>(
+        "http://bakisan-001-site1.ctempurl.com/api/Admin/allroles",
+        {
+          headers: { Authorization: "Bearer " + token },
+        }
+      )
       .then((response) => {
         const loadedData: IRoleModel[] = [];
         // console.log(roles);

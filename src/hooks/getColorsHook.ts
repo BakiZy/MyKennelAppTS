@@ -22,9 +22,12 @@ const useGetColors = (): PoodleColorProps => {
   useEffect(() => {
     const fetchColors = async () => {
       await axios
-        .get<PoodleColor[]>("https://localhost:44373/api/poodles/list-colors", {
-          headers: { Authorization: "Bearer " + token },
-        })
+        .get<PoodleColor[]>(
+          "http://bakisan-001-site1.ctempurl.com/api/poodles/list-colors",
+          {
+            headers: { Authorization: "Bearer " + token },
+          }
+        )
         .then((response) => {
           const loadedData: PoodleColor[] = [];
           const responseData = response.data;
