@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import axios from "axios";
-import Layout from "../components/UI/Layout";
 import AuthContext from "../store/auth-context";
 import { IRoleModel } from "../interfaces/IAuthModel";
 
@@ -66,9 +65,9 @@ const AdminPage: React.FC = () => {
     return <div>You are not admin</div>;
   }
   return (
-    <Layout>
+    <>
       <RolesList />
-    </Layout>
+    </>
   );
 };
 

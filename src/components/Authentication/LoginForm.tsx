@@ -21,7 +21,7 @@ const LoginForm = () => {
     setIsLogin((prevState) => !prevState);
   };
 
-  const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+  const submitHandler = (event: React.FormEvent) => {
     event.preventDefault();
 
     const loginFetch = async () => {

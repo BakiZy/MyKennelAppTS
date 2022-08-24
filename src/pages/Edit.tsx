@@ -60,7 +60,7 @@ const EditPoodle: React.FC = () => {
     fetchReservedPoodle();
   }, [poodleId]);
 
-  const updateHandler = (event: React.FormEvent<HTMLFormElement>) => {
+  const updateHandler = (event: React.FormEvent) => {
     event.preventDefault();
     const enteredPoodleName = poodleName.current!.value;
     const enteredPoodleDate = poodleDate.current!.value;
