@@ -5,7 +5,7 @@ import { useContext } from "react";
 import AuthContext from "../../store/auth-context";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import logo from "file:///F:/Downloads/poodle.svg";
+import logo from "../../../src/poodle.svg";
 
 const Navigation = () => {
   const authContext = useContext(AuthContext);

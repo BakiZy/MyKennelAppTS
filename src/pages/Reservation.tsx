@@ -25,7 +25,9 @@ const Reservation = () => {
   useEffect(() => {
     const fetchReservedPoodle = async () => {
       await axios
-        .get<PoodleModel>(`https://localhost:44373/api/poodles/${poodleId}`)
+        .get<PoodleModel>(
+          `http://bakisan-001-site1.ctempurl.com/api/poodles/${poodleId}`
+        )
         .then((response: AxiosResponse<PoodleModel>) => {
           setPoodle(response.data);
         })

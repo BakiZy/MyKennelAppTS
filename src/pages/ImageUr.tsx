@@ -18,7 +18,7 @@ const ImagePage: React.FC = () => {
 
     const addNewImage = async () => {
       await axios.post<AxiosResponse>(
-        "https://localhost:44373/api/Images",
+        "http://bakisan-001-site1.ctempurl.com/api/Images",
         {
           name: enteredImgName,
           url: enteredImgUrl,
