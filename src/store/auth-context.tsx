@@ -58,7 +58,7 @@ export const AuthContextProvider: React.FC<ChildrenProp> = ({ children }) => {
     initialUsername = tokenData.username;
     initialExpiration = tokenData.expiration;
   }
-  console.log(initialExpiration);
+  console.log(`your login will expire at ${initialExpiration}`);
   const [token, setToken] = useState(initialToken);
   const userIsLoggedIn = !!token;
 

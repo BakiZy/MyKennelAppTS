@@ -49,7 +49,6 @@ const LoginForm = () => {
             response.data.username,
             response.data.expiration
           );
-          console.log(response.data);
           if (response.data.username === "AdminZ") {
             authContext.isAdmin = true;
           }
