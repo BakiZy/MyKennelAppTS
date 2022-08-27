@@ -20,7 +20,7 @@ const useGetSizes = (): PoodleSizeProps => {
     const fetchSizes = async () => {
       await axios
         .get<PoodleSize[]>(
-          "http://bakisan-001-site1.ctempurl.com/api/poodles/list-sizes",
+          "https://poodlesvonapalusso.dog/api/poodles/list-sizes",
           {
             headers: { Authorization: "Bearer " + token },
           }

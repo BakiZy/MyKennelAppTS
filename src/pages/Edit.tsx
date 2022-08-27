@@ -47,7 +47,7 @@ const EditPoodle: React.FC = () => {
     const fetchReservedPoodle = async () => {
       await axios
         .get<PoodleModel>(
-          `http://bakisan-001-site1.ctempurl.com/api/poodles/${poodleId}`
+          `https://poodlesvonapalusso.dog/api/poodles/${poodleId}`
         )
         .then((response: AxiosResponse<PoodleModel>) => {
           console.log(response.data);

@@ -37,7 +37,7 @@ const LoginForm = () => {
 
       await axios
         .post<ILoginResponse>(
-          "http://bakisan-001-site1.ctempurl.com/api/Authentication/login",
+          "https://poodlesvonapalusso.dog/api/Authentication/login",
           {
             username: enteredUsername,
             password: enteredPassword,
@@ -82,7 +82,7 @@ const LoginForm = () => {
 
       await axios
         .post<AxiosResponse>(
-          "https://localhost:44373/api/Authentication/register",
+          "https://poodlesvonapalusso.dog/api/Authentication/register",
           {
             username: enteredUsername,
             password: enteredPassword,

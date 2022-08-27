@@ -46,7 +46,7 @@ const ProfileForm = () => {
     const changePassword = async () => {
       axios
         .post(
-          "http://bakisan-001-site1.ctempurl.com/api/Authentication/change-password",
+          "https://poodlesvonapalusso.dog/api/Authentication/change-password",
           bodyParameters,
           config
         )

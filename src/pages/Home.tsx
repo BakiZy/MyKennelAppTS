@@ -34,7 +34,7 @@ const Home: React.FC = () => {
       };
       axios
         .get<PoodleModel[]>(
-          "http://bakisan-001-site1.ctempurl.com/api/filters/color-and-size",
+          "https://poodlesvonapalusso.dog/api/filters/color-and-size",
           { params }
         )
         .then((response) => {
@@ -61,7 +61,7 @@ const Home: React.FC = () => {
 
     const onReset = useCallback(() => {
       axios
-        .get<PoodleModel[]>("http://bakisan-001-site1.ctempurl.com/api/poodles")
+        .get<PoodleModel[]>("https://poodlesvonapalusso.dog/api/poodles")
         .then((response: AxiosResponse<PoodleModel[]>) => {
           const loadedData: PoodleModel[] = [];
           for (let i = 0; i < response.data.length; i++) {
@@ -158,7 +158,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get<PoodleModel[]>("http://bakisan-001-site1.ctempurl.com/api/poodles")
+      .get<PoodleModel[]>("https://poodlesvonapalusso.dog/api/poodles")
       .then((response: AxiosResponse<PoodleModel[]>) => {
         const loadedData: PoodleModel[] = [];
         for (let i = 0; i < response.data.length; i++) {
@@ -185,7 +185,7 @@ const Home: React.FC = () => {
 
   const onRemoveHandler = (id) => {
     axios
-      .delete(`http://bakisan-001-site1.ctempurl.com/api/poodles/${id}`, {
+      .delete(`https://poodlesvonapalusso.dog/api/poodles/${id}`, {
         headers: { Authorization: "Bearer " + localStorage.getItem("token") },
       })
       .then(() => {

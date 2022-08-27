@@ -23,7 +23,7 @@ const useGetColors = (): PoodleColorProps => {
     const fetchColors = async () => {
       await axios
         .get<PoodleColor[]>(
-          "http://bakisan-001-site1.ctempurl.com/api/poodles/list-colors",
+          "https://poodlesvonapalusso.dog/api/poodles/list-colors",
           {
             headers: { Authorization: "Bearer " + token },
           }
