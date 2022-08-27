@@ -14,9 +14,6 @@ const About: React.FC = () => {
         Welcome to Von Apalusso kennel page
       </h1>
       <div className={classes.container}>
-        <div className={classes.poodleimage}>
-          <img src="https://i.imgur.com/duLbBLa.jpeg" alt="poodles" />
-        </div>
         <p>
           Kennel Von Apalusso was created almost 40 years a go, by my father who
           was big German shepherd dog lover. Me and my sister got poodle as pets
