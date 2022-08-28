@@ -51,6 +51,9 @@ const Home: React.FC = () => {
               imageUrl: response.data[key].imageUrl,
               imagePedigreeUrl: response.data[key].imagePedigreeUrl,
             });
+            if (loadedData.length < 1) {
+              alert("rip");
+            }
             setPoodles(loadedData);
           }
         })
@@ -78,6 +81,7 @@ const Home: React.FC = () => {
             });
           }
           setPoodles(loadedData);
+
           setLoading(false);
         })
         .catch((error) => {
@@ -131,11 +135,12 @@ const Home: React.FC = () => {
         <div className={classes.filterButtons}>
           <Button
             type="submit"
+            variant="dark"
             style={{
-              backgroundColor: " rgb(107, 14, 117)",
               borderRadius: "1rem",
-              borderColor: "rgb(107, 14, 117)",
-              width: "6rem",
+              borderColor: "rgb(44, 43, 43)",
+              fontSize: "1.5rem",
+              width: "7rem",
             }}
           >
             Filter
@@ -143,10 +148,11 @@ const Home: React.FC = () => {
           <Button
             type="button"
             onClick={onReset}
+            variant="dark"
             style={{
-              backgroundColor: " rgb(107, 14, 117)",
               borderRadius: "1rem",
-              borderColor: "rgb(107, 14, 117)",
+              borderColor: "rgb(44, 43, 43)",
+              fontSize: "1.5rem",
             }}
           >
             Reset filter

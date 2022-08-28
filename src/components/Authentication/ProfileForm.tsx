@@ -99,17 +99,13 @@ const ProfileForm = () => {
         </div>
         <br />
         <div className="col-md-12 text-center">
-          <Button
-            type="submit"
-            variant="outline-dark"
-            style={{ background: "rgba(216, 176, 226, 0.815)" }}
-          >
+          <Button type="submit" variant="dark" style={{ fontSize: "1.6rem" }}>
             Change password
           </Button>
           <Button
             onClick={logoutHandler}
-            variant="outline-dark"
-            style={{ background: "rgba(216, 176, 226, 0.815)" }}
+            variant="dark"
+            style={{ fontSize: "1.6rem" }}
           >
             Logout{" "}
           </Button>

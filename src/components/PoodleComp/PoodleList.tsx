@@ -43,24 +43,25 @@ const PoodleList: React.FC<PoodleListProps> = (props) => {
                   Interested in this poodle pups?
                 </Link>
               </Card.Body>
-              <Card.Body>
+              <Card.Body className={classes.buttonDiv}>
                 {authContext.isAdmin && (
                   <Button
+                    className="btn btn-danger"
                     onClick={() => props.onRemove(poodle.id)}
                     style={{
-                      backgroundColor: "rgb(107, 14, 117)",
                       borderRadius: "1rem",
                       borderColor: "rgb(107, 14, 117)",
-                      color: "black",
-                      font: "1.5rem",
+                      color: "#ffe2ed",
+                      fontSize: "1.5rem",
+                      marginBottom: "",
                     }}
                   >
-                    Remove (admin only!)
+                    Remove
                   </Button>
                 )}
                 {authContext.isAdmin && (
                   <Link className={classes.linkZ} to={`/poodle/${poodle.id}`}>
-                    Edit poodle data
+                    Edit DB data
                   </Link>
                 )}
               </Card.Body>

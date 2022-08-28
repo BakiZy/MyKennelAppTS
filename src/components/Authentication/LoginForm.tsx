@@ -135,8 +135,11 @@ const LoginForm = () => {
           {!isLoading && (
             <Button
               type="submit"
-              variant="outline-dark"
-              style={{ background: "rgba(216, 176, 226, 0.815)" }}
+              variant="dark"
+              style={{
+                color: "#ffe2ed",
+                fontSize: "1.6rem",
+              }}
             >
               {isLogin ? "Login" : "Create account"}
             </Button>
@@ -146,8 +149,11 @@ const LoginForm = () => {
           <Button
             type="button"
             onClick={switchLoginHandler}
-            variant="outline-dark"
-            style={{ background: "rgba(216, 176, 226, 0.815)" }}
+            variant="dark"
+            style={{
+              color: "#ffe2ed",
+              fontSize: "1.6rem",
+            }}
           >
             {isLogin ? "Create a new account" : "Login with existing account"}
           </Button>

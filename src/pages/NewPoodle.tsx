@@ -162,11 +162,7 @@ const NewPoodle: React.FC = () => {
           </div>
           <br></br>
           <div className="col-md-12 text-center">
-            <Button
-              type="submit"
-              variant="outline-dark"
-              style={{ background: "rgba(216, 176, 226, 0.815)" }}
-            >
+            <Button type="submit" variant="dark" style={{ fontSize: "1.6rem" }}>
               Add new poodle
             </Button>
           </div>

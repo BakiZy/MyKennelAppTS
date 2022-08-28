@@ -211,11 +211,7 @@ const EditPoodle: React.FC = () => {
         </div>
         <br></br>
         <div className={classes.control}>
-          <Button
-            type="submit"
-            variant="outline-dark"
-            style={{ background: "rgba(216, 176, 226, 0.815)" }}
-          >
+          <Button type="submit" variant="dark" style={{ fontSize: "1.6rem" }}>
             Update info
           </Button>
         </div>

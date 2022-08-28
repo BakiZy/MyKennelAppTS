@@ -1,11 +1,13 @@
 .cardProperty {
-  background-color: rgba(216, 176, 226, 0.815);
+  background-color: rgba(45, 72, 192, 0.9);
   border-radius: 1.5rem;
   text-align: center;
   box-sizing: border-box;
   width: 30rem;
+  color: #ffe2ed;
   margin-bottom: 2.5rem;
   transition: transform 0.3s ease-in-out;
+  font-size: 1.5rem;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.26);
 }
 
@@ -22,21 +24,11 @@
   }
 }
 
-.btn {
-  background-color: rgb(107, 14, 117) !important;
-  border-radius: 1rem !important;
-  border-color: rgb(107, 14, 117) !important;
-  color: black !important;
-  font-size: 1.5rem !important;
-  padding: 0.4rem !important;
-  text-decoration: none !important;
-}
-
 .linkZ {
-  background-color: rgb(107, 14, 117);
+  background-color: #212519;
   border-radius: 1rem;
-  border-color: rgb(107, 14, 117);
-  color: black;
+  border-color: rgb(49, 67, 148);
+  color: #ffe2ed;
   font-size: 1.5rem;
   padding: 0.4rem;
   text-decoration: none;
@@ -44,9 +36,15 @@
 
 .linkZ:hover {
   color: white;
+  background-color: rgb(44, 43, 43);
 }
 
 .cardProperty:hover,
 .cardProperty:active {
-  transform: scale(1.1);
+  transform: scale(1.05);
+}
+
+.buttonDiv {
+  display: flex;
+  justify-content: center;
 }

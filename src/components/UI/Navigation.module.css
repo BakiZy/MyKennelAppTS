@@ -17,11 +17,11 @@ span {
 }
 
 .navMain {
-  background-color: rgb(107, 14, 117);
+  background-color: #212529;
   margin-bottom: 2.5rem;
 }
 
 .mainMenu {
-  font-size: 1.8rem !important;
+  font-size: 2.3rem !important;
   margin-right: 10rem !important;
 }

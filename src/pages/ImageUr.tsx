@@ -54,11 +54,7 @@ const ImagePage: React.FC = () => {
           />
         </div>
         <br></br>
-        <Button
-          type="submit"
-          variant="outline-dark"
-          style={{ background: "rgba(216, 176, 226, 0.815)" }}
-        >
+        <Button type="submit" variant="dark" style={{ fontSize: "1.6rem" }}>
           Add image
         </Button>
       </form>

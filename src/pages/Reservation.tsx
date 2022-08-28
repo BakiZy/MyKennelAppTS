@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import emailjs from "@emailjs/browser";
 import classes from "./Reservation.module.css";
 import { PoodleModel } from "../interfaces/IPoodleModel";
-import { Card, Col, Row, Image } from "react-bootstrap";
+import { Card, Col, Row, Image, Button } from "react-bootstrap";
 import axios, { AxiosResponse } from "axios";
 
 const Reservation = () => {
@@ -121,12 +121,13 @@ const Reservation = () => {
               </div>
               <br></br>
               <div className={classes.formGroup}>
-                <button
+                <Button
                   type="submit"
-                  style={{ background: "rgba(216, 176, 226, 0.815)" }}
+                  variant="dark"
+                  style={{ fontSize: "1.6rem" }}
                 >
                   Send information
-                </button>
+                </Button>
               </div>
             </form>
           </Col>
