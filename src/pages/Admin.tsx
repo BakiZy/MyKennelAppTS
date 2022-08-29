@@ -48,7 +48,7 @@ const AdminPage: React.FC = () => {
 
   const removeHandler = (id: string) => {
     axios
-      .delete(`https://poodlesvonapalusso.dog/api/Admin/user${id}`, {
+      .delete(`https://poodlesvonapalusso.dog/api/user/${id}`, {
         headers: { Authorization: "Bearer " + localStorage.getItem("token") },
       })
       .then(() => {
@@ -58,6 +58,7 @@ const AdminPage: React.FC = () => {
         console.log(error);
       });
   };
+
   useEffect(() => {
     setLoading(true);
     axios

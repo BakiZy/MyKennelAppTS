@@ -128,6 +128,11 @@ const Reservation = () => {
                 >
                   Send information
                 </Button>
+                <br></br>
+                <Card.Footer className={classes.futer}>
+                  We don't need you to be logged in/registered for this action.
+                  We just want to have valid way of contacting you back.
+                </Card.Footer>
               </div>
             </form>
           </Col>

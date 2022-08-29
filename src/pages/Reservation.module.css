@@ -16,7 +16,7 @@ h1 {
   margin-left: auto;
 }
 .cardProperty {
-  margin-left: 5rem;
+  margin-left: 4rem;
   background-color: rgba(45, 72, 192, 0.9);
   border-radius: 1.5rem;
   text-align: center;
@@ -56,4 +56,12 @@ h1 {
     font-size: 1.2rem;
     margin-left: 0;
   }
+}
+
+.futer {
+  background-color: #212529;
+  border-radius: 1.5rem;
+  color: #ffe2ed;
+  font-size: medium;
+  padding: 2px;
 }
