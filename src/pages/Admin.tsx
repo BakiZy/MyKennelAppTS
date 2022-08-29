@@ -44,6 +44,7 @@ const AdminPage: React.FC = () => {
       .catch((error) => {
         console.log(error);
       });
+    return () => {};
   }, [authContext.isAdmin, token]);
 
   const removeHandler = (id: string) => {
@@ -77,10 +78,10 @@ const AdminPage: React.FC = () => {
             id: response.data[i].id,
           });
         }
-        console.log(loadedData);
         setUsers(loadedData);
-        setLoading(false);
       });
+    setLoading(false);
+    return () => {};
   }, [authContext.isAdmin, token]);
 
   const UsersList: React.FC<IUserProps> = (props) => {
@@ -101,7 +102,12 @@ const AdminPage: React.FC = () => {
               <td>{user.email}</td>
               <td>{user.id}</td>
               <td>
-                <Button onClick={() => props.onRemove(user.id)}>Delete</Button>
+                <Button
+                  variant="danger"
+                  onClick={() => props.onRemove(user.id)}
+                >
+                  Delete
+                </Button>
               </td>
             </tr>
           ))}
@@ -224,8 +230,9 @@ const AdminPage: React.FC = () => {
   return (
     <>
       <RolesList />
-      <UsersList users={users} onRemove={removeHandler} />
       <AdminReg />
+      <br></br>
+      <UsersList users={users} onRemove={removeHandler} />
     </>
   );
 };

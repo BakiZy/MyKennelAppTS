@@ -109,7 +109,7 @@ const Reservation = () => {
               </div>
               <div className={classes.formGroup}>
                 <label htmlFor="phone">Phone number</label>
-                <input type="tel" name="phone" placeholder="only numbers" />
+                <input type="tel" name="phone" />
               </div>
               <div className={classes.formGroup}>
                 <label htmlFor="message">Message</label>

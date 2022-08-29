@@ -13,7 +13,7 @@ interface FilterProps {
 
 const Home: React.FC = () => {
   const [poodles, setPoodles] = useState<PoodleModel[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const { selectSizeOption, setSelectedSizeOption, sizes, selectedSizeName } =
     useGetSizes();
@@ -40,23 +40,25 @@ const Home: React.FC = () => {
         )
         .then((response) => {
           const loadedData: PoodleModel[] = [];
-          for (const key in response.data) {
-            loadedData.push({
-              id: response.data[key].id,
-              name: response.data[key].name,
-              dateOfBirth: response.data[key].dateOfBirth,
-              geneticTests: response.data[key].geneticTests,
-              pedigreeNumber: response.data[key].pedigreeNumber,
-              poodleSizeName: response.data[key].poodleSizeName,
-              poodleColorName: response.data[key].poodleColorName,
-              imageUrl: response.data[key].imageUrl,
-              imagePedigreeUrl: response.data[key].imagePedigreeUrl,
-            });
-            if (loadedData.length < 1) {
-              alert("rip");
-            }
-            setPoodles(loadedData);
+          if (response.data.length < 1) {
+            alert("We don't have this combination in our kennel :(");
             setLoading(false);
+          } else {
+            for (const key in response.data) {
+              loadedData.push({
+                id: response.data[key].id,
+                name: response.data[key].name,
+                dateOfBirth: response.data[key].dateOfBirth,
+                geneticTests: response.data[key].geneticTests,
+                pedigreeNumber: response.data[key].pedigreeNumber,
+                poodleSizeName: response.data[key].poodleSizeName,
+                poodleColorName: response.data[key].poodleColorName,
+                imageUrl: response.data[key].imageUrl,
+                imagePedigreeUrl: response.data[key].imagePedigreeUrl,
+              });
+              setPoodles(loadedData);
+              setLoading(false);
+            }
           }
         })
         .catch((error) => {
@@ -84,13 +86,12 @@ const Home: React.FC = () => {
             });
           }
           setPoodles(loadedData);
-
-          setLoading(false);
         })
         .catch((error) => {
           console.log(error);
           setLoading(false);
         });
+      return setLoading(false);
     }, []);
 
     const changeSelectSizeHandler = (
@@ -184,12 +185,12 @@ const Home: React.FC = () => {
           });
         }
         setPoodles(loadedData);
-        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
         setLoading(false);
       });
+    return setLoading(false);
   }, []);
 
   const onRemoveHandler = (id) => {

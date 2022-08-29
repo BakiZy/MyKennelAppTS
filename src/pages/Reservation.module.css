@@ -44,7 +44,7 @@ h1 {
 
 .pedigree {
   border-radius: 1.5rem;
-  height: 41rem;
+  height: 41.6rem;
   object-fit: initial;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.26);
   width: 50rem;
@@ -63,5 +63,5 @@ h1 {
   border-radius: 1.5rem;
   color: #ffe2ed;
   font-size: medium;
-  padding: 2px;
+  padding: 0.1rem;
 }
