@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import AuthContext from "../store/auth-context";
 import { IRoleModel, IUserModel, IUserProps } from "../interfaces/IAuthModel";
-import { Table } from "react-bootstrap";
+import { Table, Button } from "react-bootstrap";
 import classes from "./Admin.module.css";
+import { validEmail, validPassword } from "../components/Authentication/Regex";
 
 const AdminPage: React.FC = () => {
   const [roles, setRoles] = useState<IRoleModel[]>([]);
@@ -13,9 +14,9 @@ const AdminPage: React.FC = () => {
   });
   const [users, setUsers] = useState<IUserModel[]>([]);
   const [loading, setLoading] = useState(false);
-  // const usernameInputRef = useRef<HTMLInputElement>(null);
-  // const passwordInputRef = useRef<HTMLInputElement>(null);
-  // const emailInputRef = useRef<HTMLInputElement>(null);
+  const usernameInputRef = useRef<HTMLInputElement>(null);
+  const passwordInputRef = useRef<HTMLInputElement>(null);
+  const emailInputRef = useRef<HTMLInputElement>(null);
 
   const authContext = useContext(AuthContext);
   const token = authContext.token;
@@ -45,6 +46,18 @@ const AdminPage: React.FC = () => {
       });
   }, [authContext.isAdmin, token]);
 
+  const removeHandler = (id: string) => {
+    axios
+      .delete(`https://poodlesvonapalusso.dog/api/Admin/user${id}`, {
+        headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+      })
+      .then(() => {
+        setUsers(users.filter((user) => user.id !== id));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   useEffect(() => {
     setLoading(true);
     axios
@@ -77,6 +90,7 @@ const AdminPage: React.FC = () => {
             <th>Username </th>
             <th>email</th>
             <th>id</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -85,6 +99,9 @@ const AdminPage: React.FC = () => {
               <td>{user.userName}</td>
               <td>{user.email}</td>
               <td>{user.id}</td>
+              <td>
+                <Button onClick={() => props.onRemove(user.id)}>Delete</Button>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -114,6 +131,88 @@ const AdminPage: React.FC = () => {
       </div>
     );
   };
+
+  const AdminReg: React.FC = () => {
+    const submitHandler = async (event: React.FormEvent) => {
+      event.preventDefault();
+      const enteredUsername = usernameInputRef.current!.value;
+      const enteredPassword = passwordInputRef.current!.value;
+      const enteredEmail = emailInputRef.current!.value;
+      if (
+        !validEmail.test(enteredEmail) ||
+        !validPassword.test(enteredPassword)
+      ) {
+        alert(
+          "entered values must be valid, password must contain at least 1 number, 1 uppercase and one special character"
+        );
+        setLoading(false);
+        return;
+      }
+      const config = {
+        headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+      };
+
+      await axios
+        .post<AxiosResponse>(
+          "https://poodlesvonapalusso.dog/api/Admin/register-admin",
+          {
+            username: enteredUsername,
+            password: enteredPassword,
+            email: enteredEmail,
+          },
+          config
+        )
+        .then(() => {
+          alert("admin registration successful");
+          setLoading(false);
+        })
+        .catch((error: string) => {
+          setLoading(false);
+          alert(error);
+        });
+    };
+    return (
+      <section>
+        <h1>Register admin account</h1>
+        <form onSubmit={submitHandler}>
+          <div className={classes.control}>
+            <label htmlFor="email">E-mail address</label>
+            <input type="email" id="email" required ref={emailInputRef} />
+          </div>
+
+          <div className={classes.control}>
+            <label htmlFor="username">Username</label>
+            <input type="text" id="username" required ref={usernameInputRef} />
+          </div>
+          <div className={classes.control}>
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              required
+              ref={passwordInputRef}
+            />
+          </div>
+          <br></br>
+          <div className="col-md-12 text-center">
+            <Button
+              type="submit"
+              variant="dark"
+              style={{
+                color: "#ffe2ed",
+                fontSize: "1.6rem",
+              }}
+            >
+              Create account
+            </Button>
+            {loading && <div>Loading...</div>}
+            <br />
+          </div>
+        </form>
+      </section>
+    );
+  };
+
   if (!authContext.isAdmin) {
     return <div>You are not admin</div>;
   }
@@ -124,7 +223,8 @@ const AdminPage: React.FC = () => {
   return (
     <>
       <RolesList />
-      <UsersList users={users} />
+      <UsersList users={users} onRemove={removeHandler} />
+      <AdminReg />
     </>
   );
 };
