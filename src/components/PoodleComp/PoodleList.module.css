@@ -24,6 +24,13 @@
   }
 }
 
+@media only screen and (max-width: 600px) {
+  .cardProperty {
+    width: 24.5rem;
+    font-size: 1.2rem;
+  }
+}
+
 .linkZ {
   background-color: #212519;
   border-radius: 1rem;

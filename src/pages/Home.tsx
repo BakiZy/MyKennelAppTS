@@ -13,7 +13,7 @@ interface FilterProps {
 
 const Home: React.FC = () => {
   const [poodles, setPoodles] = useState<PoodleModel[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const { selectSizeOption, setSelectedSizeOption, sizes, selectedSizeName } =
     useGetSizes();
@@ -28,6 +28,7 @@ const Home: React.FC = () => {
   const PoodleFilter: React.FC<FilterProps> = () => {
     const getFilters = useCallback((event) => {
       event.preventDefault();
+      setLoading(true);
       const params = {
         colorName: selectedColorName,
         sizeName: selectedSizeName,
@@ -55,6 +56,7 @@ const Home: React.FC = () => {
               alert("rip");
             }
             setPoodles(loadedData);
+            setLoading(false);
           }
         })
         .catch((error) => {
@@ -63,6 +65,7 @@ const Home: React.FC = () => {
     }, []);
 
     const onReset = useCallback(() => {
+      setLoading(true);
       axios
         .get<PoodleModel[]>("https://poodlesvonapalusso.dog/api/poodles")
         .then((response: AxiosResponse<PoodleModel[]>) => {
