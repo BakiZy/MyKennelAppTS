@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": "6.x"
+    "node": "16.x"
   },
   "dependencies": {
     "@emailjs/browser": "^3.6.2",
