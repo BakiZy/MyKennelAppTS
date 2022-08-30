@@ -69,7 +69,7 @@ const EditPoodle: React.FC = () => {
     const updatePoodle = async () => {
       await axios
         .put<AxiosResponse>(
-          `http://bakisan-001-site1.ctempurl.com/api/poodles/${poodleId}`,
+          `https://poodlesvonapalusso.dog/api/poodles/${poodleId}`,
           {
             id: poodleId,
             name: enteredPoodleName,

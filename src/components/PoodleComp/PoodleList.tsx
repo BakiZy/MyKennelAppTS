@@ -21,7 +21,13 @@ const PoodleList: React.FC<PoodleListProps> = (props) => {
           <Col key={poodle.id}>
             <Card key={poodle.id} className={classes.cardProperty}>
               <Card.Body>
-                <Card.Img src={poodle.imageUrl} className={classes.imageProp} />
+                <Link className={classes.linkZ} to={`/${poodle.id}`}>
+                  <Card.Img
+                    src={poodle.imageUrl}
+                    className={classes.imageProp}
+                  />
+                </Link>
+
                 <Card.Title>
                   <h2>{poodle.name}</h2>
                 </Card.Title>

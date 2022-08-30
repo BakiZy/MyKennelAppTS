@@ -16,8 +16,8 @@ const About: React.FC = () => {
       <div className={classes.container}>
         <p>
           Kennel Von Apalusso was created almost 40 years a go, by my father who
-          was big German shepherd dog lover. Me and my sister got poodle as pets
-          back when we were kids, 20 ages + a go, and we've had poodles ever
+          was big German shepherd dog lover. When i was young I got poodle as
+          pet back when we were kids, 20 ages + a go, and we've had poodles ever
           since.
         </p>
         <br></br>

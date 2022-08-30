@@ -1,3 +1,5 @@
+import React from "react";
+
 export interface ILoginResponse {
   token: string;
   username: string;
@@ -19,4 +21,9 @@ export interface IUserModel {
 export interface IUserProps {
   users: IUserModel[];
   onRemove: (id: string) => void;
+}
+
+export interface IErrorProps {
+  title: string;
+  message: string;
 }

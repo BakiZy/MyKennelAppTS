@@ -6,14 +6,20 @@ import classes from "./Home.module.css";
 import useGetSizes from "../hooks/getSizesHook";
 import useGetColors from "../hooks/getColorsHook";
 import { Button } from "react-bootstrap";
+import ErrorModal from "../components/UI/ErrorModal";
+import { IErrorProps } from "../interfaces/IAuthModel";
 
 interface FilterProps {
   filteredPoodles: PoodleModel[];
 }
-
 const Home: React.FC = () => {
   const [poodles, setPoodles] = useState<PoodleModel[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<IErrorProps>({
+    title: "",
+    message: "",
+    onConfirm: () => {},
+  });
 
   const { selectSizeOption, setSelectedSizeOption, sizes, selectedSizeName } =
     useGetSizes();
@@ -28,7 +34,6 @@ const Home: React.FC = () => {
   const PoodleFilter: React.FC<FilterProps> = () => {
     const getFilters = useCallback((event) => {
       event.preventDefault();
-      setLoading(true);
       const params = {
         colorName: selectedColorName,
         sizeName: selectedSizeName,
@@ -41,8 +46,12 @@ const Home: React.FC = () => {
         .then((response) => {
           const loadedData: PoodleModel[] = [];
           if (response.data.length < 1) {
-            alert("We don't have this combination in our kennel :(");
             setLoading(false);
+            setError({
+              title: "Filter empty",
+              message: "no such poodles",
+              onConfirm: () => {},
+            });
           } else {
             for (const key in response.data) {
               loadedData.push({
@@ -209,8 +218,11 @@ const Home: React.FC = () => {
   if (loading) {
     return <div>Loading...</div>;
   }
+
+  const errorHandler = () => {};
   return (
     <>
+      {<ErrorModal message={error!.message} title={error!.title} />}
       <PoodleFilter filteredPoodles={poodles} />
       <PoodleList poodles={poodles} onRemove={onRemoveHandler} />
     </>
