@@ -5,20 +5,21 @@ import { PoodleModel } from "../interfaces/IPoodleModel";
 import classes from "./Home.module.css";
 import useGetSizes from "../hooks/getSizesHook";
 import useGetColors from "../hooks/getColorsHook";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import ErrorModal from "../components/UI/ErrorModal";
-import { IErrorProps } from "../interfaces/IAuthModel";
+//import { IErrorProps } from "../interfaces/IAuthModel";
 
 interface FilterProps {
   filteredPoodles: PoodleModel[];
 }
+
 const Home: React.FC = () => {
   const [poodles, setPoodles] = useState<PoodleModel[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<IErrorProps>({
-    title: "",
+  const [error, setError] = useState({
     message: "",
-    onConfirm: () => {},
+    title: "",
+    popup: false,
   });
 
   const { selectSizeOption, setSelectedSizeOption, sizes, selectedSizeName } =
@@ -48,9 +49,9 @@ const Home: React.FC = () => {
           if (response.data.length < 1) {
             setLoading(false);
             setError({
-              title: "Filter empty",
-              message: "no such poodles",
-              onConfirm: () => {},
+              message: "Currently we don't have this combination of poodle",
+              title: "Error",
+              popup: true,
             });
           } else {
             for (const key in response.data) {
@@ -73,6 +74,7 @@ const Home: React.FC = () => {
         .catch((error) => {
           console.log(error);
         });
+      return setLoading(false);
     }, []);
 
     const onReset = useCallback(() => {
@@ -168,7 +170,7 @@ const Home: React.FC = () => {
               fontSize: "1.5rem",
             }}
           >
-            Reset filter
+            Show all
           </Button>
         </div>
       </form>
@@ -176,6 +178,7 @@ const Home: React.FC = () => {
   };
 
   useEffect(() => {
+    setLoading(true);
     axios
       .get<PoodleModel[]>("https://poodlesvonapalusso.dog/api/poodles")
       .then((response: AxiosResponse<PoodleModel[]>) => {
@@ -193,13 +196,12 @@ const Home: React.FC = () => {
             imagePedigreeUrl: response.data[i].imagePedigreeUrl,
           });
         }
+        setLoading(false);
         setPoodles(loadedData);
       })
       .catch((error) => {
         console.log(error);
-        setLoading(false);
       });
-    return setLoading(false);
   }, []);
 
   const onRemoveHandler = (id) => {
@@ -215,14 +217,30 @@ const Home: React.FC = () => {
       });
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  const errorHandler = () => {
+    setError({
+      message: "",
+      title: "",
+      popup: false,
+    });
+  };
 
-  const errorHandler = () => {};
+  if (loading) {
+    return (
+      <Spinner animation="border" variant="info">
+        Load
+      </Spinner>
+    );
+  }
   return (
     <>
-      {<ErrorModal message={error!.message} title={error!.title} />}
+      {error.popup && (
+        <ErrorModal
+          message={error!.message}
+          title={error!.title}
+          onConfirm={errorHandler}
+        />
+      )}
       <PoodleFilter filteredPoodles={poodles} />
       <PoodleList poodles={poodles} onRemove={onRemoveHandler} />
     </>

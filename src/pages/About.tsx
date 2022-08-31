@@ -1,33 +1,43 @@
 import React from "react";
 import classes from "./About.module.css";
+//import { Button } from "react-bootstrap";
 
 const About: React.FC = () => {
   return (
-    <section id="poodlesetup">
-      <h1
-        style={{
-          textAlign: "center",
-          fontSize: "2em",
-          textAlignLast: "center",
-        }}
-      >
-        Welcome to Von Apalusso kennel page
-      </h1>
-      <div className={classes.container}>
-        <p>
-          Kennel Von Apalusso was created almost 40 years a go, by my father who
-          was big German shepherd dog lover. When i was young I got poodle as
-          pet back when we were kids, 20 ages + a go, and we've had poodles ever
-          since.
-        </p>
-        <br></br>
-        <p>
-          We choose poodles because they are very smart, agile, playful and
-          loyal. They have very special characteristics and they are very
-          unique.
-        </p>
-      </div>
-    </section>
+    <>
+      <section className={classes.about}>
+        <h1>Welcome to Von Apalusso kennel page</h1>
+        <div className={classes.container}>
+          <p>
+            Kennel Von Apalusso was created almost 40 years a go, back in 1984,
+            by my father who was big German Shepherd Dog lover. He was very
+            competitive about dog shows, and was very successful as a breeder.
+            In early 90s me and my sister wanted poodles as pets, and of course
+            our father got us one. Ever since then we've had at least one poodle
+            in our house.
+          </p>
+          <p>
+            After I met my girlfriend , we decided to get more serious about
+            with our poodles, get into shows and started competing. Therefor all
+            our dogs have completed health testing and have their patellas
+            checked, and are very well set in standards of a poodle race. Our
+            dogs, and their descendants have been rewarded in dog shows multiple
+            times.
+          </p>
+          <p>
+            We choose poodles because they are very smart, agile, playful and
+            loyal. They have very special characteristics and they are very
+            unique . They don't shed which is big part of why people like them ,
+            but that's why their coat and skin requires a lot of care. They need
+            to be groomed regularly, they require a lot of attention and
+            dedication. We keep all our poodles with us in our house, and all
+            puppies that leave our kennel are already used to living in good
+            home conditions. Therefor we expect new owners to continue in such a
+            way.
+          </p>
+        </div>
+      </section>
+    </>
   );
 };
 

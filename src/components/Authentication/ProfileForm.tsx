@@ -1,9 +1,9 @@
-import { useContext, useRef } from "react";
+import { useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
 import axios from "axios";
 import classes from "./ProfileForm.module.css";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 
 const ProfileForm = () => {
   const authContext = useContext(AuthContext);
@@ -12,6 +12,7 @@ const ProfileForm = () => {
   const currentPasswordInput = useRef<HTMLInputElement>(null);
   const newPasswordInput = useRef<HTMLInputElement>(null);
   const confirmPasswordInput = useRef<HTMLInputElement>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const logoutHandler = () => {
     authContext.logout();
@@ -26,13 +27,12 @@ const ProfileForm = () => {
     const confirmPassword = confirmPasswordInput!.current!.value;
 
     const token = authContext.token;
-    console.log(token + "token iz profila");
 
     if (newPassword.length < 7 || newPassword !== confirmPassword) {
       alert("Passwords must match and be in proper form");
       return;
     }
-
+    setIsLoading(true);
     const config = {
       headers: { Authorization: "Bearer " + token },
     };
@@ -61,6 +61,13 @@ const ProfileForm = () => {
     changePassword();
   };
 
+  if (isLoading) {
+    return (
+      <Spinner animation="border" variant="info" className={classes.spinner}>
+        Load
+      </Spinner>
+    );
+  }
   return (
     <>
       <form className={classes.form} onSubmit={submitHandler}>

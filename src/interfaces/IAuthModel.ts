@@ -1,5 +1,3 @@
-import React from "react";
-
 export interface ILoginResponse {
   token: string;
   username: string;
@@ -26,4 +24,5 @@ export interface IUserProps {
 export interface IErrorProps {
   title: string;
   message: string;
+  onConfirm: () => void;
 }

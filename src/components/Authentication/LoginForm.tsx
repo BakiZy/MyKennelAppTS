@@ -4,7 +4,7 @@ import axios, { AxiosResponse } from "axios";
 import classes from "./LoginForm.module.css";
 import AuthContext from "../../store/auth-context";
 import { ILoginResponse } from "../../interfaces/IAuthModel";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import { validEmail, validPassword } from "./Regex";
 
 const LoginForm = () => {
@@ -106,6 +106,13 @@ const LoginForm = () => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <Spinner animation="border" variant="info" className={classes.spinner}>
+        Load
+      </Spinner>
+    );
+  }
   return (
     <section className={classes.auth}>
       <h1>{isLogin ? "Login" : "Register account"}</h1>

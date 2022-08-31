@@ -19,7 +19,7 @@ const Navigation = () => {
             className="col-sm"
             style={{ color: "rgba(255, 255, 255, 0.75)" }}
           >
-            © Poodle Kennel Von Apalusso{" "}
+            © Poodle Kennel Von Apalusso
           </span>
           <img src={logo} alt="poodle" className={classes.logo} />
         </Navbar.Brand>

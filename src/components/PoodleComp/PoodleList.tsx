@@ -21,13 +21,12 @@ const PoodleList: React.FC<PoodleListProps> = (props) => {
           <Col key={poodle.id}>
             <Card key={poodle.id} className={classes.cardProperty}>
               <Card.Body>
-                <Link className={classes.linkZ} to={`/${poodle.id}`}>
+                <Link to={`/poodle/${poodle.id}`}>
                   <Card.Img
                     src={poodle.imageUrl}
                     className={classes.imageProp}
                   />
                 </Link>
-
                 <Card.Title>
                   <h2>{poodle.name}</h2>
                 </Card.Title>
@@ -45,7 +44,7 @@ const PoodleList: React.FC<PoodleListProps> = (props) => {
 
                 <Card.Text>Size : {poodle.poodleSizeName}</Card.Text>
                 <Card.Text>Color : {poodle.poodleColorName}</Card.Text>
-                <Link className={classes.linkZ} to={`/${poodle.id}`}>
+                <Link className={classes.linkZ} to={`/poodle/${poodle.id}`}>
                   Interested in this poodle pups?
                 </Link>
               </Card.Body>
@@ -66,7 +65,10 @@ const PoodleList: React.FC<PoodleListProps> = (props) => {
                   </Button>
                 )}
                 {authContext.isAdmin && (
-                  <Link className={classes.linkZ} to={`/poodle/${poodle.id}`}>
+                  <Link
+                    className={classes.linkZ}
+                    to={`/edit-poodle/${poodle.id}`}
+                  >
                     Edit DB data
                   </Link>
                 )}

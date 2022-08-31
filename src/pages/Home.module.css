@@ -11,7 +11,7 @@
   margin-right: 1rem;
   padding-bottom: 2rem;
   color: #212529;
-  font-weight: 500;
+  font-weight: 550;
 }
 
 .filterButtons {
@@ -26,4 +26,11 @@
 body {
   background-image: url("https://i.imgur.com/BLbQkuY.jpeg");
   background-size: cover;
+}
+
+.spinner {
+  height: 10rem;
+  width: 10rem;
+  display: flex;
+  justify-content: center;
 }

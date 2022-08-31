@@ -50,7 +50,6 @@ const EditPoodle: React.FC = () => {
           `https://poodlesvonapalusso.dog/api/poodles/${poodleId}`
         )
         .then((response: AxiosResponse<PoodleModel>) => {
-          console.log(response.data);
           setPoodle(response.data);
         })
         .catch((error) => {
