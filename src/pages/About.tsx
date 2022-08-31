@@ -17,23 +17,22 @@ const About: React.FC = () => {
             in our house.
           </p>
           <p>
-            After I met my girlfriend , we decided to get more serious about
-            with our poodles, get into shows and started competing. Therefor all
-            our dogs have completed health testing and have their patellas
-            checked, and are very well set in standards of a poodle race. Our
-            dogs, and their descendants have been rewarded in dog shows multiple
-            times.
+            AFter a while me and my girlfriend have decided to get more serious
+            about with our poodles, get into shows and started competing.
+            Therefore all our dogs have completed health testing and have their
+            patellas checked, and are very well set in standards of a poodle
+            race. Our dogs, and their descendants have been rewarded in dog
+            shows multiple times.
           </p>
           <p>
             We choose poodles because they are very smart, agile, playful and
-            loyal. They have very special characteristics and they are very
-            unique . They don't shed which is big part of why people like them ,
-            but that's why their coat and skin requires a lot of care. They need
-            to be groomed regularly, they require a lot of attention and
-            dedication. We keep all our poodles with us in our house, and all
-            puppies that leave our kennel are already used to living in good
-            home conditions. Therefor we expect new owners to continue in such a
-            way.
+            loyal. They have very special characters and they are very unique .
+            They don't shed, which is big part of why people like them , but
+            that's why their coat and skin requires a lot of care. They need to
+            be groomed regularly, and their hair requires a lot of nursing . We
+            keep all our poodles with us in our house, and all puppies that
+            leave our kennel are already used to living in good home conditions,
+            therefore we expect new owners to continue in such a way.
           </p>
         </div>
       </section>
