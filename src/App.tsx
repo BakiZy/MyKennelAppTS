@@ -23,7 +23,7 @@ const App: React.FC = () => {
       <Navigation />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path=":poodleId" element={<Reservation />} />
+
         <Route path="/about" element={<About />} />
         {authContext.isLoggedIn ? (
           <Route path="/profile" element={<Profile />} />
@@ -32,16 +32,19 @@ const App: React.FC = () => {
         )}
         {authContext.isAdmin ? (
           <Route path="/admin" element={<Admin />} />
-        ) : null}
+        ) : (
+          <Route path="*" element={<NotFound />} />
+        )}
         {authContext.isAdmin && (
           <Route path="/new-poodle" element={<NewPoodle />} />
         )}
         {authContext.isAdmin && (
-          <Route path="/poodle/:poodleId" element={<EditPoodle />} />
+          <Route path="/edit-poodle/:poodleId" element={<EditPoodle />} />
         )}
         {authContext.isAdmin && (
           <Route path="/images" element={<ImagePage />} />
         )}
+        <Route path="/poodle/:poodleId" element={<Reservation />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

@@ -20,3 +20,9 @@ export interface IUserProps {
   users: IUserModel[];
   onRemove: (id: string) => void;
 }
+
+export interface IErrorProps {
+  title: string;
+  message: string;
+  onConfirm: () => void;
+}

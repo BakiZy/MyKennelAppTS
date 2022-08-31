@@ -60,8 +60,10 @@ h1 {
 
 .futer {
   background-color: #212529;
+  opacity: 0.9;
   border-radius: 1.5rem;
   color: #ffe2ed;
   font-size: medium;
   padding: 0.1rem;
+  margin-top: 1rem;
 }

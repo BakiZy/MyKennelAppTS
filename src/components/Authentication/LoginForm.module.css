@@ -19,3 +19,10 @@ h1 {
   text-align: center;
   color: #212529;
 }
+
+.spinner {
+  height: 10rem;
+  width: 10rem;
+  display: flex;
+  justify-content: center;
+}

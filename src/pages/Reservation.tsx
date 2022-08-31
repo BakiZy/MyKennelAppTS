@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import emailjs from "@emailjs/browser";
 import classes from "./Reservation.module.css";
 import { PoodleModel } from "../interfaces/IPoodleModel";
-import { Card, Col, Row, Image, Button } from "react-bootstrap";
+import { Card, Col, Row, Image, Button, Spinner } from "react-bootstrap";
 import axios, { AxiosResponse } from "axios";
 
 const Reservation = () => {
@@ -36,7 +36,7 @@ const Reservation = () => {
         });
     };
     fetchReservedPoodle();
-    setLoading(false);
+    return setLoading(false);
   }, [poodleId]);
 
   const sendEmail = (e: React.FormEvent<HTMLFormElement>) => {
@@ -61,7 +61,11 @@ const Reservation = () => {
     formInputRef.current!.reset();
   };
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <Spinner animation="border" variant="info" className={classes.spinner}>
+        loading
+      </Spinner>
+    );
   }
 
   if (!poodle) {

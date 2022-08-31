@@ -11,3 +11,10 @@
   text-align: center;
   border-radius: 2px;
 }
+
+.spinner {
+  height: 10rem;
+  width: 10rem;
+  display: flex;
+  justify-content: center;
+}
