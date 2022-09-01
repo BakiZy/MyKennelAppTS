@@ -141,7 +141,11 @@ const Reservation = () => {
           </Col>
           <Col>
             <Card className={classes.pedigree}>
-              <a href={poodle.imagePedigreeUrl}>
+              <a
+                href={poodle.imagePedigreeUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
                 <Card.Img
                   src={poodle.imagePedigreeUrl}
                   alt={poodle.name}

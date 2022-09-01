@@ -83,5 +83,6 @@ h1 {
 .pedigreeText {
   margin: 2rem;
   color: #ffe2ed;
-  font-size: medium;
+  font-weight: 500;
+  font-size: large;
 }
