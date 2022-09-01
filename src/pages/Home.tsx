@@ -120,32 +120,36 @@ const Home: React.FC = () => {
     return (
       <form onSubmit={getFilters} className={classes.filterMain}>
         <div className={classes.control}>
-          <label htmlFor="sizeName">Select size of poodle</label>
-          <select
-            id="sizeName"
-            name="sizeName"
-            value={selectSizeOption}
-            onChange={changeSelectSizeHandler}
-          >
-            {sizes.map((size) => (
-              <option key={size.id} value={size.id}>
-                {size.name}
-              </option>
-            ))}
-          </select>
-          <label htmlFor="colorName">Select color of poodle</label>
-          <select
-            id="colorName"
-            name="colorName"
-            value={selectColorOption}
-            onChange={changeSelectColorHandler}
-          >
-            {colors.map((color) => (
-              <option key={color.id} value={color.id}>
-                {color.name}
-              </option>
-            ))}
-          </select>
+          <div>
+            <label htmlFor="sizeName">Select size of poodle</label>
+            <select
+              id="sizeName"
+              name="sizeName"
+              value={selectSizeOption}
+              onChange={changeSelectSizeHandler}
+            >
+              {sizes.map((size) => (
+                <option key={size.id} value={size.id}>
+                  {size.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className={classes.filters}>
+            <label htmlFor="colorName">Select color of poodle</label>
+            <select
+              id="colorName"
+              name="colorName"
+              value={selectColorOption}
+              onChange={changeSelectColorHandler}
+            >
+              {colors.map((color) => (
+                <option key={color.id} value={color.id}>
+                  {color.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
         <div className={classes.filterButtons}>
           <Button
