@@ -19,10 +19,22 @@ span {
 .navMain {
   background-color: #212529;
   margin-bottom: 2.5rem;
-  display: flex;
 }
 
 .mainMenu {
   font-size: 2.3rem !important;
   margin-right: 10rem !important;
+}
+
+@media only screen and (max-width: 600px) {
+  .navMain {
+    width: fit-content;
+  }
+  .mainMenu {
+    margin-left: 7rem !important;
+  }
+  .social {
+    text-align: center !important;
+    margin-left: 6rem;
+  }
 }

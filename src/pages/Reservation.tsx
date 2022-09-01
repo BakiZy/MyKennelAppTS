@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import emailjs from "@emailjs/browser";
 import classes from "./Reservation.module.css";
 import { PoodleModel } from "../interfaces/IPoodleModel";
-import { Card, Col, Row, Image, Button, Spinner } from "react-bootstrap";
+import { Card, Col, Row, Button, Spinner } from "react-bootstrap";
 import axios, { AxiosResponse } from "axios";
 
 const Reservation = () => {
@@ -132,7 +132,6 @@ const Reservation = () => {
                 >
                   Send information
                 </Button>
-                <br></br>
                 <Card.Footer className={classes.futer}>
                   We don't need you to be logged in/registered for this action.
                   We just want to have valid way of contacting you back.
@@ -141,12 +140,18 @@ const Reservation = () => {
             </form>
           </Col>
           <Col>
-            <a href={poodle!.imagePedigreeUrl} target="_blank" rel="noreferrer">
-              <Image
-                src={poodle!.imagePedigreeUrl}
-                className={classes.pedigree}
-              />
-            </a>
+            <Card className={classes.pedigree}>
+              <a href={poodle.imagePedigreeUrl}>
+                <Card.Img
+                  src={poodle.imagePedigreeUrl}
+                  alt={poodle.name}
+                  className={classes.pedigreeImg}
+                />
+              </a>
+              <Card.Text className={classes.pedigreeText}>
+                {poodle.name}'s Family tree
+              </Card.Text>
+            </Card>
           </Col>
         </Row>
       </div>
