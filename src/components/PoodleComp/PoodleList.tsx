@@ -25,6 +25,7 @@ const PoodleList: React.FC<PoodleListProps> = (props) => {
                   <Card.Img
                     src={poodle.imageUrl}
                     className={classes.imageProp}
+                    alt={poodle.name}
                   />
                 </Link>
                 <Card.Title>
