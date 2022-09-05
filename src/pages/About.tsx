@@ -1,6 +1,10 @@
 import React from "react";
 import classes from "./About.module.css";
-//import { Button } from "react-bootstrap";
+//import { ISliderImage } from "../interfaces/ISliderModel";
+import ImageSlider from "../components/UI/ImageSlider";
+import imageData from "../components/UI/ImageData";
+
+const images = imageData;
 
 const About: React.FC = () => {
   return (
@@ -36,6 +40,11 @@ const About: React.FC = () => {
           </p>
         </div>
       </section>
+      <div style={{ width: "500px", height: "1000px", margin: "0 auto" }}>
+        <h1>Currently available puppies</h1>
+        <ImageSlider slides={images} />
+      </div>
+      <div></div>
     </>
   );
 };

@@ -1,0 +1,44 @@
+.leftArrow {
+  position: absolute;
+  left: -13.4rem;
+  top: 40%;
+  font-size: 3rem;
+  color: black;
+  cursor: pointer;
+  padding-bottom: 1.5rem;
+}
+
+.rightArrow {
+  position: absolute;
+  top: 40%;
+  right: -13.4rem;
+  font-size: 3rem;
+  color: black;
+  cursor: pointer;
+  user-select: none;
+  padding-bottom: 1.5rem;
+}
+
+.slider {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sliderImage {
+  width: 50rem;
+  height: 40rem;
+  border-radius: 1rem;
+  object-fit: cover;
+}
+
+.symbol {
+  color: aliceblue;
+  background-color: #212529;
+  border-radius: 1rem;
+  position: absolute;
+  font-size: 5rem;
+  font-weight: 500;
+  bottom: 1rem;
+}
