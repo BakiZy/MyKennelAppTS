@@ -36,12 +36,6 @@ const ImageSlider: React.FC<ISliderProps> = (props) => {
           <div key={index}>
             {index === currentIndex && (
               <>
-                <img
-                  key={image.currentIndex}
-                  src={image.url}
-                  alt="poodle red"
-                  className={classes.sliderImage}
-                />
                 <p>
                   {image.sex === "male" ? (
                     <MdMale className={classes.symbol}></MdMale>
@@ -49,6 +43,12 @@ const ImageSlider: React.FC<ISliderProps> = (props) => {
                     <MdFemale className={classes.symbol}></MdFemale>
                   )}
                 </p>
+                <img
+                  key={image.currentIndex}
+                  src={image.url}
+                  alt="poodle red"
+                  className={classes.sliderImage}
+                />
               </>
             )}
           </div>

@@ -1,21 +1,23 @@
 .leftArrow {
   position: absolute;
-  left: -13.4rem;
-  top: 40%;
+  left: -9.6rem;
+  bottom: 0rem;
   font-size: 3rem;
   color: black;
   cursor: pointer;
   padding-bottom: 1.5rem;
+  border-radius: 1rem;
 }
 
 .rightArrow {
   position: absolute;
-  top: 40%;
-  right: -13.4rem;
+  bottom: 0rem;
+  right: -9.5rem;
   font-size: 3rem;
   color: black;
   cursor: pointer;
   user-select: none;
+  border-radius: 1rem;
   padding-bottom: 1.5rem;
 }
 
@@ -34,11 +36,43 @@
 }
 
 .symbol {
-  color: aliceblue;
+  color: #ffe2ed;
   background-color: #212529;
   border-radius: 1rem;
   position: absolute;
   font-size: 5rem;
   font-weight: 500;
-  bottom: 1rem;
+  top: 1rem;
+}
+
+@media only screen and (max-width: 601px) {
+  .rightArrow {
+    font-size: 2rem;
+    color: black;
+    cursor: pointer;
+    user-select: none;
+    margin-right: 20rem;
+    height: 4rem;
+    top: 42rem;
+  }
+
+  .leftArrow {
+    position: absolute;
+    font-size: 2rem;
+    color: black;
+    cursor: pointer;
+    padding-bottom: 1.5rem;
+    margin-left: 20rem;
+    height: 4rem;
+    top: 42rem;
+  }
+
+  .sliderImage {
+    object-fit: contain;
+  }
+
+  .symbol {
+    top: 1.5rem;
+    left: 0.5rem;
+  }
 }

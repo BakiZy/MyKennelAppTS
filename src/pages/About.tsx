@@ -40,7 +40,7 @@ const About: React.FC = () => {
           </p>
         </div>
       </section>
-      <div style={{ width: "500px", height: "1000px", margin: "0 auto" }}>
+      <div style={{ width: "500px", height: "800px", margin: "0 auto" }}>
         <h1>Currently available puppies</h1>
         <ImageSlider slides={images} />
       </div>
