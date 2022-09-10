@@ -17,6 +17,7 @@ export interface IUserModel {
 }
 
 export interface IUserProps {
+  admins: IUserModel[];
   users: IUserModel[];
   onRemove: (id: string) => void;
 }

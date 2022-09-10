@@ -13,6 +13,7 @@ const AdminPage: React.FC = () => {
     name: "",
   });
   const [users, setUsers] = useState<IUserModel[]>([]);
+  const [admins, setAdmins] = useState<IUserModel[]>([]);
   const [loading, setLoading] = useState(false);
   const usernameInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
@@ -62,57 +63,118 @@ const AdminPage: React.FC = () => {
 
   useEffect(() => {
     setLoading(true);
-    axios
-      .get<IUserModel[]>(
-        "https://poodlesvonapalusso.dog/api/Admin/list-users",
-        {
-          headers: { Authorization: "Bearer " + token },
-        }
-      )
-      .then((response) => {
-        const loadedData: IUserModel[] = [];
-        for (let i = 0; i < response.data.length; i++) {
-          loadedData.push({
-            userName: response.data[i].userName,
-            email: response.data[i].email,
-            id: response.data[i].id,
-          });
-        }
-        setUsers(loadedData);
-      });
-    setLoading(false);
-    return () => {};
+    const fetchUsers = async () => {
+      await axios
+        .get<IUserModel[]>(
+          "https://poodlesvonapalusso.dog/api/Admin/list-admins",
+          {
+            headers: { Authorization: "Bearer " + token },
+          }
+        )
+        .then((response) => {
+          const loadedData: IUserModel[] = [];
+          for (let i = 0; i < response.data.length; i++) {
+            loadedData.push({
+              userName: response.data[i].userName,
+              email: response.data[i].email,
+              id: response.data[i].id,
+            });
+          }
+          setUsers(loadedData);
+        });
+      setLoading(false);
+      return () => {};
+    };
+    fetchUsers();
+  }, [authContext.isAdmin, token]);
+
+  useEffect(() => {
+    setLoading(true);
+    const fetchUsers = async () => {
+      await axios
+        .get<IUserModel[]>(
+          "https://poodlesvonapalusso.dog/api/Admin/list-users",
+          {
+            headers: { Authorization: "Bearer " + token },
+          }
+        )
+        .then((response) => {
+          const loadedData: IUserModel[] = [];
+          for (let i = 0; i < response.data.length; i++) {
+            loadedData.push({
+              userName: response.data[i].userName,
+              email: response.data[i].email,
+              id: response.data[i].id,
+            });
+          }
+          setAdmins(loadedData);
+        });
+      setLoading(false);
+      return () => {};
+    };
+    fetchUsers();
   }, [authContext.isAdmin, token]);
 
   const UsersList: React.FC<IUserProps> = (props) => {
     return (
-      <Table variant="dark">
-        <thead>
-          <tr>
-            <th>Username </th>
-            <th>email</th>
-            <th>id</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {props.users.map((user) => (
-            <tr key={user.userName}>
-              <td>{user.userName}</td>
-              <td>{user.email}</td>
-              <td>{user.id}</td>
-              <td>
-                <Button
-                  variant="danger"
-                  onClick={() => props.onRemove(user.id)}
-                >
-                  Delete
-                </Button>
-              </td>
+      <>
+        <h1>List of users</h1>
+        <Table variant="dark">
+          <thead>
+            <tr>
+              <th>Username </th>
+              <th>email</th>
+              <th>id</th>
+              <th></th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {props.users.map((user) => (
+              <tr key={user.userName}>
+                <td>{user.userName}</td>
+                <td>{user.email}</td>
+                <td>{user.id}</td>
+                <td>
+                  <Button
+                    variant="danger"
+                    onClick={() => props.onRemove(user.id)}
+                  >
+                    Delete
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+        <h1>List of admins</h1>
+        <Table variant="dark">
+          <thead>
+            <tr>
+              <th>Username </th>
+              <th>email</th>
+              <th>id</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {props.admins.map((admin) => (
+              <tr key={admin.userName}>
+                <td>{admin.userName}</td>
+                <td>{admin.email}</td>
+                <td>{admin.id}</td>
+                <td>
+                  <Button
+                    variant="danger"
+                    onClick={() => props.onRemove(admin.id)}
+                  >
+                    Delete
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </>
     );
   };
 
@@ -232,7 +294,7 @@ const AdminPage: React.FC = () => {
       <RolesList />
       <AdminReg />
       <br></br>
-      <UsersList users={users} onRemove={removeHandler} />
+      <UsersList users={users} onRemove={removeHandler} admins={admins} />
     </>
   );
 };
