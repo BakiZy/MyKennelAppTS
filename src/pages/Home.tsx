@@ -33,13 +33,13 @@ const Home: React.FC = () => {
   } = useGetColors();
 
   const PoodleFilter: React.FC<FilterProps> = () => {
-    const getFilters = useCallback(async (event) => {
+    const getFilters = useCallback((event) => {
       event.preventDefault();
       const params = {
         colorName: selectedColorName,
         sizeName: selectedSizeName,
       };
-      await axios
+      axios
         .get("https://poodlesvonapalusso.dog/api/filters/color-and-size", {
           params,
         })
@@ -79,7 +79,7 @@ const Home: React.FC = () => {
     const onReset = useCallback(async () => {
       setLoading(true);
       await axios
-        .get<PoodleModel[]>("/api/poodles")
+        .get<PoodleModel[]>("https://poodlesvonapalusso.dog/api/poodles")
         .then((response: AxiosResponse<PoodleModel[]>) => {
           const loadedData: PoodleModel[] = [];
 
