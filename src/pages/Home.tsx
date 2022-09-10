@@ -77,7 +77,6 @@ const Home: React.FC = () => {
     }, []);
 
     const onReset = useCallback(async () => {
-      setLoading(true);
       await axios
         .get<PoodleModel[]>("https://poodlesvonapalusso.dog/api/poodles")
         .then((response: AxiosResponse<PoodleModel[]>) => {
