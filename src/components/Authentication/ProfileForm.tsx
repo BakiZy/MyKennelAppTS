@@ -4,6 +4,7 @@ import AuthContext from "../../store/auth-context";
 import axios from "axios";
 import classes from "./ProfileForm.module.css";
 import { Button, Spinner } from "react-bootstrap";
+import ErrorModal from "../UI/ErrorModal";
 
 const ProfileForm = () => {
   const authContext = useContext(AuthContext);
@@ -13,6 +14,11 @@ const ProfileForm = () => {
   const newPasswordInput = useRef<HTMLInputElement>(null);
   const confirmPasswordInput = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState({
+    message: "",
+    title: "",
+    popup: false,
+  });
 
   const logoutHandler = () => {
     authContext.logout();
@@ -29,10 +35,13 @@ const ProfileForm = () => {
     const token = authContext.token;
 
     if (newPassword.length < 7 || newPassword !== confirmPassword) {
-      alert("Passwords must match and be in proper form");
+      setError({
+        message: "invalid password or passwords don't match",
+        title: "Password error",
+        popup: true,
+      });
       return;
     }
-    setIsLoading(true);
     const config = {
       headers: { Authorization: "Bearer " + token },
     };
@@ -44,21 +53,35 @@ const ProfileForm = () => {
     };
 
     const changePassword = async () => {
-      axios
+      setIsLoading(true);
+      await axios
         .post(
           "https://poodlesvonapalusso.dog/api/Authentication/change-password",
           bodyParameters,
           config
         )
-        .then(function () {
+        .then(function (response) {
+          if (response.status !== 200) {
+            setError({
+              message: "invalid password or passwords don't match",
+              title: "Password error",
+              popup: true,
+            });
+          }
           alert("password successfully  changed");
           navigate("/");
         })
         .catch((error) => {
           console.log(error);
+          setError({
+            message: "invalid password or passwords don't match",
+            title: "Password error",
+            popup: true,
+          });
         });
     };
     changePassword();
+    setIsLoading(false);
   };
 
   if (isLoading) {
@@ -68,8 +91,23 @@ const ProfileForm = () => {
       </Spinner>
     );
   }
+
+  const errorHandler = () => {
+    setError({
+      message: "",
+      title: "",
+      popup: false,
+    });
+  };
   return (
     <>
+      {error.popup && (
+        <ErrorModal
+          message={error.message}
+          title={error.title}
+          onConfirm={errorHandler}
+        />
+      )}
       <form className={classes.form} onSubmit={submitHandler}>
         <div className={classes.control}>
           <label htmlFor="username">Username</label>
