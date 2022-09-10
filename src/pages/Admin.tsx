@@ -66,7 +66,7 @@ const AdminPage: React.FC = () => {
     const fetchUsers = async () => {
       await axios
         .get<IUserModel[]>(
-          "https://poodlesvonapalusso.dog/api/Admin/list-admins",
+          "https://poodlesvonapalusso.dog/api/Admin/list-users",
           {
             headers: { Authorization: "Bearer " + token },
           }
@@ -90,10 +90,10 @@ const AdminPage: React.FC = () => {
 
   useEffect(() => {
     setLoading(true);
-    const fetchUsers = async () => {
+    const fetchAdmins = async () => {
       await axios
         .get<IUserModel[]>(
-          "https://poodlesvonapalusso.dog/api/Admin/list-users",
+          "https://poodlesvonapalusso.dog/api/Admin/list-admins",
           {
             headers: { Authorization: "Bearer " + token },
           }
@@ -112,7 +112,7 @@ const AdminPage: React.FC = () => {
       setLoading(false);
       return () => {};
     };
-    fetchUsers();
+    fetchAdmins();
   }, [authContext.isAdmin, token]);
 
   const UsersList: React.FC<IUserProps> = (props) => {
