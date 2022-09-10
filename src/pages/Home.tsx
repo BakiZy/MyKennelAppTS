@@ -33,17 +33,16 @@ const Home: React.FC = () => {
   } = useGetColors();
 
   const PoodleFilter: React.FC<FilterProps> = () => {
-    const getFilters = useCallback((event) => {
+    const getFilters = useCallback(async (event) => {
       event.preventDefault();
       const params = {
         colorName: selectedColorName,
         sizeName: selectedSizeName,
       };
-      axios
-        .get<PoodleModel[]>(
-          "https://poodlesvonapalusso.dog/api/filters/color-and-size",
-          { params }
-        )
+      await axios
+        .get("https://poodlesvonapalusso.dog/api/filters/color-and-size", {
+          params,
+        })
         .then((response) => {
           const loadedData: PoodleModel[] = [];
           if (response.data.length < 1) {
@@ -77,12 +76,13 @@ const Home: React.FC = () => {
       return setLoading(false);
     }, []);
 
-    const onReset = useCallback(() => {
+    const onReset = useCallback(async () => {
       setLoading(true);
-      axios
-        .get<PoodleModel[]>("https://poodlesvonapalusso.dog/api/poodles")
+      await axios
+        .get<PoodleModel[]>("/api/poodles")
         .then((response: AxiosResponse<PoodleModel[]>) => {
           const loadedData: PoodleModel[] = [];
+
           for (let i = 0; i < response.data.length; i++) {
             loadedData.push({
               id: response.data[i].id,
@@ -208,8 +208,8 @@ const Home: React.FC = () => {
       });
   }, []);
 
-  const onRemoveHandler = (id) => {
-    axios
+  const onRemoveHandler = async (id) => {
+    await axios
       .delete(`https://poodlesvonapalusso.dog/api/poodles/${id}`, {
         headers: { Authorization: "Bearer " + localStorage.getItem("token") },
       })

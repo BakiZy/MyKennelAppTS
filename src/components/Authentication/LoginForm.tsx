@@ -55,6 +55,7 @@ const LoginForm = () => {
           setIsLogin(true);
           setIsLoading(false);
           navigate("/");
+          return response;
         })
         .catch((error) => {
           alert(error.message);

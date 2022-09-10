@@ -14,9 +14,12 @@ import Reservation from "./pages/Reservation";
 import "bootstrap/dist/css/bootstrap.min.css";
 import EditPoodle from "./pages/Edit";
 import ImagePage from "./pages/ImageUr";
+import { axiosInterceptor } from "./components/Authentication/Axios";
+import axios from "axios";
 
 const App: React.FC = () => {
   const authContext = useContext(AuthContext);
+  axiosInterceptor(axios);
 
   return (
     <>
