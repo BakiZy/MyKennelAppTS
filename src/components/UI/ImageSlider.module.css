@@ -1,12 +1,13 @@
 .leftArrow {
   position: absolute;
+  background-color: transparent;
   left: -9.6rem;
   bottom: 0rem;
   font-size: 3rem;
   color: black;
   cursor: pointer;
   padding-bottom: 1.5rem;
-  border-radius: 1rem;
+  border: 0px;
 }
 
 .rightArrow {
@@ -17,8 +18,9 @@
   color: black;
   cursor: pointer;
   user-select: none;
-  border-radius: 1rem;
   padding-bottom: 1.5rem;
+  background-color: transparent;
+  border: 0px;
 }
 
 .slider {
@@ -59,7 +61,7 @@
   .leftArrow {
     position: absolute;
     font-size: 2rem;
-    color: black;
+    color: rgb(0, 0, 0);
     cursor: pointer;
     padding-bottom: 1.5rem;
     margin-left: 20rem;
