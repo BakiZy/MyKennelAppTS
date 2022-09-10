@@ -6,6 +6,7 @@ import AuthContext from "../../store/auth-context";
 import { ILoginResponse } from "../../interfaces/IAuthModel";
 import { Button, Spinner } from "react-bootstrap";
 import { validEmail, validPassword } from "./Regex";
+import ErrorModal from "../UI/ErrorModal";
 
 const LoginForm = () => {
   const usernameInputRef = useRef<HTMLInputElement>(null);
@@ -15,6 +16,11 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState({
+    message: "",
+    title: "",
+    popup: false,
+  });
   const authContext = useContext(AuthContext);
 
   const switchLoginHandler = () => {
@@ -30,7 +36,11 @@ const LoginForm = () => {
       const enteredPassword = passwordInputRef.current!.value;
 
       if (!validPassword.test(enteredPassword)) {
-        alert("entered values must be valid");
+        setError({
+          message: "Entered information is not valid",
+          title: "Login error",
+          popup: true,
+        });
         setIsLoading(false);
         return;
       }
@@ -73,9 +83,11 @@ const LoginForm = () => {
         !validEmail.test(enteredEmail) ||
         !validPassword.test(enteredPassword)
       ) {
-        alert(
-          "entered values must be valid, password must contain at least 1 number, 1 uppercase and one special character"
-        );
+        setError({
+          message: "Entered information is not valid or username is taken",
+          title: "Registration error",
+          popup: true,
+        });
         setIsLoading(false);
         return;
       }
@@ -96,7 +108,7 @@ const LoginForm = () => {
         })
         .catch((error: string) => {
           setIsLoading(false);
-          alert(error);
+          console.log(error);
         });
     };
 
@@ -114,60 +126,78 @@ const LoginForm = () => {
       </Spinner>
     );
   }
-  return (
-    <section className={classes.auth}>
-      <h1>{isLogin ? "Login" : "Register account"}</h1>
-      <form onSubmit={submitHandler}>
-        {!isLogin && (
-          <div className={classes.control}>
-            <label htmlFor="email">E-mail address</label>
-            <input type="email" id="email" required ref={emailInputRef} />
-          </div>
-        )}
-        <div className={classes.control}>
-          <label htmlFor="username">Username</label>
-          <input type="text" id="username" required ref={usernameInputRef} />
-        </div>
 
-        <div className={classes.control}>
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            required
-            ref={passwordInputRef}
-          />
-        </div>
-        <br></br>
-        <div className="col-md-12 text-center">
-          {!isLoading && (
+  const errorHandler = () => {
+    setError({
+      message: "",
+      title: "",
+      popup: false,
+    });
+  };
+
+  return (
+    <>
+      {error.popup && (
+        <ErrorModal
+          message={error.message}
+          onConfirm={errorHandler}
+          title={error.title}
+        />
+      )}
+      <section className={classes.auth}>
+        <h1>{isLogin ? "Login" : "Register account"}</h1>
+        <form onSubmit={submitHandler}>
+          {!isLogin && (
+            <div className={classes.control}>
+              <label htmlFor="email">E-mail address</label>
+              <input type="email" id="email" required ref={emailInputRef} />
+            </div>
+          )}
+          <div className={classes.control}>
+            <label htmlFor="username">Username</label>
+            <input type="text" id="username" required ref={usernameInputRef} />
+          </div>
+
+          <div className={classes.control}>
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              required
+              ref={passwordInputRef}
+            />
+          </div>
+          <br></br>
+          <div className="col-md-12 text-center">
+            {!isLoading && (
+              <Button
+                type="submit"
+                variant="dark"
+                style={{
+                  color: "#ffe2ed",
+                  fontSize: "1.6rem",
+                }}
+              >
+                {isLogin ? "Login" : "Create account"}
+              </Button>
+            )}
+            {isLoading && <div>Loading...</div>}
+            <br />
             <Button
-              type="submit"
+              type="button"
+              onClick={switchLoginHandler}
               variant="dark"
               style={{
                 color: "#ffe2ed",
                 fontSize: "1.6rem",
               }}
             >
-              {isLogin ? "Login" : "Create account"}
+              {isLogin ? "Create a new account" : "Login with existing account"}
             </Button>
-          )}
-          {isLoading && <div>Loading...</div>}
-          <br />
-          <Button
-            type="button"
-            onClick={switchLoginHandler}
-            variant="dark"
-            style={{
-              color: "#ffe2ed",
-              fontSize: "1.6rem",
-            }}
-          >
-            {isLogin ? "Create a new account" : "Login with existing account"}
-          </Button>
-        </div>
-      </form>
-    </section>
+          </div>
+        </form>
+      </section>
+    </>
   );
 };
 
