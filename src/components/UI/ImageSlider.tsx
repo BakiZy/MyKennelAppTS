@@ -22,7 +22,6 @@ const ImageSlider: React.FC<ISliderProps> = (props) => {
     );
   };
 
-  console.log(currentIndex);
   return (
     <section className={classes.slider}>
       <button className={classes.leftArrow} onClick={previousSlide}>
