@@ -1,8 +1,9 @@
 export interface ILoginResponse {
   token: string;
-  username: string;
   expiration: string;
   email: string;
+  role: string;
+  username: string;
 }
 
 export interface IRoleModel {
