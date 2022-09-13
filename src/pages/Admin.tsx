@@ -49,16 +49,19 @@ const AdminPage: React.FC = () => {
   }, [authContext.isAdmin, token]);
 
   const removeHandler = (id: string) => {
+    setLoading(true);
     axios
       .delete(`https://poodlesvonapalusso.dog/api/user/${id}`, {
-        headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+        headers: { Authorization: "Bearer " + token },
       })
       .then(() => {
         setUsers(users.filter((user) => user.id !== id));
+        setAdmins(admins.filter((admin) => admin.id !== id));
       })
       .catch((error) => {
         console.log(error);
       });
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -85,8 +88,10 @@ const AdminPage: React.FC = () => {
       setLoading(false);
       return () => {};
     };
+
     fetchUsers();
-  }, [authContext.isAdmin, token]);
+    setLoading(false);
+  }, [token]);
 
   useEffect(() => {
     setLoading(true);
@@ -113,7 +118,8 @@ const AdminPage: React.FC = () => {
       return () => {};
     };
     fetchAdmins();
-  }, [authContext.isAdmin, token]);
+    setLoading(false);
+  }, [token]);
 
   const UsersList: React.FC<IUserProps> = (props) => {
     return (

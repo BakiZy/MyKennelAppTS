@@ -56,12 +56,9 @@ const LoginForm = () => {
         .then((response) => {
           authContext.login(
             response.data.token,
-            response.data.username,
+            response.data.role,
             response.data.expiration
           );
-          if (response.data.username === "AdminZ") {
-            authContext.isAdmin = true;
-          }
           setIsLogin(true);
           setIsLoading(false);
           navigate("/");

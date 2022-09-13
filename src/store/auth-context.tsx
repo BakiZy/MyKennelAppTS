@@ -6,15 +6,15 @@ let logoutTimer: NodeJS.Timeout;
 
 interface IToken {
   token: string | null;
-  username: string | null;
   expiration: string | null;
+  role: string | null;
 }
 
 export interface IAuthContext {
   token: string | null;
   isLoggedIn: boolean;
   isAdmin: boolean;
-  login: (token: string, username: string, expiration: string) => void;
+  login: (token: string, role: string, expiration: string) => void;
   logout: () => void;
 }
 
@@ -28,13 +28,13 @@ const AuthContext = React.createContext<IAuthContext>({
 
 const retrieveStoredUserInfo = () => {
   const storedToken = localStorage.getItem("token");
-  const storedUsername = localStorage.getItem("username");
   const storedExpiration = localStorage.getItem("expiration");
+  const storedRole = localStorage.getItem("role");
 
   return {
     token: storedToken,
-    username: storedUsername,
     expiration: storedExpiration,
+    role: storedRole,
   };
 };
 
@@ -47,47 +47,47 @@ const calculateExpirationTime = (tokenExpiration: string) => {
 
 export const AuthContextProvider: React.FC<ChildrenProp> = ({ children }) => {
   let initialToken: IToken["token"] = "";
-  let initialUsername: IToken["username"] = "";
   let initialExpiration: IToken["expiration"] = "";
+  let initialRole: IToken["role"] = "";
 
   const tokenData = retrieveStoredUserInfo();
   const [isAdmin, setIsAdmin] = useState(false);
 
   if (tokenData) {
     initialToken = tokenData.token;
-    initialUsername = tokenData.username;
     initialExpiration = tokenData.expiration;
+    initialRole = tokenData.role;
   }
   initialExpiration?.toString();
   const [token, setToken] = useState(initialToken);
   const userIsLoggedIn = !!token;
 
-  useEffect(() => {
-    if (initialUsername === "AdminZ") {
-      setIsAdmin(true);
-    }
-  }, [initialUsername]);
-
   const logoutHandler = useCallback(() => {
     setToken(null);
     setIsAdmin(false);
     localStorage.removeItem("token");
-    localStorage.removeItem("username");
+    localStorage.removeItem("role");
+    localStorage.removeItem("expiration");
   }, []);
 
   const loginHandler = (
     token: string,
-    storedUsername: string,
+    role: string,
     expirationTime: string
   ) => {
     setToken(token);
     localStorage.setItem("token", token);
-    localStorage.setItem("username", storedUsername);
     localStorage.setItem("expiration", expirationTime);
-
+    localStorage.setItem("role", role);
     const remainingTime = calculateExpirationTime(expirationTime);
     logoutTimer = setTimeout(logoutHandler, parseInt(remainingTime));
   };
+
+  useEffect(() => {
+    if (initialRole === "Admin") {
+      setIsAdmin(true);
+    }
+  }, [initialRole]);
 
   useEffect(() => {
     if (tokenData != null) {
