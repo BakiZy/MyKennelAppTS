@@ -3,12 +3,17 @@ import classes from "./About.module.css";
 //import { ISliderImage } from "../interfaces/ISliderModel";
 import ImageSlider from "../components/UI/ImageSlider";
 import imageData from "../components/UI/ImageData";
+import { Helmet } from "react-helmet";
 
 const images = imageData;
 
 const About: React.FC = () => {
   return (
     <>
+      <Helmet>
+        <title>About us</title>
+        <meta name="about" content="about our poodle kennel" />
+      </Helmet>
       <section className={classes.about}>
         <h1>Welcome to Von Apalusso kennel page</h1>
         <div className={classes.container}>
