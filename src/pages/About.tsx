@@ -12,7 +12,7 @@ const About: React.FC = () => {
     <>
       <Helmet>
         <title>About us</title>
-        <meta name="about" content="about our poodle kennel" />
+        <meta name="about" content="https://poodlesvonapalusso.xyz/about" />
       </Helmet>
       <section className={classes.about}>
         <h1>Welcome to Von Apalusso kennel page</h1>
