@@ -47,7 +47,7 @@ const App: React.FC = () => {
         {authContext.isAdmin && (
           <Route path="/images" element={<ImagePage />} />
         )}
-        <Route path="/poodle/:poodleId" element={<Reservation />} />
+        <Route path="/poodles/:poodleId" element={<Reservation />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

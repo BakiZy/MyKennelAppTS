@@ -245,7 +245,7 @@ const Home: React.FC = () => {
         </title>
         <meta
           name="description"
-          content="poodles buy red miniature toy poodle black fawn mini sell"
+          content="poodles buy red miniature toy poodle black fawn mini sell serbia srbija pudle"
         />
         <meta name="og:title" />
       </Helmet>
