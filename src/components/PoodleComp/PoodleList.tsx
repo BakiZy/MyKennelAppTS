@@ -21,7 +21,7 @@ const PoodleList: React.FC<PoodleListProps> = (props) => {
           <Col key={poodle.id}>
             <Card key={poodle.id} className={classes.cardProperty}>
               <Card.Body>
-                <Link to={`/poodle/${poodle.id}`}>
+                <Link to={`/poodles/${poodle.id}`}>
                   <Card.Img
                     src={poodle.imageUrl}
                     className={classes.imageProp}
@@ -45,7 +45,7 @@ const PoodleList: React.FC<PoodleListProps> = (props) => {
 
                 <Card.Text>Size : {poodle.poodleSizeName}</Card.Text>
                 <Card.Text>Color : {poodle.poodleColorName}</Card.Text>
-                <Link className={classes.linkZ} to={`/poodle/${poodle.id}`}>
+                <Link className={classes.linkZ} to={`/poodles/${poodle.id}`}>
                   Interested in this poodle pups?
                 </Link>
               </Card.Body>
