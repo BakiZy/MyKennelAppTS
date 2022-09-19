@@ -119,7 +119,7 @@ const AdminPage: React.FC = () => {
     };
     fetchAdmins();
     setLoading(false);
-  }, [token]);
+  }, [token, setAdmins]);
 
   const UsersList: React.FC<IUserProps> = (props) => {
     return (

@@ -7,6 +7,8 @@ import useGetSizes from "../hooks/getSizesHook";
 import useGetColors from "../hooks/getColorsHook";
 import { Button, Spinner } from "react-bootstrap";
 import ErrorModal from "../components/UI/ErrorModal";
+import { Helmet } from "react-helmet";
+
 //import { IErrorProps } from "../interfaces/IAuthModel";
 
 interface FilterProps {
@@ -237,6 +239,16 @@ const Home: React.FC = () => {
   }
   return (
     <>
+      <Helmet>
+        <title>
+          Poodles Von Apalusso kennel of red fawn black toy and mini poodle
+        </title>
+        <meta
+          name="description"
+          content="poodles buy red miniature toy poodle black fawn mini sell"
+        />
+        <meta name="og:title" />
+      </Helmet>
       {error.popup && (
         <ErrorModal
           message={error!.message}
