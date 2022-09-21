@@ -24,6 +24,7 @@ const EditPoodle: React.FC = () => {
   const { poodleId } = useParams();
   const authContext = useContext(AuthContext);
   const token = authContext.token;
+  const [gender, setGender] = useState("");
   const [geneticTest, setGeneticTest] = React.useState(false);
   const { images, selectImgOption, setSelectedImgOption } = useGetImgUr();
   const { selectSizeOption, setSelectedSizeOption, sizes } = useGetSizes();
@@ -37,6 +38,7 @@ const EditPoodle: React.FC = () => {
     pedigreeNumber: "",
     geneticTests: false,
     poodleSizeName: "",
+    sex: "",
     poodleColorName: "",
   });
   const poodleName = useRef<HTMLInputElement>(null);
@@ -78,6 +80,7 @@ const EditPoodle: React.FC = () => {
             pedigreeNumber: enteredPedigreeNumber,
             poodleSizeId: selectSizeOption,
             poodleColorId: selectColorOption,
+            sex: gender,
           },
           {
             headers: { Authorization: "Bearer " + token },
@@ -95,6 +98,9 @@ const EditPoodle: React.FC = () => {
     updatePoodle();
   };
 
+  const genderHandler = (e) => {
+    setGender(e.target.value);
+  };
   const geneticTestHandler = () => {
     setGeneticTest((prevstate) => !prevstate);
   };
@@ -145,6 +151,24 @@ const EditPoodle: React.FC = () => {
         <div className={classes.control}>
           <label htmlFor="poodleDate">Date of birth</label>
           <input type="date" id="poodleDate" required ref={poodleDate} />
+        </div>
+        <div className={classes.control}>
+          <label>Gender</label>
+          <label htmlFor="gender">Male</label>
+          <input
+            type="radio"
+            name="gender"
+            value="Male"
+            onChange={genderHandler}
+          />
+          <label htmlFor="gender">Female</label>
+          <input
+            type="radio"
+            name="gender"
+            value="Female"
+            defaultChecked={true}
+            onChange={genderHandler}
+          />
         </div>
         <div className={classes.control}>
           <label>Genetic test</label>

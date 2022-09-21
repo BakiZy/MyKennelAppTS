@@ -32,7 +32,7 @@ const PoodleList: React.FC<PoodleListProps> = (props) => {
                   <h2>{poodle.name}</h2>
                 </Card.Title>
                 <Card.Text>Date of birth : {parseDate}</Card.Text>
-                {authContext.isAdmin ? (
+                {authContext.isLoggedIn ? (
                   <Card.Text>
                     Pedigree number: {poodle.pedigreeNumber}
                   </Card.Text>
@@ -42,11 +42,11 @@ const PoodleList: React.FC<PoodleListProps> = (props) => {
                 ) : (
                   <Card.Text> Genetic testings : no </Card.Text>
                 )}
-
+                <Card.Text>Gender: {poodle.sex}</Card.Text>
                 <Card.Text>Size : {poodle.poodleSizeName}</Card.Text>
                 <Card.Text>Color : {poodle.poodleColorName}</Card.Text>
                 <Link className={classes.linkZ} to={`/poodles/${poodle.id}`}>
-                  Interested in this poodle pups?
+                  Interested in our poodle pups?
                 </Link>
               </Card.Body>
               <Card.Body className={classes.buttonDiv}>

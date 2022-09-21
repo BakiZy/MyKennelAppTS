@@ -14,7 +14,7 @@ const NewPoodle: React.FC = () => {
   const poodleDateRef = useRef<HTMLInputElement>(null);
   const poodlePedigreeNumberRef = useRef<HTMLInputElement>(null);
   const [geneticTest, setGeneticTest] = React.useState(false);
-
+  const [gender, setGender] = React.useState("");
   const { images, selectImgOption, setSelectedImgOption } = useGetImgUr();
   const { selectSizeOption, setSelectedSizeOption, sizes } = useGetSizes();
   const { selectColorOption, setSelectedColorOption, colors } = useGetColors();
@@ -37,6 +37,7 @@ const NewPoodle: React.FC = () => {
             pedigreeNumber: enteredPedigreeNumber,
             poodleSizeId: selectSizeOption,
             poodleColorId: selectColorOption,
+            sex: gender,
           },
           {
             headers: { Authorization: "Bearer " + token },
@@ -56,6 +57,10 @@ const NewPoodle: React.FC = () => {
 
   const geneticTestHandler = () => {
     setGeneticTest((prevstate) => !prevstate);
+  };
+
+  const genderHandler = (e) => {
+    setGender(e.target.value);
   };
 
   const changeSelectSizeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -97,6 +102,24 @@ const NewPoodle: React.FC = () => {
           <div className={classes.control}>
             <label htmlFor="poodleDate">Date of birth</label>
             <input type="date" id="poodleDate" required ref={poodleDateRef} />
+          </div>
+          <div className={classes.control}>
+            <label>Gender</label>
+            <label htmlFor="gender">Male</label>
+            <input
+              type="radio"
+              name="gender"
+              value="Male"
+              onChange={genderHandler}
+            />
+            <label htmlFor="gender">Female</label>
+            <input
+              type="radio"
+              name="gender"
+              value="Female"
+              defaultChecked={true}
+              onChange={genderHandler}
+            />
           </div>
           <div className={classes.control}>
             <label>Genetic test</label>
