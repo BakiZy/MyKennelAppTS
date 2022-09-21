@@ -19,6 +19,7 @@ const Reservation = () => {
     pedigreeNumber: "",
     geneticTests: false,
     poodleSizeName: "",
+    sex: "",
     poodleColorName: "",
   });
 
