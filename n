@@ -1,0 +1,263 @@
+[33mcommit 1c4035ca08f45f2833f2f566194fe1edf02617cb[m[33m ([m[1;36mHEAD -> [m[1;32mdev[m[33m, [m[1;31morigin/dev[m[33m)[m
+Author: BakiZy <milosh88@live.com>
+Date:   Wed Sep 21 22:12:04 2022 +0200
+
+    added gender data in poodle entity
+
+[33mcommit 08a76b80c827527b103dd101887c8407c7d58488[m
+Author: BakiZy <milosh88@live.com>
+Date:   Mon Sep 19 21:20:35 2022 +0200
+
+    poodles api
+
+[33mcommit 98ec180e15c14800290dc7778a91af3601375733[m
+Author: BakiZy <milosh88@live.com>
+Date:   Mon Sep 19 20:56:57 2022 +0200
+
+    about seo again
+
+[33mcommit 217cd15f278806e7fdb4d2b2eb573c6ade7fd536[m
+Author: BakiZy <milosh88@live.com>
+Date:   Mon Sep 19 20:51:39 2022 +0200
+
+    test seo
+
+[33mcommit fe7cedad3b2d7548e4a92c295a03e87a56a80244[m
+Author: BakiZy <milosh88@live.com>
+Date:   Tue Sep 13 16:43:12 2022 +0200
+
+    admin load state + role
+
+[33mcommit 999282501a7b669578773a41ccdd761ec95a2566[m
+Author: BakiZy <milosh88@live.com>
+Date:   Sat Sep 10 21:10:48 2022 +0200
+
+    swapped admin/user table
+
+[33mcommit 9f1d4ef91b4f5fe017e53c9ce51e984a934ea8b2[m
+Author: BakiZy <milosh88@live.com>
+Date:   Sat Sep 10 21:00:28 2022 +0200
+
+    user/admin list
+
+[33mcommit 42568dc3805fe2adbbb5275f13c978a0f210a833[m
+Author: BakiZy <milosh88@live.com>
+Date:   Sat Sep 10 15:10:55 2022 +0200
+
+    auth modal
+
+[33mcommit 757f505941b3c3b397996b3c92107d2e8b58be25[m
+Author: BakiZy <milosh88@live.com>
+Date:   Sat Sep 10 12:43:11 2022 +0200
+
+     axios intercept
+
+[33mcommit f8bee1374e7cb32b42f0e1414b36d8ddb7f1663c[m
+Author: BakiZy <milosh88@live.com>
+Date:   Sat Sep 10 12:25:09 2022 +0200
+
+    buttons about
+
+[33mcommit 4a336806022b172a86fa1aa4596a7555dc7f6446[m
+Author: BakiZy <milosh88@live.com>
+Date:   Sat Sep 10 12:21:10 2022 +0200
+
+    about buttons
+
+[33mcommit aa36f47c3d1e17055462bd7202d39b52b380a37f[m
+Author: BakiZy <milosh88@live.com>
+Date:   Sat Sep 10 11:56:58 2022 +0200
+
+    axios intercept
+
+[33mcommit cfd720917d9dc43b5a5880c4e1ec6180938d3cdb[m
+Author: BakiZy <milosh88@live.com>
+Date:   Sat Sep 10 10:57:07 2022 +0200
+
+    interceptor axios
+
+[33mcommit d40357dc4efdc7e41e6b382ddc505d08e2cf76c3[m
+Author: BakiZy <milosh88@live.com>
+Date:   Mon Sep 5 18:38:04 2022 +0200
+
+    slider mobile
+
+[33mcommit 738d65de2eec9489f4dfd02f1dcef8cd6b7049af[m
+Author: BakiZy <milosh88@live.com>
+Date:   Mon Sep 5 15:44:41 2022 +0200
+
+    slider
+
+[33mcommit 11d8e877d181e826bbbe9858c38f1a0d6e7a94e0[m
+Author: BakiZy <milosh88@live.com>
+Date:   Thu Sep 1 21:02:57 2022 +0200
+
+    filter mobile style
+
+[33mcommit 9bab4c22bf62ae4d6ac3866b43e8399f1fe35f34[m
+Author: BakiZy <milosh88@live.com>
+Date:   Thu Sep 1 20:18:44 2022 +0200
+
+    finished pedigree style
+
+[33mcommit a76a9714492158d17df9677a2e48d15ab51116ed[m
+Author: BakiZy <milosh88@live.com>
+Date:   Thu Sep 1 20:14:21 2022 +0200
+
+    pedigree styling
+
+[33mcommit 42905aa746db69b4623e0ff9e13b3999b372135e[m
+Author: BakiZy <milosh88@live.com>
+Date:   Wed Aug 31 19:29:55 2022 +0200
+
+    udapte about
+
+[33mcommit c7327d4027c4dc52a3fa6ca06642d5cc4368261a[m
+Author: BakiZy <milosh88@live.com>
+Date:   Wed Aug 31 18:55:27 2022 +0200
+
+    added spinner + ui fix
+
+[33mcommit 1c3a266e0a77591d40c7a62bc6fd6e05af625c8c[m
+Author: BakiZy <milosh88@live.com>
+Date:   Tue Aug 30 19:27:42 2022 +0200
+
+    test
+
+[33mcommit 5c6c8274d7e3ca66b394763c0b63beae66f52910[m[33m ([m[1;32mmaster[m[33m)[m
+Author: BakiZy <milosh88@live.com>
+Date:   Tue Aug 30 00:00:19 2022 +0200
+
+    filters cleanup
+
+[33mcommit 947de229516dfeede13053ef45ef36b9f68a3b96[m
+Author: BakiZy <milosh88@live.com>
+Date:   Mon Aug 29 21:14:41 2022 +0200
+
+    node 16
+
+[33mcommit 186dc724a436e0d45e4dc90e4416129733f8f713[m
+Author: BakiZy <milosh88@live.com>
+Date:   Mon Aug 29 20:54:22 2022 +0200
+
+    node ver change
+
+[33mcommit 00e6d849184241e0cae5f68c574f21d3bfcc33a4[m
+Author: BakiZy <milosh88@live.com>
+Date:   Mon Aug 29 20:08:19 2022 +0200
+
+    updating admin page
+
+[33mcommit 59c7ae322425ea0b643175832c8a17207100a32e[m
+Author: BakiZy <milosh88@live.com>
+Date:   Mon Aug 29 11:54:35 2022 +0200
+
+    ui update
+
+[33mcommit d33678ac87f2a72ef03eec4867553baa51ded283[m
+Author: BakiZy <milosh88@live.com>
+Date:   Sun Aug 28 23:18:56 2022 +0200
+
+    redesign
+
+[33mcommit b5985daef6917b566315aef8fac971cba8ebb35a[m
+Author: BakiZy <milosh88@live.com>
+Date:   Sat Aug 27 11:39:57 2022 +0200
+
+    about
+
+[33mcommit 5051c471a9e85a8f961aac864bfddc4d17ddd1eb[m
+Author: BakiZy <milosh88@live.com>
+Date:   Sat Aug 27 11:35:12 2022 +0200
+
+    remove console log
+
+[33mcommit ebc2651f29dfe47ea922e78b07a136ca180aac95[m
+Author: BakiZy <milosh88@live.com>
+Date:   Sat Aug 27 10:27:11 2022 +0200
+
+    https done
+
+[33mcommit d1f3c2bebd004156fcc1ea08a6b65ca9f392c444[m
+Author: BakiZy <milosh88@live.com>
+Date:   Thu Aug 25 10:47:49 2022 +0200
+
+    fix dependencies
+
+[33mcommit 45b17205be6a17b5317505857399a1085f514e2d[m
+Author: BakiZy <milosh88@live.com>
+Date:   Wed Aug 24 23:07:29 2022 +0200
+
+    fix
+
+[33mcommit 4585e41934678032f8b23a616dc1643eeb20f574[m
+Author: BakiZy <milosh88@live.com>
+Date:   Wed Aug 24 22:23:41 2022 +0200
+
+    security upd
+
+[33mcommit 39b73cf53e631423c2b77f1fa5a87d7b3d800413[m
+Author: BakiZy <milosh88@live.com>
+Date:   Wed Aug 24 18:18:08 2022 +0200
+
+    site up
+
+[33mcommit ad93f12e68510efed811799845fdd36cf6535059[m
+Author: BakiZy <milosh88@live.com>
+Date:   Mon Aug 22 11:38:28 2022 +0200
+
+    heroku pkg
+
+[33mcommit 0de6d1f38822f3897e195482660a6eae7c465c07[m
+Author: BakiZy <milosh88@live.com>
+Date:   Fri Aug 12 19:21:24 2022 +0200
+
+    cleanup
+
+[33mcommit e77880b1862032b041b2502c534392b01530de3e[m
+Author: BakiZy <milosh88@live.com>
+Date:   Fri Aug 12 18:54:28 2022 +0200
+
+    final version?
+
+[33mcommit 8c8964ff10037872b87c501492f3cf80f8dd8ce1[m
+Author: BakiZy <milosh88@live.com>
+Date:   Thu Aug 11 22:43:24 2022 +0200
+
+    almost done
+
+[33mcommit 91878884eff1c329abdbdae775e5f16919d9e100[m
+Author: BakiZy <milosh88@live.com>
+Date:   Tue Aug 9 22:47:11 2022 +0200
+
+    select img fix
+
+[33mcommit f941cdee8e4a3c0eb9763861b29ac72dd1cfd611[m
+Author: BakiZy <milosh88@live.com>
+Date:   Tue Aug 9 21:47:22 2022 +0200
+
+    image uploader
+
+[33mcommit 455e2073f182ba5fabf53e5d317c2c56fc77f93e[m
+Author: BakiZy <milosh88@live.com>
+Date:   Sun Aug 7 22:13:29 2022 +0200
+
+    added logout calc + img upload
+
+[33mcommit dd2d3a3d9dcedf71d552626693b05bbfcf71688a[m
+Author: BakiZy <milosh88@live.com>
+Date:   Wed Jul 20 22:53:25 2022 +0200
+
+    what next
+
+[33mcommit 3cd9617e1300cf3756a2e96caa39098abc33c2c9[m
+Author: BakiZy <milosh88@live.com>
+Date:   Wed Jul 20 21:40:42 2022 +0200
+
+    added reservation component
+
+[33mcommit a1d33b83aabe9396bd450ebc228b9cf67b94d800[m
+Author: BakiZy <milosh88@live.com>
+Date:   Wed Jul 20 10:12:18 2022 +0200
+
+    remake of repo

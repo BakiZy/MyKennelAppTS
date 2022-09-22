@@ -1,3 +1,7 @@
+.adminPage {
+  color: #ffe2ed;
+}
+
 .control {
   display: flex;
   flex-direction: column;

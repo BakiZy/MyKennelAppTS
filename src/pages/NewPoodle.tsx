@@ -45,7 +45,6 @@ const NewPoodle: React.FC = () => {
         )
         .then((response) => {
           console.log(response.data);
-
           alert("added to DB");
         })
         .catch((error: string) => {

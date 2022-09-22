@@ -1,10 +1,11 @@
 .cardProperty {
-  background-color: rgba(45, 72, 192, 0.9);
+  background-color: #212529;
   border-radius: 1.5rem;
   text-align: center;
   box-sizing: border-box;
   width: 30rem;
   color: #ffe2ed;
+
   margin-bottom: 2.5rem;
   transition: transform 0.3s ease-in-out;
   font-size: 1.5rem;
@@ -35,10 +36,10 @@
 }
 
 .linkZ {
-  background-color: #212519;
+  background-color: #5ee4d2;
   border-radius: 1rem;
   border-color: rgb(49, 67, 148);
-  color: #ffe2ed;
+  color: black;
   font-size: 1.5rem;
   padding: 0.4rem;
   text-decoration: none;
@@ -46,7 +47,7 @@
 
 .linkZ:hover {
   color: white;
-  background-color: rgb(44, 43, 43);
+  background-color: rgba(45, 72, 192, 0.9);
 }
 
 .cardProperty:hover,

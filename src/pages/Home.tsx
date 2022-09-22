@@ -9,8 +9,6 @@ import { Button, Spinner } from "react-bootstrap";
 import ErrorModal from "../components/UI/ErrorModal";
 import { Helmet } from "react-helmet";
 
-//import { IErrorProps } from "../interfaces/IAuthModel";
-
 interface FilterProps {
   filteredPoodles: PoodleModel[];
 }
@@ -35,49 +33,52 @@ const Home: React.FC = () => {
   } = useGetColors();
 
   const PoodleFilter: React.FC<FilterProps> = () => {
-    const getFilters = useCallback((event) => {
-      event.preventDefault();
-      const params = {
-        colorName: selectedColorName,
-        sizeName: selectedSizeName,
-      };
-      axios
-        .get("https://poodlesvonapalusso.dog/api/filters/color-and-size", {
-          params,
-        })
-        .then((response) => {
-          const loadedData: PoodleModel[] = [];
-          if (response.data.length < 1) {
-            setLoading(false);
-            setError({
-              message: "Currently we don't have this combination of poodle",
-              title: "Error",
-              popup: true,
-            });
-          } else {
-            for (const key in response.data) {
-              loadedData.push({
-                id: response.data[key].id,
-                name: response.data[key].name,
-                dateOfBirth: response.data[key].dateOfBirth,
-                geneticTests: response.data[key].geneticTests,
-                pedigreeNumber: response.data[key].pedigreeNumber,
-                poodleSizeName: response.data[key].poodleSizeName,
-                poodleColorName: response.data[key].poodleColorName,
-                sex: response.data[key].sex,
-                imageUrl: response.data[key].imageUrl,
-                imagePedigreeUrl: response.data[key].imagePedigreeUrl,
-              });
-              setPoodles(loadedData);
+    const getFilters = useCallback(
+      async (event: React.ChangeEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const params = {
+          colorName: selectedColorName,
+          sizeName: selectedSizeName,
+        };
+        await axios
+          .get("https://poodlesvonapalusso.dog/api/filters/color-and-size", {
+            params,
+          })
+          .then((response) => {
+            const loadedData: PoodleModel[] = [];
+            if (response.data.length < 1) {
               setLoading(false);
+              setError({
+                message: "Currently we don't have this combination of poodle",
+                title: "Search error",
+                popup: true,
+              });
+            } else {
+              for (const key in response.data) {
+                loadedData.push({
+                  id: response.data[key].id,
+                  name: response.data[key].name,
+                  dateOfBirth: response.data[key].dateOfBirth,
+                  geneticTests: response.data[key].geneticTests,
+                  pedigreeNumber: response.data[key].pedigreeNumber,
+                  poodleSizeName: response.data[key].poodleSizeName,
+                  poodleColorName: response.data[key].poodleColorName,
+                  sex: response.data[key].sex,
+                  imageUrl: response.data[key].imageUrl,
+                  imagePedigreeUrl: response.data[key].imagePedigreeUrl,
+                });
+                setPoodles(loadedData);
+                setLoading(false);
+              }
             }
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      return setLoading(false);
-    }, []);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        return setLoading(false);
+      },
+      []
+    );
 
     const onReset = useCallback(async () => {
       await axios
@@ -212,7 +213,7 @@ const Home: React.FC = () => {
       });
   }, []);
 
-  const onRemoveHandler = async (id) => {
+  const onRemoveHandler = async (id: number) => {
     await axios
       .delete(`https://poodlesvonapalusso.dog/api/poodles/${id}`, {
         headers: { Authorization: "Bearer " + localStorage.getItem("token") },
@@ -243,14 +244,33 @@ const Home: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>
-          Poodles Von Apalusso kennel of red fawn black toy and mini poodle
-        </title>
+        {" "}
+        <html lang="en" />
+        <title>Poodles Von Apalusso website</title>
         <meta
           name="description"
-          content="poodles buy red miniature toy poodle black fawn mini sell serbia srbija pudle"
+          content="Toy, miniature, red and fawn Poodle kennel from Serbia"
         />
-        <meta name="og:title" />
+        <link rel="canonical" href="https://poodlesvonapalusso.xyz/" />
+        <meta
+          name="poodles, pudle, red poodle, apricot poodle, fawn poodle, toy poodle, miniature poodle, toy pudla, pudla, pudle srbija"
+          content="Toy, miniature, red and fawn Poodle kennel from Serbia"
+        />
+        <meta name="robots" content="index,follow" />
+        {/* https://ogp.me/ */}
+        <meta property="og:url" content="https://poodlesvonapalusso.xyz/" />
+        <meta property="og:title" content="Poodles Von Apalusso website" />
+        <meta
+          property="og:description"
+          content="Toy, miniature, red and fawn Poodle kennel from Serbia"
+        />
+        <meta property="og:type" content="..." />
+        <meta
+          property="og:image"
+          content={"https://i.imgur.com/6Ll5PQL.jpeg"}
+        />
+        {/* https://moz.com/blog/meta-referrer-tag */}
+        <meta name="referrer" content="origin-when-crossorigin" />
       </Helmet>
       {error.popup && (
         <ErrorModal

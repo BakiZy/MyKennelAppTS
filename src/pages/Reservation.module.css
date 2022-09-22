@@ -17,7 +17,7 @@ h1 {
 }
 .cardProperty {
   margin-left: 4rem;
-  background-color: rgba(45, 72, 192, 0.9);
+  background-color: #212529;
   border-radius: 1.5rem;
   text-align: center;
   box-sizing: border-box;
@@ -42,7 +42,7 @@ h1 {
 }
 
 .pedigree {
-  background-color: rgba(45, 72, 192, 0.9);
+  background-color: #212529;
   border-radius: 1.5rem;
   box-sizing: border-box;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.26);

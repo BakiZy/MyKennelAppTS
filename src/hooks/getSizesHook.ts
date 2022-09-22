@@ -13,7 +13,7 @@ interface PoodleSizeProps {
 const useGetSizes = (): PoodleSizeProps => {
   const [sizes, setSizes] = useState<PoodleSize[]>([]);
   //using 1 as default for size ID: 1 = toy
-  const [selectSizeOption, setSelectedSizeOption] = useState<number>(1);
+  const [selectSizeOption, setSelectedSizeOption] = useState<number>(0);
   const authContext = useContext(AuthContext);
   const token = authContext.token;
   useEffect(() => {

@@ -11,8 +11,35 @@ const About: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>About us</title>
-        <meta name="about" content="https://poodlesvonapalusso.xyz/about" />
+        {" "}
+        <html lang="en" />
+        <title>About poodles Von Apalusso kennel</title>
+        <meta
+          name="description"
+          content="Toy, miniature, red and fawn Poodle kennel from Serbia"
+        />
+        <meta
+          name="poodles, pudle, red poodle, apricot poodle, fawn poodle, toy poodle, miniature poodle, toy pudla, pudla, pudle srbija"
+          content="About us "
+        />
+        <meta name="robots" content="noindex, nofollow" />
+        {/* https://ogp.me/ */}
+        <meta
+          property="og:url"
+          content="https://poodlesvonapalusso.xyz/about"
+        />
+        <meta property="og:title" content="About our poodle kennel" />
+        <meta
+          property="og:description"
+          content="Toy, miniature, red and fawn Poodle kennel from Serbia"
+        />
+        <meta property="og:type" content="..." />
+        <meta
+          property="og:image"
+          content={"https://i.imgur.com/6Ll5PQL.jpeg"}
+        />
+        {/* https://moz.com/blog/meta-referrer-tag */}
+        <meta name="referrer" content="origin-when-crossorigin" />
       </Helmet>
       <section className={classes.about}>
         <h1>Welcome to Von Apalusso kennel page</h1>
