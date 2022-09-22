@@ -86,15 +86,13 @@ const EditPoodle: React.FC = () => {
             headers: { Authorization: "Bearer " + token },
           }
         )
-        .then((response) => {
-          console.log(response.data + "edit info");
+        .then(() => {
           alert("edited info in DB");
         })
         .catch((error: string) => {
           alert(error);
         });
     };
-
     updatePoodle();
   };
 
