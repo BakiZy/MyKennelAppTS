@@ -28,8 +28,9 @@ body {
 }
 
 .spinner {
-  height: 10rem;
-  width: 10rem;
+  height: 20rem;
+  width: 20rem;
   display: flex;
   justify-content: center;
+  margin-left: auto;
 }
