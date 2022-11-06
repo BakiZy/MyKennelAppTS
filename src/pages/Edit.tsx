@@ -7,23 +7,15 @@ import useGetSizes from "../hooks/getSizesHook";
 import useGetColors from "../hooks/getColorsHook";
 import useGetImgUr from "../hooks/getImgUrHook";
 import axios, { AxiosResponse } from "axios";
-import { PoodleModel } from "../interfaces/IPoodleModel";
+import { PoodleModel} from "../interfaces/IPoodleModel";
 
-export interface PoodleModelEdit {
-  id: number;
-  name: string;
-  dateOfBirth: string;
-  geneticTests: boolean;
-  pedigreeNumber: string;
-  poodleSizeId: number;
-  poodleColorId: number;
-  imageId: number;
-}
 
+let controller = new AbortController();
 const EditPoodle: React.FC = () => {
   const { poodleId } = useParams();
   const authContext = useContext(AuthContext);
   const token = authContext.token;
+
   const [gender, setGender] = useState("");
   const [geneticTest, setGeneticTest] = React.useState(false);
   const { images, selectImgOption, setSelectedImgOption } = useGetImgUr();
@@ -59,6 +51,9 @@ const EditPoodle: React.FC = () => {
         });
     };
     fetchReservedPoodle();
+    return () => {
+      controller?.abort();
+    }
   }, [poodleId]);
 
   const updateHandler = (event: React.FormEvent) => {

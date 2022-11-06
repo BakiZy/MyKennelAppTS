@@ -7,7 +7,7 @@
   cursor: pointer;
   padding-bottom: 1.5rem;
   border-radius: 1rem;
-  background-color: #ffe2ed;
+  background-color: seashell;
 }
 
 .rightArrow {
@@ -20,7 +20,7 @@
   user-select: none;
   border-radius: 1rem;
   padding-bottom: 1.5rem;
-  background-color: #ffe2ed;
+  background-color: seashell;
 }
 
 .slider {
@@ -56,7 +56,7 @@
     margin-right: 20rem;
     height: 4rem;
     top: 42rem;
-    background-color: #ffe2ed;
+    background-color: seashell;
   }
 
   .leftArrow {
@@ -68,7 +68,7 @@
     margin-left: 20rem;
     height: 4rem;
     top: 42rem;
-    background-color: #ffe2ed;
+    background-color: seashell;
   }
 
   .sliderImage {

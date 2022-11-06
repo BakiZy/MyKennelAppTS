@@ -7,6 +7,7 @@ import AdminReg from "../components/Authentication/AdminReg";
 
 //import { validEmail, validPassword } from "../components/Authentication/Regex";
 
+let controller = new AbortController();
 const AdminPage: React.FC = () => {
   const [users, setUsers] = useState<IUserModel[]>([]);
   const [admins, setAdmins] = useState<IUserModel[]>([]);
@@ -57,6 +58,9 @@ const AdminPage: React.FC = () => {
       setLoading(false);
     };
     fetchUsers();
+    return () => {
+      controller?.abort();
+    };
   }, [token]);
 
   useEffect(() => {

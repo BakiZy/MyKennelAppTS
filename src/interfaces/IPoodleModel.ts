@@ -42,3 +42,14 @@ export interface PoodleListProps {
   poodles: PoodleModel[];
   onRemove: (id: number) => void;
 }
+
+export interface PoodleModelEdit {
+  id: number;
+  name: string;
+  dateOfBirth: string;
+  geneticTests: boolean;
+  pedigreeNumber: string;
+  poodleSizeId: number;
+  poodleColorId: number;
+  imageId: number;
+}
