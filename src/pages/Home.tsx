@@ -7,11 +7,13 @@ import useGetSizes from "../hooks/getSizesHook";
 import useGetColors from "../hooks/getColorsHook";
 import { Button, Spinner } from "react-bootstrap";
 import ErrorModal from "../components/UI/ErrorModal";
-import { Helmet } from "react-helmet";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 interface FilterProps {
   filteredPoodles: PoodleModel[];
 }
+
+let controller = new AbortController();
 
 const Home: React.FC = () => {
   const [poodles, setPoodles] = useState<PoodleModel[]>([]);
@@ -211,6 +213,9 @@ const Home: React.FC = () => {
       .catch((error) => {
         console.log(error);
       });
+    return () => {
+      controller?.abort();
+    };
   }, []);
 
   const onRemoveHandler = async (id: number) => {
@@ -242,7 +247,7 @@ const Home: React.FC = () => {
     );
   }
   return (
-    <>
+    <HelmetProvider>
       <Helmet>
         {" "}
         <html lang="en" />
@@ -281,7 +286,7 @@ const Home: React.FC = () => {
       )}
       <PoodleFilter filteredPoodles={poodles} />
       <PoodleList poodles={poodles} onRemove={onRemoveHandler} />
-    </>
+    </HelmetProvider>
   );
 };
 
