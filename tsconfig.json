@@ -4,7 +4,7 @@
     "outDir": "build",
     "target": "ESNext",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "types": ["vite/client", "vite-plugin-svgr/client"],
+    "types": ["vite/client", "vite-plugin-svgr/client", "node"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
