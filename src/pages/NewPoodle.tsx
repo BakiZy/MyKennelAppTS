@@ -92,10 +92,10 @@ const NewPoodle: React.FC = () => {
             <label htmlFor="poodleName">Name</label>
             <input type="text" id="poodleName" required ref={poodleNameRef} />
           </div>
-          <div className={classes.control}>
-            <label htmlFor="poodleNick">Nickname</label>
-            <input type="text" id="poodleNick" required ref={poodleNickRef} />
-          </div>
+          {/* <div className={classes.control}>
+         <label htmlFor="poodleNick">Nickname</label>
+           <input type="text" id="poodleNick" required ref={poodleNickRef} />
+          </div> */}
           <div className={classes.control}>
             <label htmlFor="poodlePedigree">Number of pedigree</label>
             <input
