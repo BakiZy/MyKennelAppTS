@@ -7,8 +7,7 @@ import useGetSizes from "../hooks/getSizesHook";
 import useGetColors from "../hooks/getColorsHook";
 import useGetImgUr from "../hooks/getImgUrHook";
 import axios, { AxiosResponse } from "axios";
-import { PoodleModel} from "../interfaces/IPoodleModel";
-
+import { PoodleModel } from "../interfaces/IPoodleModel";
 
 let controller = new AbortController();
 const EditPoodle: React.FC = () => {
@@ -32,10 +31,13 @@ const EditPoodle: React.FC = () => {
     poodleSizeName: "",
     sex: "",
     poodleColorName: "",
+    isPuppy: false,
+    nickName: "",
   });
   const poodleName = useRef<HTMLInputElement>(null);
   const poodleDate = useRef<HTMLInputElement>(null);
   const poodlePedigreeNumber = useRef<HTMLInputElement>(null);
+  const poodleNick = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const fetchReservedPoodle = async () => {
@@ -53,7 +55,7 @@ const EditPoodle: React.FC = () => {
     fetchReservedPoodle();
     return () => {
       controller?.abort();
-    }
+    };
   }, [poodleId]);
 
   const updateHandler = (event: React.FormEvent) => {
@@ -61,6 +63,7 @@ const EditPoodle: React.FC = () => {
     const enteredPoodleName = poodleName.current!.value;
     const enteredPoodleDate = poodleDate.current!.value;
     const enteredPedigreeNumber = poodlePedigreeNumber.current!.value;
+    const enteredPoodleNick = poodleNick.current!.value;
 
     const updatePoodle = async () => {
       await axios
@@ -76,6 +79,7 @@ const EditPoodle: React.FC = () => {
             poodleSizeId: selectSizeOption,
             poodleColorId: selectColorOption,
             sex: gender,
+            nickName: enteredPoodleNick,
           },
           {
             headers: { Authorization: "Bearer " + token },
@@ -129,6 +133,16 @@ const EditPoodle: React.FC = () => {
             required
             ref={poodleName}
             defaultValue={poodle.name}
+          />
+        </div>
+        <div className={classes.control}>
+          <label htmlFor="poodleNick">Nickname</label>
+          <input
+            type="text"
+            id="poodleNick"
+            required
+            ref={poodleNick}
+            defaultValue={poodle.nickName}
           />
         </div>
         <div className={classes.control}>

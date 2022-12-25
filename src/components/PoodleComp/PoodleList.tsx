@@ -45,9 +45,15 @@ const PoodleList: React.FC<PoodleListProps> = (props) => {
                 <Card.Text>Gender: {poodle.sex}</Card.Text>
                 <Card.Text>Size : {poodle.poodleSizeName}</Card.Text>
                 <Card.Text>Color : {poodle.poodleColorName}</Card.Text>
-                <Link className={classes.linkZ} to={`/poodles/${poodle.id}`}>
-                  Interested in our poodle pups?
-                </Link>
+                {poodle.isPuppy ? (
+                  <Link className={classes.linkZ} to={`/poodles/${poodle.id}`}>
+                    Interested in this pup?
+                  </Link>
+                ) : (
+                  <Link className={classes.linkZ} to={`/poodles/${poodle.id}`}>
+                    Interested in our poodle pups?
+                  </Link>
+                )}
               </Card.Body>
               <Card.Body className={classes.buttonDiv}>
                 {authContext.isAdmin && (

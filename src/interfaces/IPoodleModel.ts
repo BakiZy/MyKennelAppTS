@@ -11,6 +11,8 @@ export interface PoodleModel {
   sex: string;
   imageUrl: string;
   imagePedigreeUrl: string;
+  isPuppy: boolean;
+  nickName: string;
   children?: React.ReactNode | React.PropsWithChildren;
 }
 
@@ -52,4 +54,6 @@ export interface PoodleModelEdit {
   poodleSizeId: number;
   poodleColorId: number;
   imageId: number;
+  isPuppy: boolean;
+  nickName: string;
 }

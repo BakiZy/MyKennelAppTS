@@ -13,6 +13,7 @@ const NewPoodle: React.FC = () => {
   const poodleNameRef = useRef<HTMLInputElement>(null);
   const poodleDateRef = useRef<HTMLInputElement>(null);
   const poodlePedigreeNumberRef = useRef<HTMLInputElement>(null);
+  const poodleNickRef = useRef<HTMLInputElement>(null);
   const [geneticTest, setGeneticTest] = React.useState(false);
   const [gender, setGender] = React.useState("");
   const { images, selectImgOption, setSelectedImgOption } = useGetImgUr();
@@ -24,6 +25,7 @@ const NewPoodle: React.FC = () => {
     const enteredPoodleName = poodleNameRef.current!.value;
     const enteredPoodleDate = poodleDateRef.current!.value;
     const enteredPedigreeNumber = poodlePedigreeNumberRef.current!.value;
+    const enteredPoodleNick = poodleNickRef.current!.value;
 
     const addPoodle = async () => {
       await axios
@@ -38,6 +40,7 @@ const NewPoodle: React.FC = () => {
             poodleSizeId: selectSizeOption,
             poodleColorId: selectColorOption,
             sex: gender,
+            nickName: enteredPoodleNick,
           },
           {
             headers: { Authorization: "Bearer " + token },
@@ -88,6 +91,10 @@ const NewPoodle: React.FC = () => {
           <div className={classes.control}>
             <label htmlFor="poodleName">Name</label>
             <input type="text" id="poodleName" required ref={poodleNameRef} />
+          </div>
+          <div className={classes.control}>
+            <label htmlFor="poodleNick">Nickname</label>
+            <input type="text" id="poodleNick" required ref={poodleNickRef} />
           </div>
           <div className={classes.control}>
             <label htmlFor="poodlePedigree">Number of pedigree</label>

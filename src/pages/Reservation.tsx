@@ -21,6 +21,8 @@ const Reservation = () => {
     poodleSizeName: "",
     sex: "",
     poodleColorName: "",
+    isPuppy: false,
+    nickName: "",
   });
 
   useEffect(() => {
@@ -98,7 +100,11 @@ const Reservation = () => {
             </Card>
           </Col>
           <Col>
-            <h1>Interested in {poodle.name}'s puppies? Write to us!</h1>
+            {poodle.isPuppy ? (
+              <h1>Interested in {poodle.name}'s puppies? Write to us!</h1>
+            ) : (
+              <h1>Interested in our {poodle.name}? Write to us!</h1>
+            )}
             <form
               ref={formInputRef}
               className={classes.form}

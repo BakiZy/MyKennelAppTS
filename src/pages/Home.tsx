@@ -68,6 +68,8 @@ const Home: React.FC = () => {
                   sex: response.data[key].sex,
                   imageUrl: response.data[key].imageUrl,
                   imagePedigreeUrl: response.data[key].imagePedigreeUrl,
+                  isPuppy: response.data[key].isPuppy,
+                  nickName: response.data[key].nickName,
                 });
                 setPoodles(loadedData);
                 setLoading(false);
@@ -100,6 +102,8 @@ const Home: React.FC = () => {
               imageUrl: response.data[i].imageUrl,
               sex: response.data[i].sex,
               imagePedigreeUrl: response.data[i].imagePedigreeUrl,
+              isPuppy: response.data[i].isPuppy,
+              nickName: response.data[i].nickName,
             });
           }
           setPoodles(loadedData);
@@ -205,6 +209,8 @@ const Home: React.FC = () => {
             imageUrl: response.data[i].imageUrl,
             sex: response.data[i].sex,
             imagePedigreeUrl: response.data[i].imagePedigreeUrl,
+            isPuppy: response.data[i].isPuppy,
+            nickName: response.data[i].nickName,
           });
         }
         setLoading(false);
