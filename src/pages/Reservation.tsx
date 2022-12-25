@@ -100,7 +100,7 @@ const Reservation = () => {
             </Card>
           </Col>
           <Col>
-            {poodle.isPuppy ? (
+            {!poodle.isPuppy ? (
               <h1>Interested in {poodle.name}'s puppies? Write to us!</h1>
             ) : (
               <h1>Interested in our {poodle.name}? Write to us!</h1>
