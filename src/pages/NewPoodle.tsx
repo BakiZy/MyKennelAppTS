@@ -25,7 +25,7 @@ const NewPoodle: React.FC = () => {
     const enteredPoodleName = poodleNameRef.current!.value;
     const enteredPoodleDate = poodleDateRef.current!.value;
     const enteredPedigreeNumber = poodlePedigreeNumberRef.current!.value;
-    const enteredPoodleNick = poodleNickRef.current!.value;
+    //const enteredPoodleNick = poodleNickRef.current!.value;
 
     const addPoodle = async () => {
       await axios
@@ -40,7 +40,7 @@ const NewPoodle: React.FC = () => {
             poodleSizeId: selectSizeOption,
             poodleColorId: selectColorOption,
             sex: gender,
-            nickName: enteredPoodleNick,
+            //nickName: enteredPoodleNick,
           },
           {
             headers: { Authorization: "Bearer " + token },
