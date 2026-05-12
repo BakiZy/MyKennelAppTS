@@ -1,6 +1,7 @@
 import React, { useState, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
+import api from "../../api/client";
 import classes from "./LoginForm.module.css";
 import AuthContext from "../../store/auth-context";
 import { ILoginResponse } from "../../interfaces/IAuthModel";
@@ -45,9 +46,9 @@ const LoginForm = () => {
         return;
       }
 
-      await axios
+      await api
         .post<ILoginResponse>(
-          "https://poodlesvonapalusso.dog/api/Authentication/login",
+          "/api/Authentication/login",
           {
             username: enteredUsername,
             password: enteredPassword,
@@ -89,9 +90,9 @@ const LoginForm = () => {
         return;
       }
 
-      await axios
+      await api
         .post<AxiosResponse>(
-          "https://poodlesvonapalusso.dog/api/Authentication/register",
+          "/api/Authentication/register",
           {
             username: enteredUsername,
             password: enteredPassword,

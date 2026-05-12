@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import axios from "axios";
+import api from "../api/client";
 import AuthContext from "../store/auth-context";
 import { IUserModel } from "../interfaces/IAuthModel";
 import { Alert, Table, Button, Spinner } from "react-bootstrap";
@@ -18,8 +18,8 @@ const AdminPage: React.FC = () => {
 
   const removeHandler = (id: string) => {
     setLoading(true);
-    axios
-      .delete(`https://poodlesvonapalusso.dog/api/user/${id}`, {
+    api
+      .delete(`/api/user/${id}`, {
         headers: { Authorization: "Bearer " + token },
       })
       .then(() => {
@@ -35,9 +35,9 @@ const AdminPage: React.FC = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       const loadedData: IUserModel[] = [];
-      await axios
+      await api
         .get<IUserModel[]>(
-          "https://poodlesvonapalusso.dog/api/Admin/list-users",
+          "/api/Admin/list-users",
           {
             headers: { Authorization: "Bearer " + token },
           }
@@ -67,9 +67,9 @@ const AdminPage: React.FC = () => {
     setLoading(true);
     const loadedData: IUserModel[] = [];
     const fetchAdmins = () => {
-      axios
+      api
         .get<IUserModel[]>(
-          "https://poodlesvonapalusso.dog/api/Admin/list-admins",
+          "/api/Admin/list-admins",
           {
             headers: { Authorization: "Bearer " + token },
           }

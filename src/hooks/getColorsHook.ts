@@ -1,7 +1,7 @@
 import { PoodleColor } from "../interfaces/IPoodleModel";
 import { useState, useEffect, useContext } from "react";
 import AuthContext from "../store/auth-context";
-import axios from "axios";
+import api from "../api/client";
 
 interface PoodleColorProps {
   colors: PoodleColor[];
@@ -21,9 +21,9 @@ const useGetColors = (): PoodleColorProps => {
 
   useEffect(() => {
     const fetchColors = async () => {
-      await axios
+      await api
         .get<PoodleColor[]>(
-          "https://poodlesvonapalusso.dog/api/poodles/list-colors",
+          "/api/poodles/list-colors",
           {
             headers: { Authorization: "Bearer " + token },
           }

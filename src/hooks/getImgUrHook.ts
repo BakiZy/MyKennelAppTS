@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import axios from "axios";
+import api from "../api/client";
 import AuthContext from "../store/auth-context";
 
 interface Image {
@@ -24,8 +24,8 @@ const useGetImgUr = (): PoodleImageProps => {
 
   useEffect(() => {
     const getImages = async () => {
-      await axios
-        .get<Image[]>("https://poodlesvonapalusso.dog/api/Images", {
+      await api
+        .get<Image[]>("/api/Images", {
           headers: { Authorization: "Bearer " + token },
         })
         .then((res) => {

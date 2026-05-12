@@ -4,7 +4,8 @@ import emailjs from "@emailjs/browser";
 import classes from "./Reservation.module.css";
 import { PoodleModel } from "../interfaces/IPoodleModel";
 import { Card, Col, Row, Button, Spinner } from "react-bootstrap";
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
+import api from "../api/client";
 
 const Reservation = () => {
   const [loading, setLoading] = useState(true);
@@ -27,9 +28,9 @@ const Reservation = () => {
 
   useEffect(() => {
     const fetchReservedPoodle = async () => {
-      await axios
+      await api
         .get<PoodleModel>(
-          `https://poodlesvonapalusso.dog/api/poodles/${poodleId}`
+          `/api/poodles/${poodleId}`
         )
         .then((response: AxiosResponse<PoodleModel>) => {
           setPoodle(response.data);

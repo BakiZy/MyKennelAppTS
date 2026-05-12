@@ -1,7 +1,7 @@
 import { useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
-import axios from "axios";
+import api from "../../api/client";
 import classes from "./ProfileForm.module.css";
 import { Button, Spinner } from "react-bootstrap";
 import ErrorModal from "../UI/ErrorModal";
@@ -54,9 +54,9 @@ const ProfileForm = () => {
 
     const changePassword = async () => {
       setIsLoading(true);
-      await axios
+      await api
         .post(
-          "https://poodlesvonapalusso.dog/api/Authentication/change-password",
+          "/api/Authentication/change-password",
           bodyParameters,
           config
         )

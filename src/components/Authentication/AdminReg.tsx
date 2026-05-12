@@ -1,5 +1,6 @@
 import React, { useState, useRef, useContext, useCallback } from "react";
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
+import api from "../../api/client";
 import AuthContext from "../../store/auth-context";
 import classes from "./AdminReg.module.css";
 import { Button, Spinner } from "react-bootstrap";
@@ -35,9 +36,9 @@ const AdminReg: React.FC = () => {
         headers: { Authorization: "Bearer " + token },
       };
 
-      await axios
+      await api
         .post<AxiosResponse>(
-          "https://poodlesvonapalusso.dog/api/Admin/register-admin",
+          "/api/Admin/register-admin",
           {
             username: enteredUsername,
             password: enteredPassword,

@@ -1,5 +1,6 @@
 import React, { useContext, useRef } from "react";
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
+import api from "../api/client";
 import AuthContext from "../store/auth-context";
 import classes from "./ImageUr.module.css";
 import { Button } from "react-bootstrap";
@@ -17,8 +18,8 @@ const ImagePage: React.FC = () => {
     const enteredPedigreeUrl = pedigreeUrl.current!.value;
 
     const addNewImage = async () => {
-      await axios.post<AxiosResponse>(
-        "https://poodlesvonapalusso.dog/api/Images",
+      await api.post<AxiosResponse>(
+        "/api/Images",
         {
           name: enteredImgName,
           url: enteredImgUrl,

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import PoodleList from "../components/PoodleComp/PoodleList";
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
+import api from "../api/client";
 import { PoodleModel } from "../interfaces/IPoodleModel";
 import classes from "./Home.module.css";
 import useGetSizes from "../hooks/getSizesHook";
@@ -42,8 +43,8 @@ const Home: React.FC = () => {
           colorName: selectedColorName,
           sizeName: selectedSizeName,
         };
-        await axios
-          .get("https://poodlesvonapalusso.dog/api/filters/color-and-size", {
+        await api
+          .get("/api/filters/color-and-size", {
             params,
           })
           .then((response) => {
@@ -85,8 +86,8 @@ const Home: React.FC = () => {
     );
 
     const onReset = useCallback(async () => {
-      await axios
-        .get<PoodleModel[]>("https://poodlesvonapalusso.dog/api/poodles")
+      await api
+        .get<PoodleModel[]>("/api/poodles")
         .then((response: AxiosResponse<PoodleModel[]>) => {
           const loadedData: PoodleModel[] = [];
 
@@ -193,8 +194,8 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     setLoading(true);
-    axios
-      .get<PoodleModel[]>("https://poodlesvonapalusso.dog/api/poodles")
+    api
+      .get<PoodleModel[]>("/api/poodles")
       .then((response: AxiosResponse<PoodleModel[]>) => {
         const loadedData: PoodleModel[] = [];
         for (let i = 0; i < response.data.length; i++) {
@@ -225,8 +226,8 @@ const Home: React.FC = () => {
   }, []);
 
   const onRemoveHandler = async (id: number) => {
-    await axios
-      .delete(`https://poodlesvonapalusso.dog/api/poodles/${id}`, {
+    await api
+      .delete(`/api/poodles/${id}`, {
         headers: { Authorization: "Bearer " + localStorage.getItem("token") },
       })
       .then(() => {

@@ -6,7 +6,8 @@ import AuthContext from "../store/auth-context";
 import useGetSizes from "../hooks/getSizesHook";
 import useGetColors from "../hooks/getColorsHook";
 import useGetImgUr from "../hooks/getImgUrHook";
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
+import api from "../api/client";
 import { PoodleModel } from "../interfaces/IPoodleModel";
 
 let controller = new AbortController();
@@ -41,9 +42,9 @@ const EditPoodle: React.FC = () => {
 
   useEffect(() => {
     const fetchReservedPoodle = async () => {
-      await axios
+      await api
         .get<PoodleModel>(
-          `https://poodlesvonapalusso.dog/api/poodles/${poodleId}`
+          `/api/poodles/${poodleId}`
         )
         .then((response: AxiosResponse<PoodleModel>) => {
           setPoodle(response.data);
@@ -66,9 +67,9 @@ const EditPoodle: React.FC = () => {
     const enteredPoodleNick = poodleNick.current!.value;
 
     const updatePoodle = async () => {
-      await axios
+      await api
         .put<AxiosResponse>(
-          `https://poodlesvonapalusso.dog/api/poodles/${poodleId}`,
+          `/api/poodles/${poodleId}`,
           {
             id: poodleId,
             name: enteredPoodleName,

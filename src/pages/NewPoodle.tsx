@@ -1,4 +1,5 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
+import api from "../api/client";
 import classes from "./NewPoodle.module.css";
 import React, { useRef, useContext } from "react";
 import AuthContext from "../store/auth-context";
@@ -13,7 +14,6 @@ const NewPoodle: React.FC = () => {
   const poodleNameRef = useRef<HTMLInputElement>(null);
   const poodleDateRef = useRef<HTMLInputElement>(null);
   const poodlePedigreeNumberRef = useRef<HTMLInputElement>(null);
-  const poodleNickRef = useRef<HTMLInputElement>(null);
   const [geneticTest, setGeneticTest] = React.useState(false);
   const [gender, setGender] = React.useState("");
   const { images, selectImgOption, setSelectedImgOption } = useGetImgUr();
@@ -28,9 +28,9 @@ const NewPoodle: React.FC = () => {
     //const enteredPoodleNick = poodleNickRef.current!.value;
 
     const addPoodle = async () => {
-      await axios
+      await api
         .post<AxiosResponse>(
-          "https://poodlesvonapalusso.dog/api/poodles",
+          "/api/poodles",
           {
             name: enteredPoodleName,
             dateOfBirth: enteredPoodleDate,

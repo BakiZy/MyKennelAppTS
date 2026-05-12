@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { PoodleSize } from "../interfaces/IPoodleModel";
-import axios from "axios";
+import api from "../api/client";
 import AuthContext from "../store/auth-context";
 
 interface PoodleSizeProps {
@@ -18,9 +18,9 @@ const useGetSizes = (): PoodleSizeProps => {
   const token = authContext.token;
   useEffect(() => {
     const fetchSizes = async () => {
-      await axios
+      await api
         .get<PoodleSize[]>(
-          "https://poodlesvonapalusso.dog/api/poodles/list-sizes",
+          "/api/poodles/list-sizes",
           {
             headers: { Authorization: "Bearer " + token },
           }
