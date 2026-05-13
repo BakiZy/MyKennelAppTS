@@ -5,7 +5,7 @@ import api from "../../api/client";
 import classes from "./LoginForm.module.css";
 import AuthContext from "../../store/auth-context";
 import { ILoginResponse } from "../../interfaces/IAuthModel";
-import { Button, Spinner } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 import { validEmail, validPassword } from "./Regex";
 import ErrorModal from "../UI/ErrorModal";
 
@@ -66,7 +66,11 @@ const LoginForm = () => {
           return response;
         })
         .catch((error) => {
-          alert(error.message);
+          setError({
+            message: error.message,
+            title: "Login error",
+            popup: true,
+          });
           setIsLoading(false);
         });
     };
@@ -100,13 +104,22 @@ const LoginForm = () => {
           }
         )
         .then(() => {
-          alert("registration successful");
           setIsLoading(false);
-          navigate("/");
+          setError({
+            message:
+              "Registration successful. You can now log in with your account.",
+            title: "Account created",
+            popup: true,
+          });
+          setIsLogin(true);
         })
-        .catch((error: string) => {
+        .catch((error) => {
           setIsLoading(false);
-          console.log(error);
+          setError({
+            message: error.message,
+            title: "Registration error",
+            popup: true,
+          });
         });
     };
 
@@ -119,9 +132,11 @@ const LoginForm = () => {
 
   if (isLoading) {
     return (
-      <Spinner animation="border" variant="info" className={classes.spinner}>
-        Load
-      </Spinner>
+      <main className={classes.page}>
+        <div className={classes.loadingState}>
+          <Spinner animation="border" variant="dark" />
+        </div>
+      </main>
     );
   }
 
@@ -142,59 +157,58 @@ const LoginForm = () => {
           title={error.title}
         />
       )}
-      <section className={classes.auth}>
-        <h1>{isLogin ? "Login" : "Register account"}</h1>
-        <form onSubmit={submitHandler}>
-          {!isLogin && (
-            <div className={classes.control}>
-              <label htmlFor="email">E-mail address</label>
-              <input type="email" id="email" required ref={emailInputRef} />
-            </div>
-          )}
-          <div className={classes.control}>
-            <label htmlFor="username">Username</label>
-            <input type="text" id="username" required ref={usernameInputRef} />
+      <main className={classes.page}>
+        <section className={classes.auth}>
+          <div className={classes.intro}>
+            <p className={classes.eyebrow}>Von Apalusso account</p>
+            <h1>{isLogin ? "Welcome back" : "Create your account"}</h1>
+            <p>
+              {isLogin
+                ? "Sign in to manage reservations and kennel administration."
+                : "Register a client account for reservation requests and updates."}
+            </p>
           </div>
-
-          <div className={classes.control}>
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              required
-              ref={passwordInputRef}
-            />
-          </div>
-          <br></br>
-          <div className="col-md-12 text-center">
-            {!isLoading && (
-              <Button
-                type="submit"
-                variant="dark"
-                style={{
-                  color: "#ffe2ed",
-                  fontSize: "1.6rem",
-                }}
-              >
-                {isLogin ? "Login" : "Create account"}
-              </Button>
+          <form onSubmit={submitHandler} className={classes.form}>
+            {!isLogin && (
+              <div className={classes.control}>
+                <label htmlFor="email">E-mail address</label>
+                <input type="email" id="email" required ref={emailInputRef} />
+              </div>
             )}
-            {isLoading && <div>Loading...</div>}
-            <br />
-            <Button
-              type="button"
-              onClick={switchLoginHandler}
-              variant="dark"
-              style={{
-                color: "#ffe2ed",
-                fontSize: "1.6rem",
-              }}
-            >
-              {isLogin ? "Create a new account" : "Login with existing account"}
-            </Button>
-          </div>
-        </form>
-      </section>
+            <div className={classes.control}>
+              <label htmlFor="username">Username</label>
+              <input type="text" id="username" required ref={usernameInputRef} />
+            </div>
+
+            <div className={classes.control}>
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                required
+                ref={passwordInputRef}
+              />
+            </div>
+            <div className={classes.actions}>
+              {!isLoading && (
+                <button type="submit" className={classes.primaryAction}>
+                  {isLogin ? "Login" : "Create account"}
+                </button>
+              )}
+              {isLoading && <div>Loading...</div>}
+              <button
+                type="button"
+                onClick={switchLoginHandler}
+                className={classes.secondaryAction}
+              >
+                {isLogin
+                  ? "Create a new account"
+                  : "Login with existing account"}
+              </button>
+            </div>
+          </form>
+        </section>
+      </main>
     </>
   );
 };

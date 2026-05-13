@@ -1,61 +1,183 @@
-.cardProperty {
-  background-color: #212529;
-  border-radius: 1.5rem;
-  text-align: center;
-  box-sizing: border-box;
-  width: 30rem;
-  color: #ffe2ed;
+.grid {
+  display: grid;
+  width: min(1360px, 100%);
+  margin: 0 auto;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
 
-  margin-bottom: 2.5rem;
-  transition: transform 0.3s ease-in-out;
-  font-size: 1.5rem;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.26);
+.cardProperty {
+  display: grid;
+  overflow: hidden;
+  min-width: 0;
+  border: 1px solid rgba(32, 32, 29, 0.1);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 16px 40px rgba(31, 35, 29, 0.08);
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.cardProperty:hover {
+  border-color: rgba(141, 47, 63, 0.25);
+  box-shadow: 0 20px 46px rgba(31, 35, 29, 0.12);
+  transform: translateY(-3px);
+}
+
+.imageLink {
+  display: block;
+  background: #e8e2da;
 }
 
 .imageProp {
-  border-radius: 1.5rem;
-  height: 30rem;
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
   object-fit: cover;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.26);
 }
 
-@media only screen and (min-width: 768px) {
-  .cardProperty {
-    margin-left: 2rem;
-  }
+.cardContent {
+  display: flex;
+  min-height: 19rem;
+  flex-direction: column;
+  padding: 1rem;
 }
 
-@media only screen and (max-width: 600px) {
-  .cardProperty {
-    width: 24rem;
-    font-size: 1.2rem;
-  }
-  .imageProp {
-    object-fit: cover;
-  }
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.8rem;
+  margin-bottom: 0.9rem;
 }
 
-.linkZ {
-  background-color: #5ee4d2;
-  border-radius: 1rem;
-  border-color: rgb(49, 67, 148);
-  color: black;
-  font-size: 1.5rem;
-  padding: 0.4rem;
+.cardHeader h2 {
+  margin: 0;
+  color: #20201d;
+  font-size: 1.18rem;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.kicker {
+  margin: 0 0 0.35rem;
+  color: #8d2f3f;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.sexBadge {
+  flex: 0 0 auto;
+  border: 1px solid rgba(58, 64, 57, 0.18);
+  border-radius: 999px;
+  background: #f4f7f0;
+  color: #3a4039;
+  padding: 0.28rem 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.metaList {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0;
+}
+
+.metaList div {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(32, 32, 29, 0.08);
+  padding-bottom: 0.55rem;
+}
+
+.metaList dt {
+  color: #6b7069;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.metaList dd {
+  margin: 0;
+  color: #20201d;
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-align: right;
+}
+
+.cardActions {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: auto;
+  padding-top: 1rem;
+}
+
+.linkZ,
+.editLink,
+.removeButton {
+  display: inline-flex;
+  min-height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0.55rem 0.85rem;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1;
   text-decoration: none;
 }
 
+.linkZ {
+  border: 1px solid #20201d;
+  background: #20201d;
+  color: #ffffff;
+}
+
 .linkZ:hover {
-  color: white;
-  background-color: rgba(45, 72, 192, 0.9);
+  color: #ffffff;
+  background: #8d2f3f;
+  border-color: #8d2f3f;
 }
 
-.cardProperty:hover,
-.cardProperty:active {
-  transform: scale(1.05);
+.adminActions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.55rem;
 }
 
-.buttonDiv {
-  display: flex;
-  justify-content: center;
+.removeButton {
+  border: 1px solid #b54747;
+  background: #b54747;
+  color: #ffffff;
+}
+
+.editLink {
+  border: 1px solid rgba(32, 32, 29, 0.18);
+  color: #20201d;
+}
+
+.editLink:hover {
+  color: #8d2f3f;
+}
+
+@media only screen and (max-width: 1180px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media only screen and (max-width: 620px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cardContent {
+    min-height: auto;
+  }
 }

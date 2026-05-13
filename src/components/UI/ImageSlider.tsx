@@ -24,10 +24,20 @@ const ImageSlider: React.FC<ISliderProps> = (props) => {
 
   return (
     <section className={classes.slider}>
-      <button className={classes.leftArrow} onClick={previousSlide}>
+      <button
+        className={classes.leftArrow}
+        onClick={previousSlide}
+        type="button"
+        aria-label="Previous puppy image"
+      >
         <FaArrowAltCircleLeft />
       </button>
-      <button className={classes.rightArrow} onClick={nextSlide}>
+      <button
+        className={classes.rightArrow}
+        onClick={nextSlide}
+        type="button"
+        aria-label="Next puppy image"
+      >
         <FaArrowAltCircleRight />
       </button>
       {props.slides.map((image, index) => {

@@ -1,38 +1,72 @@
-.modal {
+.backdrop {
   position: fixed;
-  top: 30vh;
-  left: 10%;
-  width: 30%;
-  z-index: 100;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  background: rgba(24, 24, 21, 0.48);
+  padding: 1rem;
+}
+
+.modal {
+  width: min(30rem, 100%);
   overflow: hidden;
-  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
 }
 
 .header {
-  background: #212529;
-  display: flex;
-  padding: 1rem;
-  color: white;
-  justify-content: center;
-  border-radius: 0.7rem;
+  background: #20201d;
+  color: #ffffff;
+  padding: 1rem 1.2rem;
+}
+
+.header p {
+  margin: 0 0 0.35rem;
+  color: #f1cbd0;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 800;
+  line-height: 1.2;
 }
 
 .info {
-  display: flex;
-  padding: 1rem;
-  justify-content: center;
+  margin: 0;
+  color: #3a4039;
+  padding: 1.15rem 1.2rem;
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 .return {
-  display: flex !important;
-  text-align: center !important;
-  justify-content: center !important;
-  align-items: center !important;
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid rgba(32, 32, 29, 0.08);
+  padding: 0.9rem 1.2rem 1.1rem;
 }
 
-@media (min-width: 768px) {
-  .modal {
-    left: calc(50% - 20rem);
-    width: 40rem;
-  }
+.return button {
+  min-height: 2.65rem;
+  border: 1px solid #20201d;
+  border-radius: 999px;
+  background: #20201d;
+  color: #ffffff;
+  padding: 0.6rem 1.1rem;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.return button:hover {
+  border-color: #8d2f3f;
+  background: #8d2f3f;
 }

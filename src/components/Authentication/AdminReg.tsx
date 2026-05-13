@@ -3,7 +3,7 @@ import { AxiosResponse } from "axios";
 import api from "../../api/client";
 import AuthContext from "../../store/auth-context";
 import classes from "./AdminReg.module.css";
-import { Button, Spinner } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 import { validEmail, validPassword } from "./Regex";
 import { useNavigate } from "react-router-dom";
 
@@ -60,15 +60,21 @@ const AdminReg: React.FC = () => {
 
   if (loading) {
     return (
-      <Spinner animation="border" variant="info">
-        Load
-      </Spinner>
+      <main className={classes.page}>
+        <div className={classes.loadingState}>
+          <Spinner animation="border" variant="dark" />
+        </div>
+      </main>
     );
   }
   return (
-    <section>
-      <h1>Register admin account</h1>
-      <form onSubmit={submitHandler}>
+    <main className={classes.page}>
+      <section className={classes.auth}>
+        <div className={classes.intro}>
+          <p className={classes.eyebrow}>Admin access</p>
+          <h1>Register admin account</h1>
+        </div>
+      <form onSubmit={submitHandler} className={classes.form}>
         <div className={classes.control}>
           <label htmlFor="email">E-mail address</label>
           <input type="email" id="email" required ref={emailInputRef} />
@@ -87,22 +93,14 @@ const AdminReg: React.FC = () => {
             ref={passwordInputRef}
           />
         </div>
-        <br></br>
-        <div className="col-md-12 text-center">
-          <Button
-            type="submit"
-            variant="dark"
-            style={{
-              color: "#ffe2ed",
-              fontSize: "1.6rem",
-            }}
-          >
+        <div className={classes.actions}>
+          <button type="submit" className={classes.primaryAction}>
             Create account
-          </Button>
-          <br />
+          </button>
         </div>
       </form>
-    </section>
+      </section>
+    </main>
   );
 };
 

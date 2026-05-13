@@ -6,13 +6,9 @@ import { PoodleModel } from "../interfaces/IPoodleModel";
 import classes from "./Home.module.css";
 import useGetSizes from "../hooks/getSizesHook";
 import useGetColors from "../hooks/getColorsHook";
-import { Button, Spinner } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 import ErrorModal from "../components/UI/ErrorModal";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-
-interface FilterProps {
-  filteredPoodles: PoodleModel[];
-}
 
 let controller = new AbortController();
 
@@ -35,10 +31,19 @@ const Home: React.FC = () => {
     selectedColorName,
   } = useGetColors();
 
-  const PoodleFilter: React.FC<FilterProps> = () => {
+  const PoodleFilter: React.FC = () => {
     const getFilters = useCallback(
       async (event: React.ChangeEvent<HTMLFormElement>) => {
         event.preventDefault();
+        if (!selectedColorName || !selectedSizeName) {
+          setError({
+            message: "Choose a size and color to filter the poodles.",
+            title: "Search error",
+            popup: true,
+          });
+          return;
+        }
+        setLoading(true);
         const params = {
           colorName: selectedColorName,
           sizeName: selectedSizeName,
@@ -79,13 +84,15 @@ const Home: React.FC = () => {
           })
           .catch((error) => {
             console.log(error);
+            setLoading(false);
           });
         return setLoading(false);
       },
-      []
+      [selectedColorName, selectedSizeName]
     );
 
     const onReset = useCallback(async () => {
+      setLoading(true);
       await api
         .get<PoodleModel[]>("/api/poodles")
         .then((response: AxiosResponse<PoodleModel[]>) => {
@@ -116,77 +123,65 @@ const Home: React.FC = () => {
       return setLoading(false);
     }, []);
 
-    const changeSelectSizeHandler = (
-      e: React.ChangeEvent<HTMLSelectElement>
-    ) => {
-      setSelectedSizeOption(parseInt(e.target.value));
-    };
-
-    const changeSelectColorHandler = (
-      e: React.ChangeEvent<HTMLSelectElement>
-    ) => {
-      setSelectedColorOption(parseInt(e.target.value));
-    };
-
     return (
       <form onSubmit={getFilters} className={classes.filterMain}>
-        <div className={classes.control}>
+        <div className={classes.filterHeader}>
           <div>
-            <label htmlFor="sizeName">Select size of poodle</label>
-            <select
-              id="sizeName"
-              name="sizeName"
-              value={selectSizeOption}
-              onChange={changeSelectSizeHandler}
-            >
-              {sizes.map((size) => (
-                <option key={size.id} value={size.id}>
-                  {size.name}
-                </option>
-              ))}
-            </select>
+            <p className={classes.eyebrow}>Von Apalusso kennel</p>
+            <h1>Poodles available for your family</h1>
           </div>
-          <div className={classes.filters}>
-            <label htmlFor="colorName">Select color of poodle</label>
-            <select
-              id="colorName"
-              name="colorName"
-              value={selectColorOption}
-              onChange={changeSelectColorHandler}
-            >
-              {colors.map((color) => (
-                <option key={color.id} value={color.id}>
-                  {color.name}
-                </option>
-              ))}
-            </select>
+          <div className={classes.resultCount}>
+            <strong>{poodles.length}</strong>
+            <span>{poodles.length === 1 ? "poodle" : "poodles"}</span>
           </div>
         </div>
+        <div className={classes.filterGroups}>
+          <fieldset className={classes.filterGroup}>
+            <legend>Size</legend>
+            <div className={classes.chipList}>
+              {sizes.map((size) => (
+                <button
+                  key={size.id}
+                  type="button"
+                  className={`${classes.chip} ${
+                    selectSizeOption === size.id ? classes.activeChip : ""
+                  }`}
+                  onClick={() => setSelectedSizeOption(size.id)}
+                >
+                  {size.name}
+                </button>
+              ))}
+            </div>
+          </fieldset>
+          <fieldset className={classes.filterGroup}>
+            <legend>Color</legend>
+            <div className={classes.chipList}>
+              {colors.map((color) => (
+                <button
+                  key={color.id}
+                  type="button"
+                  className={`${classes.chip} ${
+                    selectColorOption === color.id ? classes.activeChip : ""
+                  }`}
+                  onClick={() => setSelectedColorOption(color.id)}
+                >
+                  {color.name}
+                </button>
+              ))}
+            </div>
+          </fieldset>
+        </div>
         <div className={classes.filterButtons}>
-          <Button
-            type="submit"
-            variant="dark"
-            style={{
-              borderRadius: "1rem",
-              borderColor: "rgb(44, 43, 43)",
-              fontSize: "1.5rem",
-              width: "7rem",
-            }}
-          >
+          <button type="submit" className={classes.primaryAction}>
             Filter
-          </Button>
-          <Button
+          </button>
+          <button
             type="button"
             onClick={onReset}
-            variant="dark"
-            style={{
-              borderRadius: "1rem",
-              borderColor: "rgb(44, 43, 43)",
-              fontSize: "1.5rem",
-            }}
+            className={classes.secondaryAction}
           >
             Show all
-          </Button>
+          </button>
         </div>
       </form>
     );
@@ -248,9 +243,11 @@ const Home: React.FC = () => {
 
   if (loading) {
     return (
-      <Spinner animation="border" variant="info">
-        Load
-      </Spinner>
+      <main className={classes.page}>
+        <div className={classes.loadingState}>
+          <Spinner animation="border" variant="dark" />
+        </div>
+      </main>
     );
   }
   return (
@@ -291,8 +288,10 @@ const Home: React.FC = () => {
           onConfirm={errorHandler}
         />
       )}
-      <PoodleFilter filteredPoodles={poodles} />
-      <PoodleList poodles={poodles} onRemove={onRemoveHandler} />
+      <main className={classes.page}>
+        <PoodleFilter />
+        <PoodleList poodles={poodles} onRemove={onRemoveHandler} />
+      </main>
     </HelmetProvider>
   );
 };

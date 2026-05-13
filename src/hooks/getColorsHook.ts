@@ -51,7 +51,8 @@ const useGetColors = (): PoodleColorProps => {
     selectColorOption: selectColorOption,
     setSelectedColorOption: setSelectedColorOption,
     loadingColors: loading,
-    selectedColorName: colors[selectColorOption - 1]?.name,
+    selectedColorName:
+      colors.find((color) => color.id === selectColorOption)?.name ?? "",
   };
 };
 

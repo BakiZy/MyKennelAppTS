@@ -3,88 +3,83 @@ import classes from "./PoodleList.module.css";
 //import { Link } from "react-router-dom";
 import { PoodleListProps } from "../../interfaces/IPoodleModel";
 import AuthContext from "../../store/auth-context";
-import { Card, Col, Row, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 const PoodleList: React.FC<PoodleListProps> = (props) => {
   const authContext = useContext(AuthContext);
   return (
-    <Row lg={3} className={classes.rowContent}>
+    <section className={classes.grid} aria-label="Poodle list">
       {props.poodles.map((poodle) => {
         const parseDate = new Date(poodle.dateOfBirth).toLocaleDateString(
-          "en-UK"
+          "en-GB"
         );
 
         //change date format from yyyy-mm-dd to dd-mm-yyyy
 
         return (
-          <Col key={poodle.id}>
-            <Card key={poodle.id} className={classes.cardProperty}>
-              <Card.Body>
-                <Link to={`/poodles/${poodle.id}`}>
-                  <Card.Img
-                    src={poodle.imageUrl}
-                    className={classes.imageProp}
-                    alt={poodle.name}
-                  />
-                </Link>
-                <Card.Title>
+          <article key={poodle.id} className={classes.cardProperty}>
+            <Link className={classes.imageLink} to={`/poodles/${poodle.id}`}>
+              <img
+                src={poodle.imageUrl}
+                className={classes.imageProp}
+                alt={poodle.name}
+              />
+            </Link>
+            <div className={classes.cardContent}>
+              <div className={classes.cardHeader}>
+                <div>
+                  <p className={classes.kicker}>
+                    {poodle.poodleSizeName} / {poodle.poodleColorName}
+                  </p>
                   <h2>{poodle.name}</h2>
-                </Card.Title>
-                <Card.Text>Date of birth : {parseDate}</Card.Text>
+                </div>
+                <span className={classes.sexBadge}>{poodle.sex}</span>
+              </div>
+              <dl className={classes.metaList}>
+                <div>
+                  <dt>Born</dt>
+                  <dd>{parseDate}</dd>
+                </div>
+                <div>
+                  <dt>Genetic tests</dt>
+                  <dd>{poodle.geneticTests ? "Yes" : "No"}</dd>
+                </div>
                 {authContext.isLoggedIn ? (
-                  <Card.Text>
-                    Pedigree number: {poodle.pedigreeNumber}
-                  </Card.Text>
+                  <div>
+                    <dt>Pedigree</dt>
+                    <dd>{poodle.pedigreeNumber}</dd>
+                  </div>
                 ) : null}
-                {poodle.geneticTests ? (
-                  <Card.Text> Genetic testings : yes </Card.Text>
-                ) : (
-                  <Card.Text> Genetic testings : no </Card.Text>
-                )}
-                <Card.Text>Gender: {poodle.sex}</Card.Text>
-                <Card.Text>Size : {poodle.poodleSizeName}</Card.Text>
-                <Card.Text>Color : {poodle.poodleColorName}</Card.Text>
-                {poodle.isPuppy ? (
-                  <Link className={classes.linkZ} to={`/poodles/${poodle.id}`}>
-                    Interested in this pup?
-                  </Link>
-                ) : (
-                  <Link className={classes.linkZ} to={`/poodles/${poodle.id}`}>
-                    Interested in our poodle pups?
-                  </Link>
-                )}
-              </Card.Body>
-              <Card.Body className={classes.buttonDiv}>
+              </dl>
+              <div className={classes.cardActions}>
+                <Link className={classes.linkZ} to={`/poodles/${poodle.id}`}>
+                  {poodle.isPuppy
+                    ? "Interested in this pup?"
+                    : "Interested in our poodle pups?"}
+                </Link>
                 {authContext.isAdmin && (
-                  <Button
-                    className="btn btn-danger"
-                    onClick={() => props.onRemove(poodle.id)}
-                    style={{
-                      borderRadius: "1rem",
-                      borderColor: "rgb(107, 14, 117)",
-                      color: "#ffe2ed",
-                      fontSize: "1.5rem",
-                      marginBottom: "",
-                    }}
-                  >
-                    Remove
-                  </Button>
+                  <div className={classes.adminActions}>
+                    <button
+                      className={classes.removeButton}
+                      type="button"
+                      onClick={() => props.onRemove(poodle.id)}
+                    >
+                      Remove
+                    </button>
+                    <Link
+                      className={classes.editLink}
+                      to={`/edit-poodle/${poodle.id}`}
+                    >
+                      Edit DB data
+                    </Link>
+                  </div>
                 )}
-                {authContext.isAdmin && (
-                  <Link
-                    className={classes.linkZ}
-                    to={`/edit-poodle/${poodle.id}`}
-                  >
-                    Edit DB data
-                  </Link>
-                )}
-              </Card.Body>
-            </Card>
-          </Col>
+              </div>
+            </div>
+          </article>
         );
       })}
-    </Row>
+    </section>
   );
 };
 
