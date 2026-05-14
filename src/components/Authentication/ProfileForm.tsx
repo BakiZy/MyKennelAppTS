@@ -32,8 +32,6 @@ const ProfileForm = () => {
     const newPassword = newPasswordInput.current!.value;
     const confirmPassword = confirmPasswordInput!.current!.value;
 
-    const token = authContext.token;
-
     if (newPassword.length < 7 || newPassword !== confirmPassword) {
       setError({
         message: "invalid password or passwords don't match",
@@ -42,9 +40,6 @@ const ProfileForm = () => {
       });
       return;
     }
-    const config = {
-      headers: { Authorization: "Bearer " + token },
-    };
     const bodyParameters = {
       username: username,
       currentPassword: currentPassword,
@@ -57,8 +52,7 @@ const ProfileForm = () => {
       await api
         .post(
           "/api/Authentication/change-password",
-          bodyParameters,
-          config
+          bodyParameters
         )
         .then(function (response) {
           if (response.status !== 200) {

@@ -1,7 +1,6 @@
-import React, { useState, useRef, useContext, useCallback } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { AxiosResponse } from "axios";
 import api from "../../api/client";
-import AuthContext from "../../store/auth-context";
 import classes from "./AdminReg.module.css";
 import { Spinner } from "react-bootstrap";
 import { validEmail, validPassword } from "./Regex";
@@ -13,8 +12,6 @@ const AdminReg: React.FC = () => {
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const emailInputRef = useRef<HTMLInputElement>(null);
 
-  const authContext = useContext(AuthContext);
-  const token = authContext.token;
   const navigate = useNavigate();
   const submitHandler = useCallback(
     async (event: React.FormEvent) => {
@@ -32,10 +29,6 @@ const AdminReg: React.FC = () => {
         setLoading(false);
         return;
       }
-      const config = {
-        headers: { Authorization: "Bearer " + token },
-      };
-
       await api
         .post<AxiosResponse>(
           "/api/Admin/register-admin",
@@ -43,8 +36,7 @@ const AdminReg: React.FC = () => {
             username: enteredUsername,
             password: enteredPassword,
             email: enteredEmail,
-          },
-          config
+          }
         )
         .then(() => {
           alert("admin registration successful");
@@ -55,7 +47,7 @@ const AdminReg: React.FC = () => {
           console.log(error);
         });
     },
-    [token, navigate]
+    [navigate]
   );
 
   if (loading) {

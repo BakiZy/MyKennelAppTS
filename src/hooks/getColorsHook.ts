@@ -1,6 +1,5 @@
 import { PoodleColor } from "../interfaces/IPoodleModel";
-import { useState, useEffect, useContext } from "react";
-import AuthContext from "../store/auth-context";
+import { useState, useEffect } from "react";
 import api from "../api/client";
 
 interface PoodleColorProps {
@@ -16,18 +15,11 @@ const useGetColors = (): PoodleColorProps => {
   //using 1 for default selected value of color = black
   const [selectColorOption, setSelectedColorOption] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(true);
-  const authContext = useContext(AuthContext);
-  const token = authContext.token;
 
   useEffect(() => {
     const fetchColors = async () => {
       await api
-        .get<PoodleColor[]>(
-          "/api/poodles/list-colors",
-          {
-            headers: { Authorization: "Bearer " + token },
-          }
-        )
+        .get<PoodleColor[]>("/api/poodles/list-colors")
         .then((response) => {
           const loadedData: PoodleColor[] = [];
           const responseData = response.data;
@@ -45,7 +37,7 @@ const useGetColors = (): PoodleColorProps => {
         });
     };
     fetchColors();
-  }, [token]);
+  }, []);
   return {
     colors: colors,
     selectColorOption: selectColorOption,

@@ -11,39 +11,7 @@
 
 .auth {
   display: grid;
-  width: min(920px, 100%);
-  grid-template-columns: minmax(0, 0.9fr) minmax(20rem, 1.1fr);
-  gap: 2rem;
-  align-items: start;
-}
-
-.intro {
-  padding-top: 1rem;
-}
-
-.eyebrow {
-  margin: 0 0 0.5rem;
-  color: #8d2f3f;
-  font-size: 0.78rem;
-  font-weight: 800;
-  text-transform: uppercase;
-}
-
-.intro h1 {
-  margin: 0;
-  color: #20201d;
-  text-align: left;
-  font-size: clamp(2rem, 4vw, 3.5rem);
-  font-weight: 800;
-  line-height: 1;
-}
-
-.intro p {
-  max-width: 32rem;
-  margin: 1rem 0 0;
-  color: #5c625b;
-  font-size: 1rem;
-  line-height: 1.6;
+  width: min(28rem, 100%);
 }
 
 .form {
@@ -130,8 +98,11 @@
 }
 
 @media only screen and (max-width: 760px) {
+  .page {
+    padding: 1.5rem 1rem 2.5rem;
+  }
+
   .auth {
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
+    width: 100%;
   }
 }

@@ -1,0 +1,319 @@
+.page {
+  min-height: calc(100vh - 4rem);
+  background:
+    linear-gradient(180deg, rgba(245, 242, 236, 0.92), rgba(250, 250, 248, 1) 34rem),
+    #fafaf8;
+  color: #20201d;
+  padding: 2.25rem clamp(1rem, 3vw, 3rem) 4rem;
+}
+
+.hero {
+  width: min(1120px, 100%);
+  margin: 0 auto 2rem;
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0 0 0.45rem;
+  color: #8d2f3f;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  max-width: 780px;
+  margin: 0 auto;
+  font-size: clamp(2rem, 4vw, 4rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.hero p {
+  max-width: 720px;
+  margin: 1rem auto 0;
+  color: #5c625b;
+  font-size: 1.03rem;
+  line-height: 1.6;
+}
+
+.section {
+  width: min(1360px, 100%);
+  margin: 0 auto 2rem;
+}
+
+.adminPanel {
+  width: min(1360px, 100%);
+  margin: 0 auto 2rem;
+  border: 1px solid rgba(141, 47, 63, 0.2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 18px 50px rgba(31, 35, 29, 0.08);
+  padding: 1rem;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid rgba(32, 32, 29, 0.12);
+  margin-bottom: 1rem;
+  padding-bottom: 0.8rem;
+}
+
+.sectionHeader h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.sectionHeader span {
+  border-radius: 999px;
+  background: #20201d;
+  color: #ffffff;
+  padding: 0.3rem 0.7rem;
+  font-weight: 800;
+}
+
+.litterGrid,
+.puppyGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.litterCard,
+.puppyCard,
+.emptyState {
+  overflow: hidden;
+  border: 1px solid rgba(32, 32, 29, 0.1);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 16px 40px rgba(31, 35, 29, 0.08);
+}
+
+.litterCard img,
+.puppyCard img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.cardBody {
+  padding: 1rem;
+}
+
+.cardTopLine {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.cardTopLine h3 {
+  margin: 0;
+  font-size: 1.18rem;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.cardTopLine span {
+  flex: 0 0 auto;
+  border: 1px solid rgba(58, 64, 57, 0.18);
+  border-radius: 999px;
+  background: #f4f7f0;
+  color: #3a4039;
+  padding: 0.28rem 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.cardBody p {
+  color: #5c625b;
+  line-height: 1.55;
+}
+
+.cardBody dl {
+  display: grid;
+  gap: 0.55rem;
+  margin: 1rem 0 0;
+}
+
+.cardBody dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(32, 32, 29, 0.08);
+  padding-bottom: 0.55rem;
+}
+
+.cardBody dt {
+  color: #6b7069;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.cardBody dd {
+  margin: 0;
+  color: #20201d;
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-align: right;
+}
+
+.inquiryLink {
+  display: inline-flex;
+  width: 100%;
+  min-height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #20201d;
+  border-radius: 999px;
+  background: #20201d;
+  color: #ffffff;
+  margin-top: 1rem;
+  padding: 0.55rem 0.85rem;
+  font-weight: 800;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.inquiryLink:hover {
+  border-color: #8d2f3f;
+  background: #8d2f3f;
+  color: #ffffff;
+}
+
+.emptyState,
+.statusMessage {
+  width: min(720px, 100%);
+  margin: 0 auto;
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.emptyState h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.emptyState p,
+.statusMessage {
+  color: #5c625b;
+  line-height: 1.6;
+}
+
+.adminMessage {
+  border-radius: 8px;
+  background: #f4f7f0;
+  color: #3a4039;
+  margin: 0 0 1rem;
+  padding: 0.75rem 0.9rem;
+  font-weight: 800;
+}
+
+.adminForms {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.adminForm {
+  display: grid;
+  gap: 0.65rem;
+  border: 1px solid rgba(32, 32, 29, 0.1);
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 1rem;
+}
+
+.adminForm h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.adminForm label {
+  color: #3a4039;
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.adminForm input,
+.adminForm select,
+.adminForm textarea {
+  width: 100%;
+  min-height: 2.65rem;
+  border: 1px solid rgba(32, 32, 29, 0.16);
+  border-radius: 8px;
+  background: #fbfbf9;
+  color: #20201d;
+  padding: 0.55rem 0.75rem;
+  font: inherit;
+  font-size: 0.95rem;
+}
+
+.adminForm textarea {
+  min-height: 6rem;
+  resize: vertical;
+}
+
+.adminForm input:focus,
+.adminForm select:focus,
+.adminForm textarea:focus {
+  border-color: #8d2f3f;
+  box-shadow: 0 0 0 3px rgba(141, 47, 63, 0.14);
+  outline: none;
+}
+
+.adminForm button {
+  min-height: 2.75rem;
+  border: 1px solid #20201d;
+  border-radius: 999px;
+  background: #20201d;
+  color: #ffffff;
+  margin-top: 0.35rem;
+  padding: 0.65rem 1rem;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.adminForm button:hover {
+  border-color: #8d2f3f;
+  background: #8d2f3f;
+}
+
+@media only screen and (max-width: 980px) {
+  .litterGrid,
+  .puppyGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media only screen and (max-width: 620px) {
+  .page {
+    padding: 1.35rem 1rem 3rem;
+  }
+
+  .litterGrid,
+  .puppyGrid,
+  .adminForms {
+    grid-template-columns: 1fr;
+  }
+
+  .cardBody dl div {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .cardBody dd {
+    text-align: left;
+  }
+}

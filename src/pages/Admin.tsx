@@ -14,14 +14,11 @@ const AdminPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   const authContext = useContext(AuthContext);
-  const token = authContext.token;
 
   const removeHandler = (id: string) => {
     setLoading(true);
     api
-      .delete(`/api/user/${id}`, {
-        headers: { Authorization: "Bearer " + token },
-      })
+      .delete(`/api/user/${id}`)
       .then(() => {
         setUsers(users.filter((user) => user.id !== id));
         setAdmins(admins.filter((admin) => admin.id !== id));
@@ -36,12 +33,7 @@ const AdminPage: React.FC = () => {
     const fetchUsers = async () => {
       const loadedData: IUserModel[] = [];
       await api
-        .get<IUserModel[]>(
-          "/api/Admin/list-users",
-          {
-            headers: { Authorization: "Bearer " + token },
-          }
-        )
+        .get<IUserModel[]>("/api/Admin/list-users")
         .then((response) => {
           for (let i = 0; i < response.data.length; i++) {
             loadedData.push({
@@ -61,19 +53,14 @@ const AdminPage: React.FC = () => {
     return () => {
       controller?.abort();
     };
-  }, [token]);
+  }, []);
 
   useEffect(() => {
     setLoading(true);
     const loadedData: IUserModel[] = [];
     const fetchAdmins = () => {
       api
-        .get<IUserModel[]>(
-          "/api/Admin/list-admins",
-          {
-            headers: { Authorization: "Bearer " + token },
-          }
-        )
+        .get<IUserModel[]>("/api/Admin/list-admins")
         .then((response) => {
           for (let i = 0; i < response.data.length; i++) {
             loadedData.push({
@@ -87,7 +74,7 @@ const AdminPage: React.FC = () => {
       setLoading(false);
     };
     fetchAdmins();
-  }, [token]);
+  }, []);
 
   if (!authContext.isAdmin) {
     return (

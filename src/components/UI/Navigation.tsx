@@ -41,6 +41,9 @@ const Navigation = () => {
           <Nav.Link as={Link} to="/about">
             About
           </Nav.Link>
+          <Nav.Link as={Link} to="/puppies">
+            Puppies
+          </Nav.Link>
           {authContext.isAdmin && (
             <Nav.Link as={Link} to="/admin">
               Admin

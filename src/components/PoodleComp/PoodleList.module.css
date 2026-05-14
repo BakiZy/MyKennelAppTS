@@ -175,9 +175,33 @@
 @media only screen and (max-width: 620px) {
   .grid {
     grid-template-columns: 1fr;
+    gap: 1.2rem;
   }
 
   .cardContent {
     min-height: auto;
+    padding: 0.9rem;
+  }
+
+  .cardHeader {
+    gap: 0.65rem;
+  }
+
+  .cardHeader h2 {
+    font-size: 1.08rem;
+  }
+
+  .metaList div {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .metaList dd {
+    text-align: left;
+  }
+
+  .adminActions {
+    grid-template-columns: 1fr;
   }
 }

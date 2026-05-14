@@ -14,7 +14,6 @@ let controller = new AbortController();
 const EditPoodle: React.FC = () => {
   const { poodleId } = useParams();
   const authContext = useContext(AuthContext);
-  const token = authContext.token;
 
   const [gender, setGender] = useState("");
   const [geneticTest, setGeneticTest] = React.useState(false);
@@ -81,9 +80,6 @@ const EditPoodle: React.FC = () => {
             poodleColorId: selectColorOption,
             sex: gender,
             nickName: enteredPoodleNick,
-          },
-          {
-            headers: { Authorization: "Bearer " + token },
           }
         )
         .then(() => {

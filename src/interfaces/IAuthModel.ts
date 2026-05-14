@@ -1,5 +1,5 @@
 export interface ILoginResponse {
-  token: string;
+  token?: string | null;
   expiration: string;
   email: string;
   role: string;

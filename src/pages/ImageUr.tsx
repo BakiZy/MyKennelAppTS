@@ -1,16 +1,13 @@
-import React, { useContext, useRef } from "react";
+import React, { useRef } from "react";
 import { AxiosResponse } from "axios";
 import api from "../api/client";
-import AuthContext from "../store/auth-context";
 import classes from "./ImageUr.module.css";
 import { Button } from "react-bootstrap";
 
 const ImagePage: React.FC = () => {
-  const authCtx = useContext(AuthContext);
   const imageName = useRef<HTMLInputElement>(null);
   const imageUrl = useRef<HTMLInputElement>(null);
   const pedigreeUrl = useRef<HTMLInputElement>(null);
-  const token = authCtx.token;
   const submitHandler = (event: React.FormEvent) => {
     event.preventDefault();
     const enteredImgName = imageName.current!.value;
@@ -24,9 +21,6 @@ const ImagePage: React.FC = () => {
           name: enteredImgName,
           url: enteredImgUrl,
           pedigreeUrl: enteredPedigreeUrl,
-        },
-        {
-          headers: { Authorization: "Bearer " + token },
         }
       );
     };

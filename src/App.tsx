@@ -14,6 +14,7 @@ import Reservation from "./pages/Reservation";
 import "bootstrap/dist/css/bootstrap.min.css";
 import EditPoodle from "./pages/Edit";
 import ImagePage from "./pages/ImageUr";
+import Puppies from "./pages/Puppies";
 import { axiosInterceptor } from "./components/Authentication/Axios";
 import axios from "axios";
 
@@ -28,6 +29,7 @@ const App: React.FC = () => {
         <Route path="/" element={<Home />} />
 
         <Route path="/about" element={<About />} />
+        <Route path="/puppies" element={<Puppies />} />
         {authContext.isLoggedIn ? (
           <Route path="/profile" element={<Profile />} />
         ) : (

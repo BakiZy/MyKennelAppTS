@@ -1,83 +1,82 @@
-.slider {
-  position: relative;
-  display: grid;
-  width: min(760px, 100%);
-  margin: 0 auto;
-  place-items: center;
+.leftArrow {
+  position: absolute;
+  left: -9.6rem;
+  bottom: 0rem;
+  font-size: 3rem;
+  color: black;
+  cursor: pointer;
+  padding-bottom: 1.5rem;
+  border-radius: 1rem;
+  background-color: seashell;
 }
 
-.leftArrow,
 .rightArrow {
   position: absolute;
-  z-index: 2;
-  top: 50%;
-  display: grid;
-  width: 3rem;
-  height: 3rem;
-  place-items: center;
-  border: 1px solid rgba(32, 32, 29, 0.16);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.9);
-  color: #20201d;
+  bottom: 0rem;
+  right: -9.5rem;
+  font-size: 3rem;
+  color: black;
   cursor: pointer;
-  font-size: 1.6rem;
-  line-height: 1;
-  transform: translateY(-50%);
+  user-select: none;
+  border-radius: 1rem;
+  padding-bottom: 1.5rem;
+  background-color: seashell;
 }
 
-.leftArrow {
-  left: 1rem;
-}
-
-.rightArrow {
-  right: 1rem;
-}
-
-.leftArrow:hover,
-.rightArrow:hover {
-  background: #20201d;
-  color: #ffffff;
+.slider {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .sliderImage {
-  display: block;
-  width: 100%;
-  aspect-ratio: 4 / 5;
-  max-height: 48rem;
-  border-radius: 8px;
+  width: 50rem;
+  height: 40rem;
+  border-radius: 1rem;
   object-fit: cover;
-  box-shadow: 0 18px 50px rgba(31, 35, 29, 0.16);
 }
 
 .symbol {
+  color: #ffe2ed;
+  background-color: #212529;
+  border-radius: 1rem;
   position: absolute;
-  z-index: 2;
+  font-size: 5rem;
+  font-weight: 500;
   top: 1rem;
-  left: 1rem;
-  border-radius: 999px;
-  background-color: #20201d;
-  color: #ffffff;
-  padding: 0.45rem;
-  font-size: 3.5rem;
 }
 
-@media only screen and (max-width: 640px) {
-  .leftArrow,
+@media only screen and (max-width: 601px) {
   .rightArrow {
-    width: 2.65rem;
-    height: 2.65rem;
-    font-size: 1.35rem;
+    font-size: 2rem;
+    color: black;
+    cursor: pointer;
+    user-select: none;
+    margin-right: 20rem;
+    height: 4rem;
+    top: 42rem;
+    background-color: seashell;
   }
 
   .leftArrow {
-    left: 0.75rem;
+    position: absolute;
+    font-size: 2rem;
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+    padding-bottom: 1.5rem;
+    margin-left: 20rem;
+    height: 4rem;
+    top: 42rem;
+    background-color: seashell;
   }
 
-  .rightArrow {
-    right: 0.75rem;
+  .sliderImage {
+    object-fit: contain;
   }
 
   .symbol {
-    font-size: 2.6rem;
+    top: 1.5rem;
+    left: 0.5rem;
   }
 }

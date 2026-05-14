@@ -1,6 +1,5 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import api from "../api/client";
-import AuthContext from "../store/auth-context";
 
 interface Image {
   id: number;
@@ -19,15 +18,11 @@ interface PoodleImageProps {
 const useGetImgUr = (): PoodleImageProps => {
   const [imgs, setImgs] = useState<Image[]>([]);
   const [selectImgOption, setSelectedImgOption] = useState<number>(1);
-  const authContext = useContext(AuthContext);
-  const token = authContext.token;
 
   useEffect(() => {
     const getImages = async () => {
       await api
-        .get<Image[]>("/api/Images", {
-          headers: { Authorization: "Bearer " + token },
-        })
+        .get<Image[]>("/api/Images")
         .then((res) => {
           const loadedData: Image[] = [];
           const responseData = res.data;
@@ -46,7 +41,7 @@ const useGetImgUr = (): PoodleImageProps => {
         });
     };
     getImages();
-  }, [token]);
+  }, []);
 
   return {
     images: imgs,

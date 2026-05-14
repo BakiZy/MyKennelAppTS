@@ -1,25 +1,18 @@
 import React, { useState } from "react";
 import { useEffect, useCallback } from "react";
 import { ChildrenProp } from "../interfaces/IPoodleModel";
+import api from "../api/client";
 
-let logoutTimer: NodeJS.Timeout;
-
-interface IToken {
-  token: string | null;
-  expiration: string | null;
-  role: string | null;
-}
+let logoutTimer: ReturnType<typeof setTimeout>;
 
 export interface IAuthContext {
-  token: string | null;
   isLoggedIn: boolean;
   isAdmin: boolean;
-  login: (token: string, role: string, expiration: string) => void;
+  login: (role: string, expiration: string) => void;
   logout: () => void;
 }
 
 const AuthContext = React.createContext<IAuthContext>({
-  token: "",
   isLoggedIn: false,
   isAdmin: false,
   login: () => {},
@@ -27,12 +20,20 @@ const AuthContext = React.createContext<IAuthContext>({
 });
 
 const retrieveStoredUserInfo = () => {
-  const storedToken = localStorage.getItem("token");
+  localStorage.removeItem("token");
   const storedExpiration = localStorage.getItem("expiration");
   const storedRole = localStorage.getItem("role");
+  const remainingTime = storedExpiration
+    ? Number(calculateExpirationTime(storedExpiration))
+    : 0;
+
+  if (!storedExpiration || remainingTime <= 0) {
+    localStorage.removeItem("role");
+    localStorage.removeItem("expiration");
+    return null;
+  }
 
   return {
-    token: storedToken,
     expiration: storedExpiration,
     role: storedRole,
   };
@@ -46,37 +47,24 @@ const calculateExpirationTime = (tokenExpiration: string) => {
 };
 
 export const AuthContextProvider: React.FC<ChildrenProp> = ({ children }) => {
-  let initialToken: IToken["token"] = "";
-  let initialExpiration: IToken["expiration"] = "";
-  let initialRole: IToken["role"] = "";
-
   const tokenData = retrieveStoredUserInfo();
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  if (tokenData) {
-    initialToken = tokenData.token;
-    initialExpiration = tokenData.expiration;
-    initialRole = tokenData.role;
-  }
-  initialExpiration?.toString();
-  const [token, setToken] = useState(initialToken);
-  const userIsLoggedIn = !!token;
+  const [isLoggedIn, setIsLoggedIn] = useState(!!tokenData?.expiration);
+  const [isAdmin, setIsAdmin] = useState(tokenData?.role === "Admin");
 
   const logoutHandler = useCallback(() => {
-    setToken(null);
+    api.get("/api/Authentication/logout").catch(() => undefined);
+    setIsLoggedIn(false);
     setIsAdmin(false);
-    localStorage.removeItem("token");
     localStorage.removeItem("role");
     localStorage.removeItem("expiration");
   }, []);
 
   const loginHandler = (
-    token: string,
     role: string,
     expirationTime: string
   ) => {
-    setToken(token);
-    localStorage.setItem("token", token);
+    setIsLoggedIn(true);
+    setIsAdmin(role === "Admin");
     localStorage.setItem("expiration", expirationTime);
     localStorage.setItem("role", role);
     const remainingTime = calculateExpirationTime(expirationTime);
@@ -84,22 +72,18 @@ export const AuthContextProvider: React.FC<ChildrenProp> = ({ children }) => {
   };
 
   useEffect(() => {
-    if (initialRole === "Admin") {
-      setIsAdmin(true);
+    if (tokenData?.expiration) {
+      const remainingTime = Number(calculateExpirationTime(tokenData.expiration));
+      logoutTimer = setTimeout(logoutHandler, remainingTime);
+      return () => clearTimeout(logoutTimer);
     }
-  }, [initialRole]);
 
-  useEffect(() => {
-    if (tokenData != null) {
-      logoutTimer = setTimeout(logoutHandler, Number(tokenData.expiration));
-      clearTimeout(logoutTimer);
-    }
-  }, [tokenData, logoutHandler]);
+    return undefined;
+  }, [tokenData?.expiration, logoutHandler]);
 
   const contextValue = {
-    token: token,
     isAdmin: isAdmin,
-    isLoggedIn: userIsLoggedIn,
+    isLoggedIn: isLoggedIn,
     login: loginHandler,
     logout: logoutHandler,
   };

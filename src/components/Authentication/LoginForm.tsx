@@ -56,7 +56,6 @@ const LoginForm = () => {
         )
         .then((response) => {
           authContext.login(
-            response.data.token,
             response.data.role,
             response.data.expiration
           );
@@ -159,15 +158,6 @@ const LoginForm = () => {
       )}
       <main className={classes.page}>
         <section className={classes.auth}>
-          <div className={classes.intro}>
-            <p className={classes.eyebrow}>Von Apalusso account</p>
-            <h1>{isLogin ? "Welcome back" : "Create your account"}</h1>
-            <p>
-              {isLogin
-                ? "Sign in to manage reservations and kennel administration."
-                : "Register a client account for reservation requests and updates."}
-            </p>
-          </div>
           <form onSubmit={submitHandler} className={classes.form}>
             {!isLogin && (
               <div className={classes.control}>

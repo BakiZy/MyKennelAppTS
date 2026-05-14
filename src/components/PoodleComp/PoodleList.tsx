@@ -53,9 +53,7 @@ const PoodleList: React.FC<PoodleListProps> = (props) => {
               </dl>
               <div className={classes.cardActions}>
                 <Link className={classes.linkZ} to={`/poodles/${poodle.id}`}>
-                  {poodle.isPuppy
-                    ? "Interested in this pup?"
-                    : "Interested in our poodle pups?"}
+                  View profile
                 </Link>
                 {authContext.isAdmin && (
                   <div className={classes.adminActions}>

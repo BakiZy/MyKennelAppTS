@@ -4,6 +4,7 @@ import classes from "./About.module.css";
 import ImageSlider from "../components/UI/ImageSlider";
 import imageData from "../components/UI/ImageData";
 import { Helmet, HelmetProvider } from "react-helmet-async";
+import { Card, Container } from "react-bootstrap";
 
 const images = imageData;
 
@@ -43,7 +44,8 @@ const About: React.FC = () => {
       </Helmet>
       <section className={classes.about}>
         <h1>Welcome to Von Apalusso kennel page</h1>
-        <div className={classes.story}>
+        <Card>
+          <Container>
             <p>
               Kennel Von Apalusso was created almost 40 years a go, back in
               1984, by my father who was big German Shepherd Dog lover. He was
@@ -71,13 +73,14 @@ const About: React.FC = () => {
               conditions, therefore we expect new owners to continue in such a
               way.
             </p>
-        </div>
+          </Container>
+        </Card>
       </section>
-      <section className={classes.sliderSection}>
+      <div className={classes.sliderWrap}>
         <h1>Currently available puppies</h1>
         <ImageSlider slides={images} />
-      </section>
-      <footer className={classes.footer}>
+      </div>
+      <Card.Footer className={classes.footer}>
         If you are interested in any of our puppies, you can contact us through
         our social media links in upper corner or through our{" "}
         <a
@@ -87,7 +90,7 @@ const About: React.FC = () => {
         >
           contact page
         </a>
-      </footer>
+      </Card.Footer>
     </HelmetProvider>
   );
 };

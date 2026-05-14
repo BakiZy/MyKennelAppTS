@@ -10,7 +10,6 @@ import useGetImgUr from "../hooks/getImgUrHook";
 
 const NewPoodle: React.FC = () => {
   const authContext = useContext(AuthContext);
-  const token = authContext.token;
   const poodleNameRef = useRef<HTMLInputElement>(null);
   const poodleDateRef = useRef<HTMLInputElement>(null);
   const poodlePedigreeNumberRef = useRef<HTMLInputElement>(null);
@@ -41,9 +40,6 @@ const NewPoodle: React.FC = () => {
             poodleColorId: selectColorOption,
             sex: gender,
             //nickName: enteredPoodleNick,
-          },
-          {
-            headers: { Authorization: "Bearer " + token },
           }
         )
         .then((response) => {

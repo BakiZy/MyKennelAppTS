@@ -128,16 +128,16 @@ const Home: React.FC = () => {
         <div className={classes.filterHeader}>
           <div>
             <p className={classes.eyebrow}>Von Apalusso kennel</p>
-            <h1>Poodles available for your family</h1>
-          </div>
-          <div className={classes.resultCount}>
-            <strong>{poodles.length}</strong>
-            <span>{poodles.length === 1 ? "poodle" : "poodles"}</span>
+            <h1>Family-raised poodles from Von Apalusso</h1>
+            <p className={classes.leadText}>
+              Meet the toy and miniature poodles who live with us as family,
+              with health, temperament, and breed standards in focus.
+            </p>
           </div>
         </div>
         <div className={classes.filterGroups}>
           <fieldset className={classes.filterGroup}>
-            <legend>Size</legend>
+            <legend>Find by size</legend>
             <div className={classes.chipList}>
               {sizes.map((size) => (
                 <button
@@ -154,7 +154,7 @@ const Home: React.FC = () => {
             </div>
           </fieldset>
           <fieldset className={classes.filterGroup}>
-            <legend>Color</legend>
+            <legend>Find by color</legend>
             <div className={classes.chipList}>
               {colors.map((color) => (
                 <button
@@ -172,6 +172,10 @@ const Home: React.FC = () => {
           </fieldset>
         </div>
         <div className={classes.filterButtons}>
+          <p className={classes.resultCount}>
+            Showing <strong>{poodles.length}</strong>{" "}
+            {poodles.length === 1 ? "poodle" : "poodles"}
+          </p>
           <button type="submit" className={classes.primaryAction}>
             Filter
           </button>
@@ -222,9 +226,7 @@ const Home: React.FC = () => {
 
   const onRemoveHandler = async (id: number) => {
     await api
-      .delete(`/api/poodles/${id}`, {
-        headers: { Authorization: "Bearer " + localStorage.getItem("token") },
-      })
+      .delete(`/api/poodles/${id}`)
       .then(() => {
         setPoodles(poodles.filter((poodle) => poodle.id !== id));
       })
