@@ -1,59 +1,77 @@
-import React, { useRef } from "react";
-import { AxiosResponse } from "axios";
+import React, { useState } from "react";
 import api from "../api/client";
 import classes from "./ImageUr.module.css";
-import { Button } from "react-bootstrap";
 
 const ImagePage: React.FC = () => {
-  const imageName = useRef<HTMLInputElement>(null);
-  const imageUrl = useRef<HTMLInputElement>(null);
-  const pedigreeUrl = useRef<HTMLInputElement>(null);
-  const submitHandler = (event: React.FormEvent) => {
-    event.preventDefault();
-    const enteredImgName = imageName.current!.value;
-    const enteredImgUrl = imageUrl.current!.value;
-    const enteredPedigreeUrl = pedigreeUrl.current!.value;
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState("");
+  const [form, setForm] = useState({
+    name: "",
+    url: "",
+    pedigreeUrl: "",
+  });
 
-    const addNewImage = async () => {
-      await api.post<AxiosResponse>(
-        "/api/Images",
-        {
-          name: enteredImgName,
-          url: enteredImgUrl,
-          pedigreeUrl: enteredPedigreeUrl,
-        }
-      );
-    };
-    addNewImage();
-    alert("Image added");
+  const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setForm((current) => ({
+      ...current,
+      [name]: value,
+    }));
   };
+
+  const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSaving(true);
+    setMessage("");
+
+    try {
+      await api.post("/api/Images", form);
+      setMessage("Image added.");
+      setForm({
+        name: "",
+        url: "",
+        pedigreeUrl: "",
+      });
+    } catch (error) {
+      console.log(error);
+      setMessage("Could not add image.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
-    <div>
-      <h1>Images</h1>
-      <form onSubmit={submitHandler} className={classes.control}>
-        <div className={classes.control}>
-          <label htmlFor="imageName">Image Name</label>
-          <input type="text" name="imageName" id="imageName" ref={imageName} />
+    <main className={classes.page}>
+      <section className={classes.panel}>
+        <div className={classes.header}>
+          <p>Admin</p>
+          <h1>Add image</h1>
         </div>
-        <div className={classes.control}>
-          <label htmlFor="imageUrl">Image Url</label>
-          <input type="text" name="imageUrl" id="imageUrl" ref={imageUrl} />
-        </div>
-        <div className={classes.control}>
-          <label htmlFor="pedigreeUrl">Pedigree Url</label>
-          <input
-            type="text"
-            name="pedigreeUrl"
-            id="pedigreeUrl"
-            ref={pedigreeUrl}
-          />
-        </div>
-        <br></br>
-        <Button type="submit" variant="dark" style={{ fontSize: "1.6rem" }}>
-          Add image
-        </Button>
-      </form>
-    </div>
+        {message && <p className={classes.message}>{message}</p>}
+        <form onSubmit={submitHandler} className={classes.form}>
+          <div className={classes.field}>
+            <label htmlFor="name">Image name</label>
+            <input id="name" name="name" value={form.name} onChange={changeHandler} required />
+          </div>
+          <div className={classes.field}>
+            <label htmlFor="url">Image URL</label>
+            <input id="url" name="url" value={form.url} onChange={changeHandler} required />
+          </div>
+          <div className={classes.field}>
+            <label htmlFor="pedigreeUrl">Pedigree URL</label>
+            <input
+              id="pedigreeUrl"
+              name="pedigreeUrl"
+              value={form.pedigreeUrl}
+              onChange={changeHandler}
+            />
+          </div>
+          <button type="submit" disabled={saving}>
+            {saving ? "Saving..." : "Add image"}
+          </button>
+        </form>
+      </section>
+    </main>
   );
 };
 

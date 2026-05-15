@@ -52,7 +52,7 @@ export const AuthContextProvider: React.FC<ChildrenProp> = ({ children }) => {
   const [isAdmin, setIsAdmin] = useState(tokenData?.role === "Admin");
 
   const logoutHandler = useCallback(() => {
-    api.get("/api/Authentication/logout").catch(() => undefined);
+    api.post("/api/Authentication/logout").catch(() => undefined);
     setIsLoggedIn(false);
     setIsAdmin(false);
     localStorage.removeItem("role");

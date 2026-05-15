@@ -1,13 +1,132 @@
-.control {
+.page {
+  min-height: calc(100vh - 4rem);
+  background: #fafaf8;
+  color: #20201d;
+  padding: 2rem 1rem 4rem;
+}
+
+.panel {
+  width: min(46rem, 100%);
+  margin: 0 auto;
+  border: 1px solid rgba(32, 32, 29, 0.1);
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 1.25rem;
+  box-shadow: 0 18px 50px rgba(31, 35, 29, 0.08);
+}
+
+.header {
+  display: grid;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.header p {
+  margin: 0;
+  color: #8d2f3f;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.header h1 {
+  margin: 0;
+  color: #20201d;
+  font-size: 1.8rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.form {
+  display: grid;
+  gap: 1rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.field label,
+.checkbox {
+  color: #3a4039;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  min-height: 2.9rem;
+  border: 1px solid rgba(32, 32, 29, 0.16);
+  border-radius: 8px;
+  background: #fbfbf9;
+  color: #20201d;
+  padding: 0.62rem 0.8rem;
+  font: inherit;
+}
+
+.field input:focus,
+.field select:focus {
+  border-color: #8d2f3f;
+  box-shadow: 0 0 0 3px rgba(141, 47, 63, 0.14);
+  outline: none;
+}
+
+.checkbox {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  border: 0;
-  font-size: 2rem;
-  font-family: inherit;
-  font-weight: 500;
-  color: inherit;
-  text-align: center;
-  border-radius: 2px;
+  gap: 0.6rem;
+}
+
+.checkbox input {
+  width: 1rem;
+  height: 1rem;
+}
+
+.message {
+  margin: 0 0 1rem;
+  color: #5c625b;
+  font-weight: 700;
+}
+
+.form button {
+  min-height: 2.9rem;
+  border: 1px solid #20201d;
+  border-radius: 999px;
+  background: #20201d;
+  color: #ffffff;
+  padding: 0.65rem 1.1rem;
+  font: inherit;
+  font-weight: 800;
+}
+
+.form button:hover:not(:disabled) {
+  border-color: #8d2f3f;
+  background: #8d2f3f;
+}
+
+.form button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+@media only screen and (max-width: 640px) {
+  .page {
+    padding: 1rem 0.75rem 3rem;
+  }
+
+  .panel {
+    padding: 1rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }

@@ -3,11 +3,14 @@ import React from "react";
 export interface PoodleModel {
   id: number;
   name: string;
-  dateOfBirth: Date;
+  dateOfBirth: string | Date;
   geneticTests: boolean;
   pedigreeNumber: string;
+  poodleSizeId?: number;
   poodleSizeName: string;
+  poodleColorId?: number;
   poodleColorName: string;
+  imageId?: number;
   sex: string;
   imageUrl: string;
   imagePedigreeUrl: string;

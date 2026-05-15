@@ -1,90 +1,72 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
 import api from "../../api/client";
 import classes from "./ProfileForm.module.css";
-import { Button, Spinner } from "react-bootstrap";
 import ErrorModal from "../UI/ErrorModal";
 
 const ProfileForm = () => {
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
-  const usernameInputRef = useRef<HTMLInputElement>(null);
-  const currentPasswordInput = useRef<HTMLInputElement>(null);
-  const newPasswordInput = useRef<HTMLInputElement>(null);
-  const confirmPasswordInput = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [form, setForm] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
   const [error, setError] = useState({
     message: "",
     title: "",
     popup: false,
   });
+  const [message, setMessage] = useState("");
 
   const logoutHandler = () => {
     authContext.logout();
     navigate("/");
   };
 
-  const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const username = usernameInputRef.current!.value;
-    const currentPassword = currentPasswordInput.current!.value;
-    const newPassword = newPasswordInput.current!.value;
-    const confirmPassword = confirmPasswordInput!.current!.value;
+  const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setForm((current) => ({
+      ...current,
+      [name]: value,
+    }));
+  };
 
-    if (newPassword.length < 7 || newPassword !== confirmPassword) {
+  const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setMessage("");
+
+    if (form.newPassword.length < 7 || form.newPassword !== form.confirmPassword) {
       setError({
-        message: "invalid password or passwords don't match",
+        message: "Password must be at least 7 characters and both values must match.",
         title: "Password error",
         popup: true,
       });
       return;
     }
-    const bodyParameters = {
-      username: username,
-      currentPassword: currentPassword,
-      newPassword: newPassword,
-      confirmPassword: confirmPassword,
-    };
 
-    const changePassword = async () => {
+    try {
       setIsLoading(true);
-      await api
-        .post(
-          "/api/Authentication/change-password",
-          bodyParameters
-        )
-        .then(function (response) {
-          if (response.status !== 200) {
-            setError({
-              message: "invalid password or passwords don't match",
-              title: "Password error",
-              popup: true,
-            });
-          }
-          alert("password successfully  changed");
-          navigate("/");
-        })
-        .catch((error) => {
-          console.log(error);
-          setError({
-            message: "invalid password or passwords don't match",
-            title: "Password error",
-            popup: true,
-          });
-        });
-    };
-    changePassword();
-    setIsLoading(false);
+      await api.post("/api/Authentication/change-password", form);
+      setMessage("Password changed.");
+      setForm({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+    } catch (requestError) {
+      console.log(requestError);
+      setError({
+        message: "Could not change password. Check the current password and try again.",
+        title: "Password error",
+        popup: true,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
-
-  if (isLoading) {
-    return (
-      <Spinner animation="border" variant="info" className={classes.spinner}>
-        Load
-      </Spinner>
-    );
-  }
 
   const errorHandler = () => {
     setError({
@@ -93,6 +75,7 @@ const ProfileForm = () => {
       popup: false,
     });
   };
+
   return (
     <>
       {error.popup && (
@@ -102,54 +85,61 @@ const ProfileForm = () => {
           onConfirm={errorHandler}
         />
       )}
-      <form className={classes.form} onSubmit={submitHandler}>
-        <div className={classes.control}>
-          <label htmlFor="username">Username</label>
-          <input type="text" id="username" ref={usernameInputRef} />
-        </div>
-        <div className={classes.control}>
-          <label htmlFor="current-password">Current Password</label>
-          <input
-            type="password"
-            id="current-password"
-            required
-            minLength={7}
-            ref={currentPasswordInput}
-          />
-        </div>
-        <div className={classes.control}>
-          <label htmlFor="new-password">New password</label>
-          <input
-            type="password"
-            id="new-password"
-            required
-            minLength={7}
-            ref={newPasswordInput}
-          />
-        </div>
-        <div className={classes.control}>
-          <label htmlFor="confirm-password">Confirm password</label>
-          <input
-            type="password"
-            id="confirm-password"
-            required
-            ref={confirmPasswordInput}
-          />
-        </div>
-        <br />
-        <div className="col-md-12 text-center">
-          <Button type="submit" variant="dark" style={{ fontSize: "1.6rem" }}>
-            Change password
-          </Button>
-          <Button
-            onClick={logoutHandler}
-            variant="dark"
-            style={{ fontSize: "1.6rem" }}
-          >
-            Logout{" "}
-          </Button>
-        </div>
-      </form>
+      <main className={classes.page}>
+        <section className={classes.panel}>
+          <div className={classes.header}>
+            <p>Account</p>
+            <h1>Profile</h1>
+          </div>
+          {message && <p className={classes.message}>{message}</p>}
+          <form className={classes.form} onSubmit={submitHandler}>
+            <div className={classes.field}>
+              <label htmlFor="currentPassword">Current password</label>
+              <input
+                type="password"
+                id="currentPassword"
+                name="currentPassword"
+                required
+                minLength={7}
+                value={form.currentPassword}
+                onChange={changeHandler}
+              />
+            </div>
+            <div className={classes.field}>
+              <label htmlFor="newPassword">New password</label>
+              <input
+                type="password"
+                id="newPassword"
+                name="newPassword"
+                required
+                minLength={7}
+                value={form.newPassword}
+                onChange={changeHandler}
+              />
+            </div>
+            <div className={classes.field}>
+              <label htmlFor="confirmPassword">Confirm password</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                required
+                minLength={7}
+                value={form.confirmPassword}
+                onChange={changeHandler}
+              />
+            </div>
+            <div className={classes.actions}>
+              <button type="submit" disabled={isLoading}>
+                {isLoading ? "Saving..." : "Change password"}
+              </button>
+              <button type="button" onClick={logoutHandler} className={classes.secondary}>
+                Logout
+              </button>
+            </div>
+          </form>
+        </section>
+      </main>
     </>
   );
 };

@@ -1,249 +1,232 @@
-import React, { useContext, useRef, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import classes from "./Edit.module.css";
-import { Button } from "react-bootstrap";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import AuthContext from "../store/auth-context";
 import useGetSizes from "../hooks/getSizesHook";
 import useGetColors from "../hooks/getColorsHook";
 import useGetImgUr from "../hooks/getImgUrHook";
-import { AxiosResponse } from "axios";
 import api from "../api/client";
 import { PoodleModel } from "../interfaces/IPoodleModel";
+import classes from "./Edit.module.css";
 
-let controller = new AbortController();
+const toInputDate = (value: string | Date) => {
+  if (!value) {
+    return "";
+  }
+
+  return new Date(value).toISOString().slice(0, 10);
+};
+
 const EditPoodle: React.FC = () => {
   const { poodleId } = useParams();
+  const navigate = useNavigate();
   const authContext = useContext(AuthContext);
-
-  const [gender, setGender] = useState("");
-  const [geneticTest, setGeneticTest] = React.useState(false);
-  const { images, selectImgOption, setSelectedImgOption } = useGetImgUr();
-  const { selectSizeOption, setSelectedSizeOption, sizes } = useGetSizes();
-  const { selectColorOption, setSelectedColorOption, colors } = useGetColors();
-  const [poodle, setPoodle] = useState<PoodleModel>({
-    id: 0,
+  const { images } = useGetImgUr();
+  const { sizes } = useGetSizes();
+  const { colors } = useGetColors();
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState("");
+  const [form, setForm] = useState({
     name: "",
-    imageUrl: "",
-    imagePedigreeUrl: "",
-    dateOfBirth: new Date(),
+    dateOfBirth: "",
     pedigreeNumber: "",
+    sex: "Female",
     geneticTests: false,
-    poodleSizeName: "",
-    sex: "",
-    poodleColorName: "",
-    isPuppy: false,
-    nickName: "",
+    poodleSizeId: "",
+    poodleColorId: "",
+    imageId: "",
   });
-  const poodleName = useRef<HTMLInputElement>(null);
-  const poodleDate = useRef<HTMLInputElement>(null);
-  const poodlePedigreeNumber = useRef<HTMLInputElement>(null);
-  const poodleNick = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const fetchReservedPoodle = async () => {
-      await api
-        .get<PoodleModel>(
-          `/api/poodles/${poodleId}`
-        )
-        .then((response: AxiosResponse<PoodleModel>) => {
-          setPoodle(response.data);
-        })
-        .catch((error) => {
-          console.log(error);
+    const fetchPoodle = async () => {
+      try {
+        const response = await api.get<PoodleModel>(`/api/poodles/${poodleId}`);
+        const poodle = response.data;
+
+        setForm({
+          name: poodle.name ?? "",
+          dateOfBirth: toInputDate(poodle.dateOfBirth),
+          pedigreeNumber: poodle.pedigreeNumber ?? "",
+          sex: poodle.sex || "Female",
+          geneticTests: !!poodle.geneticTests,
+          poodleSizeId: poodle.poodleSizeId ? poodle.poodleSizeId.toString() : "",
+          poodleColorId: poodle.poodleColorId ? poodle.poodleColorId.toString() : "",
+          imageId: poodle.imageId ? poodle.imageId.toString() : "",
         });
+      } catch (error) {
+        console.log(error);
+        setMessage("Could not load poodle.");
+      } finally {
+        setLoading(false);
+      }
     };
-    fetchReservedPoodle();
-    return () => {
-      controller?.abort();
-    };
+
+    fetchPoodle();
   }, [poodleId]);
 
-  const updateHandler = (event: React.FormEvent) => {
-    event.preventDefault();
-    const enteredPoodleName = poodleName.current!.value;
-    const enteredPoodleDate = poodleDate.current!.value;
-    const enteredPedigreeNumber = poodlePedigreeNumber.current!.value;
-    const enteredPoodleNick = poodleNick.current!.value;
-
-    const updatePoodle = async () => {
-      await api
-        .put<AxiosResponse>(
-          `/api/poodles/${poodleId}`,
-          {
-            id: poodleId,
-            name: enteredPoodleName,
-            dateOfBirth: enteredPoodleDate,
-            geneticTests: geneticTest,
-            imageId: selectImgOption,
-            pedigreeNumber: enteredPedigreeNumber,
-            poodleSizeId: selectSizeOption,
-            poodleColorId: selectColorOption,
-            sex: gender,
-            nickName: enteredPoodleNick,
-          }
-        )
-        .then(() => {
-          alert("edited info in DB");
-        })
-        .catch((error: string) => {
-          alert(error);
-        });
-    };
-    updatePoodle();
-  };
-
-  const genderHandler = (e) => {
-    setGender(e.target.value);
-  };
-  const geneticTestHandler = () => {
-    setGeneticTest((prevstate) => !prevstate);
-  };
-
-  const changeSelectSizeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedSizeOption(parseInt(e.target.value));
-  };
-
-  const changeSelectColorHandler = (
-    e: React.ChangeEvent<HTMLSelectElement>
+  const changeHandler = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    setSelectedColorOption(parseInt(e.target.value));
+    const { name, type, value } = event.target;
+    const checked =
+      type === "checkbox" ? (event.target as HTMLInputElement).checked : false;
+
+    setForm((current) => ({
+      ...current,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
-  const imgSelectedHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedImgOption(parseInt(e.target.value));
+  const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSaving(true);
+    setMessage("");
+
+    try {
+      await api.put(`/api/poodles/${poodleId}`, {
+        name: form.name,
+        dateOfBirth: form.dateOfBirth,
+        geneticTests: form.geneticTests,
+        imageId: form.imageId ? parseInt(form.imageId) : null,
+        pedigreeNumber: form.pedigreeNumber,
+        poodleSizeId: form.poodleSizeId ? parseInt(form.poodleSizeId) : null,
+        poodleColorId: form.poodleColorId ? parseInt(form.poodleColorId) : null,
+        sex: form.sex,
+      });
+
+      setMessage("Poodle updated.");
+    } catch (error) {
+      console.log(error);
+      setMessage("Could not update poodle.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   if (!authContext.isAdmin) {
-    return <div>Not authorized </div>;
+    return <main className={classes.page}>Not authorized.</main>;
+  }
+
+  if (loading) {
+    return <main className={classes.page}>Loading...</main>;
   }
 
   return (
-    <div>
-      <h1>Edit current poodle</h1>
+    <main className={classes.page}>
+      <section className={classes.panel}>
+        <div className={classes.header}>
+          <button type="button" onClick={() => navigate("/")}>
+            Back
+          </button>
+          <div>
+            <p>Admin</p>
+            <h1>Edit poodle</h1>
+          </div>
+        </div>
+        {message && <p className={classes.message}>{message}</p>}
+        <form onSubmit={submitHandler} className={classes.form}>
+          <div className={classes.field}>
+            <label htmlFor="name">Name</label>
+            <input id="name" name="name" value={form.name} onChange={changeHandler} required />
+          </div>
 
-      <form onSubmit={updateHandler} className={classes.control}>
-        <div className={classes.control}>
-          <label htmlFor="poodleName">Name</label>
-          <input
-            type="text"
-            id="poodleName"
-            required
-            ref={poodleName}
-            defaultValue={poodle.name}
-          />
-        </div>
-        <div className={classes.control}>
-          <label htmlFor="poodleNick">Nickname</label>
-          <input
-            type="text"
-            id="poodleNick"
-            required
-            ref={poodleNick}
-            defaultValue={poodle.nickName}
-          />
-        </div>
-        <div className={classes.control}>
-          <label htmlFor="poodlePedigree">Number of pedigree</label>
-          <input
-            type="text"
-            id="poodlePedigree"
-            required
-            ref={poodlePedigreeNumber}
-            defaultValue={poodle.pedigreeNumber}
-          />
-        </div>
-        <div className={classes.control}>
-          <label htmlFor="poodleDate">Date of birth</label>
-          <input type="date" id="poodleDate" required ref={poodleDate} />
-        </div>
-        <div className={classes.control}>
-          <label>Gender</label>
-          <label htmlFor="gender">Male</label>
-          <input
-            type="radio"
-            name="gender"
-            value="Male"
-            onChange={genderHandler}
-          />
-          <label htmlFor="gender">Female</label>
-          <input
-            type="radio"
-            name="gender"
-            value="Female"
-            defaultChecked={true}
-            onChange={genderHandler}
-          />
-        </div>
-        <div className={classes.control}>
-          <label>Genetic test</label>
-          <label htmlFor="geneticTest">Yes</label>
-          <input
-            type="radio"
-            name="geneticTest"
-            onChange={geneticTestHandler}
-          />
-          <label htmlFor="geneticTest">No</label>
-          <input
-            type="radio"
-            name="geneticTest"
-            defaultChecked={true}
-            onChange={geneticTestHandler}
-          />
-        </div>
+          <div className={classes.field}>
+            <label htmlFor="pedigreeNumber">Pedigree number</label>
+            <input
+              id="pedigreeNumber"
+              name="pedigreeNumber"
+              value={form.pedigreeNumber}
+              onChange={changeHandler}
+              minLength={5}
+              maxLength={13}
+              required
+            />
+          </div>
 
-        <div className={classes.control}>
-          <label htmlFor="sizeName">Select size of poodle</label>
-          <select
-            id="sizeName"
-            name="sizeName"
-            value={selectSizeOption}
-            onChange={changeSelectSizeHandler}
-          >
-            {sizes.map((size) => (
-              <option key={size.id} value={size.id}>
-                {size.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className={classes.control}>
-          <label htmlFor="colorName">Select color of poodle</label>
-          <select
-            id="colorName"
-            name="colorName"
-            value={selectColorOption}
-            onChange={changeSelectColorHandler}
-          >
-            {colors.map((color) => (
-              <option key={color.id} value={color.id}>
-                {color.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className={classes.control}>
-          <label htmlFor="img">Select image</label>
-          <select
-            id="img"
-            name="img"
-            value={selectImgOption}
-            onChange={imgSelectedHandler}
-          >
-            {images.map((image) => (
-              <option key={image.id} value={image.id}>
-                {image.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <br></br>
-        <div className={classes.control}>
-          <Button type="submit" variant="dark" style={{ fontSize: "1.6rem" }}>
-            Update info
-          </Button>
-        </div>
-      </form>
-    </div>
+          <div className={classes.grid}>
+            <div className={classes.field}>
+              <label htmlFor="dateOfBirth">Date of birth</label>
+              <input
+                id="dateOfBirth"
+                name="dateOfBirth"
+                type="date"
+                value={form.dateOfBirth}
+                onChange={changeHandler}
+                required
+              />
+            </div>
+            <div className={classes.field}>
+              <label htmlFor="sex">Sex</label>
+              <select id="sex" name="sex" value={form.sex} onChange={changeHandler}>
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+              </select>
+            </div>
+          </div>
+
+          <div className={classes.grid}>
+            <div className={classes.field}>
+              <label htmlFor="poodleSizeId">Size</label>
+              <select
+                id="poodleSizeId"
+                name="poodleSizeId"
+                value={form.poodleSizeId}
+                onChange={changeHandler}
+              >
+                <option value="">Select size</option>
+                {sizes.map((size) => (
+                  <option key={size.id} value={size.id}>
+                    {size.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className={classes.field}>
+              <label htmlFor="poodleColorId">Color</label>
+              <select
+                id="poodleColorId"
+                name="poodleColorId"
+                value={form.poodleColorId}
+                onChange={changeHandler}
+              >
+                <option value="">Select color</option>
+                {colors.map((color) => (
+                  <option key={color.id} value={color.id}>
+                    {color.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div className={classes.field}>
+            <label htmlFor="imageId">Image</label>
+            <select id="imageId" name="imageId" value={form.imageId} onChange={changeHandler}>
+              <option value="">Select image</option>
+              {images.map((image) => (
+                <option key={image.id} value={image.id}>
+                  {image.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <label className={classes.checkbox}>
+            <input
+              type="checkbox"
+              name="geneticTests"
+              checked={form.geneticTests}
+              onChange={changeHandler}
+            />
+            Genetic tests completed
+          </label>
+
+          <button type="submit" disabled={saving}>
+            {saving ? "Saving..." : "Update poodle"}
+          </button>
+        </form>
+      </section>
+    </main>
   );
 };
 
