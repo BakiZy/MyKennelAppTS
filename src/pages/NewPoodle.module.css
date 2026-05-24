@@ -61,7 +61,8 @@
 }
 
 .field input,
-.field select {
+.field select,
+.field textarea {
   width: 100%;
   min-height: 2.9rem;
   border: 1px solid rgba(32, 32, 29, 0.16);
@@ -73,10 +74,16 @@
 }
 
 .field input:focus,
-.field select:focus {
+.field select:focus,
+.field textarea:focus {
   border-color: #8d2f3f;
   box-shadow: 0 0 0 3px rgba(141, 47, 63, 0.14);
   outline: none;
+}
+
+.field textarea {
+  min-height: 7rem;
+  resize: vertical;
 }
 
 .checkbox {
@@ -94,6 +101,25 @@
   margin: 0 0 1rem;
   color: #5c625b;
   font-weight: 700;
+}
+
+.puppyOptions {
+  display: grid;
+  gap: 1rem;
+  border: 1px solid rgba(141, 47, 63, 0.16);
+  border-radius: 8px;
+  background: rgba(141, 47, 63, 0.05);
+  padding: 1rem;
+}
+
+.helperText {
+  min-height: 2.9rem;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  color: #5c625b;
+  font-size: 0.9rem;
+  line-height: 1.35;
 }
 
 .form button {

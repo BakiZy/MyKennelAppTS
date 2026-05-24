@@ -22,10 +22,13 @@ const NewPoodle: React.FC = () => {
     poodleSizeId: "",
     poodleColorId: "",
     imageId: "",
+    listAsPuppy: false,
+    puppyStatus: "Available",
+    puppyDescription: "",
   });
 
   const changeHandler = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, type, value } = event.target;
     const checked =
@@ -41,6 +44,12 @@ const NewPoodle: React.FC = () => {
     event.preventDefault();
     setSaving(true);
     setMessage("");
+    const selectedColor = colors.find(
+      (color) => color.id === parseInt(form.poodleColorId)
+    );
+    const selectedImage = images.find(
+      (image) => image.id === parseInt(form.imageId)
+    );
 
     try {
       await api.post("/api/poodles", {
@@ -54,7 +63,20 @@ const NewPoodle: React.FC = () => {
         sex: form.sex,
       });
 
-      setMessage("Poodle added.");
+      if (form.listAsPuppy) {
+        await api.post("/api/puppies", {
+          name: form.name || "Puppy X",
+          sex: form.sex,
+          color: selectedColor?.name ?? "",
+          dateOfBirth: form.dateOfBirth || null,
+          status: form.puppyStatus,
+          description: form.puppyDescription,
+          imageUrl: selectedImage?.url ?? "",
+          litterId: null,
+        });
+      }
+
+      setMessage(form.listAsPuppy ? "Poodle added and listed as puppy." : "Poodle added.");
       setForm({
         name: "",
         dateOfBirth: "",
@@ -64,10 +86,13 @@ const NewPoodle: React.FC = () => {
         poodleSizeId: "",
         poodleColorId: "",
         imageId: "",
+        listAsPuppy: false,
+        puppyStatus: "Available",
+        puppyDescription: "",
       });
     } catch (error) {
       console.log(error);
-      setMessage("Could not add poodle.");
+      setMessage("Could not add poodle. Check admin session and required fields.");
     } finally {
       setSaving(false);
     }
@@ -100,7 +125,6 @@ const NewPoodle: React.FC = () => {
               onChange={changeHandler}
               minLength={5}
               maxLength={13}
-              required
             />
           </div>
 
@@ -182,8 +206,55 @@ const NewPoodle: React.FC = () => {
             Genetic tests completed
           </label>
 
+          <label className={classes.checkbox}>
+            <input
+              type="checkbox"
+              name="listAsPuppy"
+              checked={form.listAsPuppy}
+              onChange={changeHandler}
+            />
+            Also list on puppies page
+          </label>
+
+          {form.listAsPuppy && (
+            <div className={classes.puppyOptions}>
+              <div className={classes.grid}>
+                <div className={classes.field}>
+                  <label htmlFor="puppyStatus">Puppy status</label>
+                  <select
+                    id="puppyStatus"
+                    name="puppyStatus"
+                    value={form.puppyStatus}
+                    onChange={changeHandler}
+                  >
+                    <option value="Available">Available</option>
+                    <option value="Reserved">Reserved</option>
+                    <option value="Sold">Sold</option>
+                  </select>
+                </div>
+                <div className={classes.field}>
+                  <label>Auto-filled puppy info</label>
+                  <p className={classes.helperText}>
+                    Name, sex, color, birth date, and selected image are copied from this poodle.
+                  </p>
+                </div>
+              </div>
+              <div className={classes.field}>
+                <label htmlFor="puppyDescription">Puppy description</label>
+                <textarea
+                  id="puppyDescription"
+                  name="puppyDescription"
+                  value={form.puppyDescription}
+                  onChange={changeHandler}
+                  maxLength={700}
+                  placeholder="Short note shown on the puppies page"
+                />
+              </div>
+            </div>
+          )}
+
           <button type="submit" disabled={saving}>
-            {saving ? "Saving..." : "Add poodle"}
+            {saving ? "Saving..." : form.listAsPuppy ? "Add poodle and puppy listing" : "Add poodle"}
           </button>
         </form>
       </section>

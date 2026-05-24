@@ -1,40 +1,131 @@
-.social {
-  width: 10rem;
-  justify-content: center;
-  color: #ffe2ed;
-}
-
-.logo {
-  width: 50px;
-  height: 50px;
-}
-span {
-  color: rgba(255, 255, 255, 0.75);
-}
-
-.navListMenu {
-  font: 5rem;
-}
-
 .navMain {
   background-color: #212529;
   margin-bottom: 2.5rem;
+  padding: 0.55rem 0;
+}
+
+.navShell {
+  gap: 1rem;
+}
+
+.logoDivLeft {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 0.55rem;
+  margin-right: 1rem;
+}
+
+.logoDivLeft span {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: clamp(0.9rem, 1.8vw, 1.08rem);
+  font-weight: 750;
+  line-height: 1.2;
+  white-space: normal;
+}
+
+.logo {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+}
+
+.navCollapse {
+  align-items: center;
+  gap: 1rem;
 }
 
 .mainMenu {
-  font-size: 2.3rem !important;
-  margin-right: 10rem !important;
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  gap: 0.15rem;
+  justify-content: center;
+  min-width: 0;
 }
 
-@media only screen and (max-width: 600px) {
-  .navMain {
-    width: fit-content;
+.mainMenu :global(.nav-link) {
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.78) !important;
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.1;
+  padding: 0.55rem 0.75rem !important;
+  white-space: nowrap;
+}
+
+.mainMenu :global(.nav-link:hover),
+.mainMenu :global(.nav-link:focus) {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff !important;
+}
+
+.logoutLink {
+  border: 0;
+  background: transparent;
+  text-align: left;
+}
+
+.social {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  justify-content: flex-end;
+  gap: 0.15rem;
+}
+
+.social :global(.nav-link) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  color: #ffe2ed !important;
+  padding: 0.45rem !important;
+}
+
+.social :global(.nav-link:hover),
+.social :global(.nav-link:focus) {
+  background: rgba(255, 226, 237, 0.1);
+}
+
+@media only screen and (max-width: 991px) {
+  .navShell {
+    align-items: flex-start;
   }
+
+  .logoDivLeft {
+    max-width: calc(100% - 4rem);
+  }
+
+  .navCollapse {
+    width: 100%;
+    padding-top: 0.75rem;
+  }
+
   .mainMenu {
-    margin-left: 7rem !important;
+    align-items: stretch;
+    justify-content: flex-start;
   }
+
+  .mainMenu :global(.nav-link) {
+    width: 100%;
+    padding: 0.65rem 0.75rem !important;
+  }
+
   .social {
-    text-align: center !important;
-    margin-left: 6rem;
+    justify-content: flex-start;
+    padding-top: 0.35rem;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .logo {
+    width: 36px;
+    height: 36px;
+  }
+
+  .logoDivLeft span {
+    max-width: 13rem;
   }
 }
