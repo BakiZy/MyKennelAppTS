@@ -1,88 +1,356 @@
-h1 {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+.page {
+  width: min(1180px, calc(100% - 2rem));
+  margin: 0 auto 3rem;
+  color: #20201d;
+}
+
+.spinner {
+  display: block;
+  margin: 5rem auto;
+}
+
+.profilePanel {
+  display: grid;
+  grid-template-columns: minmax(15rem, 0.92fr) minmax(18rem, 1fr) minmax(14rem, 0.82fr);
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.photoPanel,
+.detailsPanel,
+.pedigreePanel,
+.contactPanel {
+  overflow: hidden;
+  border: 1px solid rgba(32, 32, 29, 0.1);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 16px 40px rgba(31, 35, 29, 0.08);
+}
+
+.photoPanel {
+  background: #e8e2da;
+}
+
+.imageProp {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 32rem;
+  object-fit: cover;
+}
+
+.detailsPanel {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1.35rem;
+}
+
+.kicker {
+  margin: 0 0 0.45rem;
+  color: #8d2f3f;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.detailsPanel h1,
+.contactIntro h2 {
+  margin: 0;
+  color: #20201d;
+  font-weight: 850;
+  line-height: 1.08;
+}
+
+.detailsPanel h1 {
+  font-size: 2.05rem;
+}
+
+.registeredName {
+  margin: 0.45rem 0 0;
+  color: #6b7069;
+  font-size: 0.98rem;
+  font-weight: 700;
+}
+
+.metaGrid {
+  display: grid;
+  gap: 0.7rem;
+  margin: 1.4rem 0 0;
+}
+
+.metaGrid div {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid rgba(32, 32, 29, 0.08);
+  padding-bottom: 0.7rem;
+}
+
+.metaGrid dt {
+  flex: 0 0 auto;
+  color: #6b7069;
+  font-size: 0.88rem;
+  font-weight: 750;
+}
+
+.metaGrid dd {
+  min-width: 0;
+  margin: 0;
+  color: #20201d;
+  font-size: 0.92rem;
+  font-weight: 850;
+  overflow-wrap: anywhere;
+  text-align: right;
+}
+
+.pedigreePanel {
+  display: flex;
+  flex-direction: column;
+  background: #212529;
+  color: #ffe2ed;
+}
+
+.pedigreePanel a {
+  display: block;
+  min-height: 0;
+  flex: 1;
+  background: #ffffff;
+}
+
+.pedigreeImg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 26rem;
+  object-fit: contain;
+}
+
+.pedigreePanel p {
+  margin: 0;
+  padding: 0.8rem 1rem;
+  color: #ffe2ed;
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.contactPanel {
+  display: grid;
+  grid-template-columns: minmax(14rem, 0.62fr) minmax(0, 1fr);
+  gap: 1.4rem;
+  margin-top: 1rem;
+  padding: 1.35rem;
+}
+
+.contactIntro h2 {
+  font-size: 1.5rem;
+}
+
+.form {
+  min-width: 0;
+}
+
+.honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.formStatus,
+.formError {
+  border-radius: 8px;
+  font-weight: 750;
+  line-height: 1.45;
+  margin: 0 0 0.9rem;
+  padding: 0.8rem;
+}
+
+.formStatus {
+  border: 1px solid rgba(44, 121, 82, 0.22);
+  background: rgba(44, 121, 82, 0.08);
+  color: #2c7952;
+}
+
+.formError {
+  border: 1px solid rgba(141, 47, 63, 0.25);
+  background: rgba(141, 47, 63, 0.08);
+  color: #6f2433;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
 }
 
 .formGroup {
   display: flex;
+  min-width: 0;
   flex-direction: column;
+  gap: 0.35rem;
+}
+
+.formGroup label {
+  color: #3a4039;
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.formGroup input,
+.formGroup textarea {
+  width: 100%;
+  min-height: 2.8rem;
+  border: 1px solid rgba(32, 32, 29, 0.16);
+  border-radius: 6px;
+  background: #fbfbf8;
+  color: #20201d;
+  font: inherit;
+  padding: 0.7rem 0.8rem;
+}
+
+.formGroup input:focus,
+.formGroup textarea:focus {
+  border-color: #8d2f3f;
+  box-shadow: 0 0 0 3px rgba(141, 47, 63, 0.12);
+  outline: none;
+}
+
+.messageField {
+  grid-column: 1 / -1;
+}
+
+.textarea {
+  min-height: 7.5rem;
+  resize: vertical;
+}
+
+.formFooter {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  font-family: inherit;
-  font-weight: 500;
-  color: inherit;
-  text-align: center;
-  border-radius: 2px;
-  margin-left: auto;
-}
-.cardProperty {
-  margin-left: 4rem;
-  background-color: #212529;
-  border-radius: 1.5rem;
-  text-align: center;
-  box-sizing: border-box;
-  color: #ffe2ed;
-  width: 30rem;
-  margin-bottom: 2.5rem;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.26);
-}
-
-.imageProp {
-  border-radius: 1.5rem;
-  height: 30rem;
-  object-fit: cover;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.26);
-}
-
-.textareaInfo {
-  width: 10rem;
-  height: 5rem;
-  border-radius: 2px;
-  margin-left: auto;
-}
-
-.pedigree {
-  background-color: #212529;
-  border-radius: 1.5rem;
-  box-sizing: border-box;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.26);
-  height: 41rem;
-  padding: 0.5rem;
-  text-align: center;
-}
-
-.pedigreeImg {
-  border-radius: 1.5rem;
-  height: 35rem;
-  object-fit: initial;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.26);
-}
-
-@media only screen and (max-width: 600px) {
-  .cardProperty {
-    width: 24rem;
-    font-size: 1.2rem;
-    margin-left: 0;
-  }
-  .imageProp {
-    object-fit: cover;
-  }
-}
-
-.futer {
-  background-color: #212529;
-  opacity: 0.9;
-  border-radius: 1.5rem;
-  color: #ffe2ed;
-  font-size: medium;
-  padding: 0.1rem;
+  justify-content: space-between;
+  gap: 1rem;
   margin-top: 1rem;
-  margin-bottom: 2rem;
 }
 
-.pedigreeText {
-  margin: 2rem;
-  color: #ffe2ed;
-  font-weight: 500;
-  font-size: large;
+.submitButton {
+  flex: 0 0 auto;
+  min-height: 2.8rem;
+  border-radius: 999px;
+  padding: 0.65rem 1.15rem;
+  font-size: 0.95rem;
+  font-weight: 850;
+}
+
+.formFooter p {
+  max-width: 30rem;
+  margin: 0;
+  color: #6b7069;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+@media only screen and (max-width: 1020px) {
+  .page {
+    width: min(920px, calc(100% - 1.5rem));
+  }
+
+  .profilePanel {
+    grid-template-columns: minmax(17rem, 0.85fr) minmax(0, 1fr);
+  }
+
+  .pedigreePanel {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .pedigreePanel a {
+    flex: initial;
+  }
+
+  .pedigreeImg {
+    max-height: 26rem;
+    min-height: 18rem;
+  }
+
+  .pedigreePanel p {
+    width: 12rem;
+  }
+
+  .contactPanel {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media only screen and (max-width: 720px) {
+  .page {
+    width: min(100% - 1rem, 38rem);
+    margin-bottom: 2rem;
+  }
+
+  .profilePanel,
+  .contactPanel {
+    grid-template-columns: 1fr;
+  }
+
+  .imageProp {
+    min-height: auto;
+    aspect-ratio: 4 / 5;
+  }
+
+  .detailsPanel {
+    padding: 1rem;
+  }
+
+  .detailsPanel h1 {
+    font-size: 1.55rem;
+  }
+
+  .metaGrid div {
+    display: grid;
+    gap: 0.2rem;
+  }
+
+  .metaGrid dd {
+    text-align: left;
+  }
+
+  .pedigreePanel {
+    display: flex;
+  }
+
+  .pedigreePanel p {
+    width: auto;
+  }
+
+  .pedigreeImg {
+    min-height: auto;
+    max-height: none;
+    aspect-ratio: 4 / 3;
+  }
+
+  .contactPanel {
+    padding: 1rem;
+  }
+
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .formFooter {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .submitButton {
+    width: 100%;
+  }
 }

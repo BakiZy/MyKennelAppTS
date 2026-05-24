@@ -91,6 +91,38 @@
   color: #8d2f3f;
 }
 
+.helperLink {
+  color: #5f2230;
+  font-weight: 800;
+  text-align: center;
+  text-decoration: none;
+}
+
+.helperLink:hover {
+  color: #8d2f3f;
+  text-decoration: underline;
+}
+
+.statusMessage {
+  border: 1px solid rgba(32, 32, 29, 0.12);
+  border-radius: 8px;
+  background: #fbfbf9;
+  color: #20201d;
+  line-height: 1.45;
+  margin: 0;
+  padding: 0.8rem;
+}
+
+.errorMessage {
+  border: 1px solid rgba(141, 47, 63, 0.25);
+  border-radius: 8px;
+  background: rgba(141, 47, 63, 0.08);
+  color: #6f2433;
+  line-height: 1.45;
+  margin: 0;
+  padding: 0.8rem;
+}
+
 .loadingState {
   display: grid;
   min-height: 50vh;

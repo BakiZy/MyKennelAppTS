@@ -9,6 +9,9 @@ import logo from "../../../src/poodle.svg";
 
 const Navigation = () => {
   const authContext = useContext(AuthContext);
+  const logoutHandler = () => {
+    authContext.logout();
+  };
 
   return (
     <Navbar variant="dark" expand="lg" className={classes.navMain}>
@@ -57,6 +60,11 @@ const Navigation = () => {
           {authContext.isAdmin && (
             <Nav.Link as={Link} to="/images">
               Images
+            </Nav.Link>
+          )}
+          {authContext.isLoggedIn && (
+            <Nav.Link as="button" onClick={logoutHandler} className={classes.logoutLink}>
+              Logout
             </Nav.Link>
           )}
         </Nav>
