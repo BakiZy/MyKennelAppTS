@@ -3,7 +3,7 @@ import { AxiosResponse } from "axios";
 import api from "../../api/client";
 import classes from "./AdminReg.module.css";
 import { Spinner } from "react-bootstrap";
-import { validEmail, validPassword } from "./Regex";
+import { passwordRequirementsMessage, validEmail, validPassword } from "./Regex";
 import { useNavigate } from "react-router-dom";
 
 const AdminReg: React.FC = () => {
@@ -19,13 +19,14 @@ const AdminReg: React.FC = () => {
       const enteredUsername = usernameInputRef.current!.value;
       const enteredPassword = passwordInputRef.current!.value;
       const enteredEmail = emailInputRef.current!.value;
-      if (
-        !validEmail.test(enteredEmail) ||
-        !validPassword.test(enteredPassword)
-      ) {
-        alert(
-          "entered values must be valid, password must contain at least 1 number, 1 uppercase and one special character"
-        );
+      if (!validEmail.test(enteredEmail)) {
+        alert("Enter a valid email address.");
+        setLoading(false);
+        return;
+      }
+
+      if (!validPassword.test(enteredPassword)) {
+        alert(passwordRequirementsMessage);
         setLoading(false);
         return;
       }

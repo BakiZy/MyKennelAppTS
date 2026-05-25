@@ -6,7 +6,7 @@ import classes from "./LoginForm.module.css";
 import AuthContext from "../../store/auth-context";
 import { ILoginResponse } from "../../interfaces/IAuthModel";
 import { Spinner } from "react-bootstrap";
-import { validEmail, validPassword } from "./Regex";
+import { passwordRequirementsMessage, validEmail, validPassword } from "./Regex";
 import ErrorModal from "../UI/ErrorModal";
 
 const getErrorMessage = (error: unknown, fallback: string) => {
@@ -62,9 +62,9 @@ const LoginForm = () => {
       const enteredUsername = usernameInputRef.current!.value;
       const enteredPassword = passwordInputRef.current!.value;
 
-      if (!validPassword.test(enteredPassword)) {
+      if (!enteredPassword) {
         setError({
-          message: "Entered information is not valid",
+          message: "Password is required.",
           title: "Login error",
           popup: true,
         });
@@ -106,12 +106,19 @@ const LoginForm = () => {
       const enteredPassword = passwordInputRef.current!.value;
       const enteredEmail = emailInputRef.current!.value;
 
-      if (
-        !validEmail.test(enteredEmail) ||
-        !validPassword.test(enteredPassword)
-      ) {
+      if (!validEmail.test(enteredEmail)) {
         setError({
-          message: "Entered information is not valid or username is taken",
+          message: "Enter a valid email address.",
+          title: "Registration error",
+          popup: true,
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      if (!validPassword.test(enteredPassword)) {
+        setError({
+          message: passwordRequirementsMessage,
           title: "Registration error",
           popup: true,
         });
