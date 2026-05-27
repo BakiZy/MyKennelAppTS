@@ -164,6 +164,16 @@
   text-align: right;
 }
 
+.poodleLink {
+  color: #8d2f3f;
+  text-decoration: none;
+}
+
+.poodleLink:hover {
+  color: #20201d;
+  text-decoration: underline;
+}
+
 .inquiryLink {
   display: inline-flex;
   width: 100%;

@@ -1,4 +1,5 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import api from "../api/client";
 import { LitterModel, PuppyModel } from "../interfaces/IPuppyModel";
 import { PoodleModel } from "../interfaces/IPoodleModel";
@@ -538,11 +539,27 @@ const Puppies: React.FC = () => {
                     </div>
                     <div>
                       <dt>Father</dt>
-                      <dd>{litter.fatherName || "To be announced"}</dd>
+                      <dd>
+                        {litter.fatherId && litter.fatherName ? (
+                          <Link className={classes.poodleLink} to={`/poodles/${litter.fatherId}`}>
+                            {litter.fatherName}
+                          </Link>
+                        ) : (
+                          "To be announced"
+                        )}
+                      </dd>
                     </div>
                     <div>
                       <dt>Mother</dt>
-                      <dd>{litter.motherName || "To be announced"}</dd>
+                      <dd>
+                        {litter.motherId && litter.motherName ? (
+                          <Link className={classes.poodleLink} to={`/poodles/${litter.motherId}`}>
+                            {litter.motherName}
+                          </Link>
+                        ) : (
+                          "To be announced"
+                        )}
+                      </dd>
                     </div>
                     <div>
                       <dt>Available</dt>
