@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import api from "../api/client";
 import { LitterModel, PuppyModel } from "../interfaces/IPuppyModel";
 import { PoodleModel } from "../interfaces/IPoodleModel";
@@ -65,6 +65,7 @@ const Puppies: React.FC = () => {
   const [adminMessage, setAdminMessage] = useState("");
   const [editingLitterId, setEditingLitterId] = useState<number | null>(null);
   const [editingPuppyId, setEditingPuppyId] = useState<number | null>(null);
+  const adminPanelRef = useRef<HTMLElement>(null);
 
   const [litterForm, setLitterForm] = useState<LitterFormState>(emptyLitterForm);
   const [puppyForm, setPuppyForm] = useState<PuppyFormState>(emptyPuppyForm);
@@ -134,6 +135,15 @@ const Puppies: React.FC = () => {
     litterId: puppyForm.litterId ? parseInt(puppyForm.litterId) : null,
   });
 
+  const scrollToAdminPanel = () => {
+    window.requestAnimationFrame(() => {
+      adminPanelRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    });
+  };
+
   const submitLitterHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setAdminMessage("");
@@ -188,6 +198,7 @@ const Puppies: React.FC = () => {
       description: litter.description ?? "",
     });
     setAdminMessage(`Editing ${litter.name || `litter ${litter.id}`}.`);
+    scrollToAdminPanel();
   };
 
   const startPuppyEdit = (puppy: PuppyModel) => {
@@ -203,6 +214,7 @@ const Puppies: React.FC = () => {
       litterId: puppy.litterId ? String(puppy.litterId) : "",
     });
     setAdminMessage(`Editing ${puppy.name || `puppy ${puppy.id}`}.`);
+    scrollToAdminPanel();
   };
 
   const deleteLitterHandler = async (litter: LitterModel) => {
@@ -255,7 +267,7 @@ const Puppies: React.FC = () => {
       {loading && <p className={classes.statusMessage}>Loading puppies...</p>}
 
       {authContext.isAdmin && (
-        <section className={classes.adminPanel}>
+        <section className={classes.adminPanel} ref={adminPanelRef}>
           <div className={classes.sectionHeader}>
             <h2>Admin puppy manager</h2>
             <span>Admin</span>
