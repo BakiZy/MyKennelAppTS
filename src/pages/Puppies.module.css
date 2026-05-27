@@ -237,6 +237,13 @@
   font-weight: 800;
 }
 
+.formHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
 .adminForm label {
   color: #3a4039;
   font-size: 0.88rem;
@@ -287,6 +294,45 @@
 .adminForm button:hover {
   border-color: #8d2f3f;
   background: #8d2f3f;
+}
+
+.cardActions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+
+.cardActions button,
+.secondaryButton {
+  min-height: 2.4rem;
+  border: 1px solid #20201d;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #20201d;
+  padding: 0.55rem 0.8rem;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.cardActions button:hover,
+.secondaryButton:hover {
+  border-color: #8d2f3f;
+  background: #8d2f3f;
+  color: #ffffff;
+}
+
+.cardActions .dangerButton {
+  border-color: rgba(141, 47, 63, 0.55);
+  color: #8d2f3f;
+}
+
+.cardActions .dangerButton:hover {
+  border-color: #8d2f3f;
+  background: #8d2f3f;
+  color: #ffffff;
 }
 
 @media only screen and (max-width: 980px) {

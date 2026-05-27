@@ -5,6 +5,56 @@ import { PoodleModel } from "../interfaces/IPoodleModel";
 import AuthContext from "../store/auth-context";
 import classes from "./Puppies.module.css";
 
+type LitterFormState = {
+  name: string;
+  dateOfBirth: string;
+  fatherId: string;
+  motherId: string;
+  status: string;
+  coverImageUrl: string;
+  description: string;
+};
+
+type PuppyFormState = {
+  name: string;
+  sex: string;
+  color: string;
+  dateOfBirth: string;
+  status: string;
+  imageUrl: string;
+  description: string;
+  litterId: string;
+};
+
+const emptyLitterForm: LitterFormState = {
+  name: "",
+  dateOfBirth: "",
+  fatherId: "",
+  motherId: "",
+  status: "Available",
+  coverImageUrl: "",
+  description: "",
+};
+
+const emptyPuppyForm: PuppyFormState = {
+  name: "",
+  sex: "Male",
+  color: "",
+  dateOfBirth: "",
+  status: "Available",
+  imageUrl: "",
+  description: "",
+  litterId: "",
+};
+
+const toDateInputValue = (value?: string) => {
+  if (!value) {
+    return "";
+  }
+
+  return value.slice(0, 10);
+};
+
 const Puppies: React.FC = () => {
   const authContext = useContext(AuthContext);
   const [puppies, setPuppies] = useState<PuppyModel[]>([]);
@@ -13,27 +63,11 @@ const Puppies: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [adminMessage, setAdminMessage] = useState("");
+  const [editingLitterId, setEditingLitterId] = useState<number | null>(null);
+  const [editingPuppyId, setEditingPuppyId] = useState<number | null>(null);
 
-  const [litterForm, setLitterForm] = useState({
-    name: "",
-    dateOfBirth: "",
-    fatherId: "",
-    motherId: "",
-    status: "Available",
-    coverImageUrl: "",
-    description: "",
-  });
-
-  const [puppyForm, setPuppyForm] = useState({
-    name: "",
-    sex: "Male",
-    color: "",
-    dateOfBirth: "",
-    status: "Available",
-    imageUrl: "",
-    description: "",
-    litterId: "",
-  });
+  const [litterForm, setLitterForm] = useState<LitterFormState>(emptyLitterForm);
+  const [puppyForm, setPuppyForm] = useState<PuppyFormState>(emptyPuppyForm);
 
   const fetchPuppies = useCallback(async () => {
     setLoading(true);
@@ -69,38 +103,55 @@ const Puppies: React.FC = () => {
     return new Date(value).toLocaleDateString("en-GB");
   };
 
+  const resetLitterForm = () => {
+    setEditingLitterId(null);
+    setLitterForm(emptyLitterForm);
+  };
+
+  const resetPuppyForm = () => {
+    setEditingPuppyId(null);
+    setPuppyForm(emptyPuppyForm);
+  };
+
+  const getLitterPayload = () => ({
+    name: litterForm.name,
+    dateOfBirth: litterForm.dateOfBirth || null,
+    fatherId: litterForm.fatherId ? parseInt(litterForm.fatherId) : null,
+    motherId: litterForm.motherId ? parseInt(litterForm.motherId) : null,
+    status: litterForm.status,
+    coverImageUrl: litterForm.coverImageUrl,
+    description: litterForm.description,
+  });
+
+  const getPuppyPayload = () => ({
+    name: puppyForm.name || "Puppy X",
+    sex: puppyForm.sex,
+    color: puppyForm.color,
+    dateOfBirth: puppyForm.dateOfBirth || null,
+    status: puppyForm.status,
+    imageUrl: puppyForm.imageUrl,
+    description: puppyForm.description,
+    litterId: puppyForm.litterId ? parseInt(puppyForm.litterId) : null,
+  });
+
   const submitLitterHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setAdminMessage("");
 
     try {
-      await api.post(
-        "/api/puppies/litters",
-        {
-          name: litterForm.name,
-          dateOfBirth: litterForm.dateOfBirth || null,
-          fatherId: litterForm.fatherId ? parseInt(litterForm.fatherId) : null,
-          motherId: litterForm.motherId ? parseInt(litterForm.motherId) : null,
-          status: litterForm.status,
-          coverImageUrl: litterForm.coverImageUrl,
-          description: litterForm.description,
-        }
-      );
+      if (editingLitterId) {
+        await api.put(`/api/puppies/litters/${editingLitterId}`, getLitterPayload());
+        setAdminMessage("Litter updated.");
+      } else {
+        await api.post("/api/puppies/litters", getLitterPayload());
+        setAdminMessage("Litter added.");
+      }
 
-      setAdminMessage("Litter added.");
-      setLitterForm({
-        name: "",
-        dateOfBirth: "",
-        fatherId: "",
-        motherId: "",
-        status: "Available",
-        coverImageUrl: "",
-        description: "",
-      });
+      resetLitterForm();
       fetchPuppies();
     } catch (requestError) {
       console.log(requestError);
-      setAdminMessage("Could not add litter. Check admin session and database migration.");
+      setAdminMessage("Could not save litter. Check admin session and database migration.");
     }
   };
 
@@ -109,35 +160,84 @@ const Puppies: React.FC = () => {
     setAdminMessage("");
 
     try {
-      await api.post(
-        "/api/puppies",
-        {
-          name: puppyForm.name || "Puppy X",
-          sex: puppyForm.sex,
-          color: puppyForm.color,
-          dateOfBirth: puppyForm.dateOfBirth || null,
-          status: puppyForm.status,
-          imageUrl: puppyForm.imageUrl,
-          description: puppyForm.description,
-          litterId: puppyForm.litterId ? parseInt(puppyForm.litterId) : null,
-        }
-      );
+      if (editingPuppyId) {
+        await api.put(`/api/puppies/${editingPuppyId}`, getPuppyPayload());
+        setAdminMessage("Puppy updated.");
+      } else {
+        await api.post("/api/puppies", getPuppyPayload());
+        setAdminMessage("Puppy added.");
+      }
 
-      setAdminMessage("Puppy added.");
-      setPuppyForm({
-        name: "",
-        sex: "Male",
-        color: "",
-        dateOfBirth: "",
-        status: "Available",
-        imageUrl: "",
-        description: "",
-        litterId: "",
-      });
+      resetPuppyForm();
       fetchPuppies();
     } catch (requestError) {
       console.log(requestError);
-      setAdminMessage("Could not add puppy. Check admin session and database migration.");
+      setAdminMessage("Could not save puppy. Check admin session and database migration.");
+    }
+  };
+
+  const startLitterEdit = (litter: LitterModel) => {
+    setEditingLitterId(litter.id);
+    setLitterForm({
+      name: litter.name ?? "",
+      dateOfBirth: toDateInputValue(litter.dateOfBirth),
+      fatherId: litter.fatherId ? String(litter.fatherId) : "",
+      motherId: litter.motherId ? String(litter.motherId) : "",
+      status: litter.status ?? "Available",
+      coverImageUrl: litter.coverImageUrl ?? "",
+      description: litter.description ?? "",
+    });
+    setAdminMessage(`Editing ${litter.name || `litter ${litter.id}`}.`);
+  };
+
+  const startPuppyEdit = (puppy: PuppyModel) => {
+    setEditingPuppyId(puppy.id);
+    setPuppyForm({
+      name: puppy.name ?? "",
+      sex: puppy.sex ?? "Male",
+      color: puppy.color ?? "",
+      dateOfBirth: toDateInputValue(puppy.dateOfBirth),
+      status: puppy.status ?? "Available",
+      imageUrl: puppy.imageUrl ?? "",
+      description: puppy.description ?? "",
+      litterId: puppy.litterId ? String(puppy.litterId) : "",
+    });
+    setAdminMessage(`Editing ${puppy.name || `puppy ${puppy.id}`}.`);
+  };
+
+  const deleteLitterHandler = async (litter: LitterModel) => {
+    if (!window.confirm(`Delete ${litter.name || "this litter"}? Puppies will stay listed without this litter.`)) {
+      return;
+    }
+
+    try {
+      await api.delete(`/api/puppies/litters/${litter.id}`);
+      if (editingLitterId === litter.id) {
+        resetLitterForm();
+      }
+      setAdminMessage("Litter deleted.");
+      fetchPuppies();
+    } catch (requestError) {
+      console.log(requestError);
+      setAdminMessage("Could not delete litter.");
+    }
+  };
+
+  const deletePuppyHandler = async (puppy: PuppyModel) => {
+    if (!window.confirm(`Delete ${puppy.name || "this puppy"}?`)) {
+      return;
+    }
+
+    try {
+      await api.delete(`/api/puppies/${puppy.id}`);
+      if (editingPuppyId === puppy.id) {
+        resetPuppyForm();
+      }
+      setAdminMessage("Puppy deleted.");
+      fetchPuppies();
+    } catch (requestError) {
+      console.log(requestError);
+      setAdminMessage("Could not delete puppy.");
     }
   };
 
@@ -163,7 +263,14 @@ const Puppies: React.FC = () => {
           {adminMessage && <p className={classes.adminMessage}>{adminMessage}</p>}
           <div className={classes.adminForms}>
             <form onSubmit={submitLitterHandler} className={classes.adminForm}>
-              <h3>Add litter</h3>
+              <div className={classes.formHeader}>
+                <h3>{editingLitterId ? "Edit litter" : "Add litter"}</h3>
+                {editingLitterId && (
+                  <button type="button" className={classes.secondaryButton} onClick={resetLitterForm}>
+                    Cancel
+                  </button>
+                )}
+              </div>
               <label htmlFor="litterName">Litter name</label>
               <input
                 id="litterName"
@@ -263,11 +370,18 @@ const Puppies: React.FC = () => {
                   }))
                 }
               />
-              <button type="submit">Add litter</button>
+              <button type="submit">{editingLitterId ? "Save litter" : "Add litter"}</button>
             </form>
 
             <form onSubmit={submitPuppyHandler} className={classes.adminForm}>
-              <h3>Add puppy</h3>
+              <div className={classes.formHeader}>
+                <h3>{editingPuppyId ? "Edit puppy" : "Add puppy"}</h3>
+                {editingPuppyId && (
+                  <button type="button" className={classes.secondaryButton} onClick={resetPuppyForm}>
+                    Cancel
+                  </button>
+                )}
+              </div>
               <label htmlFor="puppyName">Name</label>
               <input
                 id="puppyName"
@@ -374,7 +488,7 @@ const Puppies: React.FC = () => {
                   }))
                 }
               />
-              <button type="submit">Add puppy</button>
+              <button type="submit">{editingPuppyId ? "Save puppy" : "Add puppy"}</button>
             </form>
           </div>
         </section>
@@ -423,6 +537,20 @@ const Puppies: React.FC = () => {
                       <dd>{litter.availablePuppyCount}</dd>
                     </div>
                   </dl>
+                  {authContext.isAdmin && (
+                    <div className={classes.cardActions}>
+                      <button type="button" onClick={() => startLitterEdit(litter)}>
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        className={classes.dangerButton}
+                        onClick={() => deleteLitterHandler(litter)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  )}
                 </div>
               </article>
             ))}
@@ -473,9 +601,24 @@ const Puppies: React.FC = () => {
                         <dd>{puppy.litterName || "Not assigned"}</dd>
                       </div>
                     </dl>
-                    <a className={classes.inquiryLink} href="/about">
-                      Send an inquiry
-                    </a>
+                    {authContext.isAdmin ? (
+                      <div className={classes.cardActions}>
+                        <button type="button" onClick={() => startPuppyEdit(puppy)}>
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          className={classes.dangerButton}
+                          onClick={() => deletePuppyHandler(puppy)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    ) : (
+                      <a className={classes.inquiryLink} href="/about">
+                        Send an inquiry
+                      </a>
+                    )}
                   </div>
                 </article>
               ))}
