@@ -5,7 +5,7 @@ import {
   AxiosInstance,
 } from "axios";
 
-export const baseURL = "https://poodlesvonapalusso.dog";
+export const baseURL = "https://api.poodlesvonapalusso.com";
 export const urlAuth = "api/Authentication/login";
 
 const onRequest = (config: AxiosRequestConfig): AxiosRequestConfig => {

@@ -27,7 +27,7 @@ const About: React.FC = () => {
         {/* https://ogp.me/ */}
         <meta
           property="og:url"
-          content="https://poodlesvonapalusso.xyz/about"
+          content="https://poodlesvonapalusso.com/about"
         />
         <meta property="og:title" content="About our poodle kennel" />
         <meta
@@ -84,7 +84,7 @@ const About: React.FC = () => {
         If you are interested in any of our puppies, you can contact us through
         our social media links in upper corner or through our{" "}
         <a
-          href="https://poodlesvonapalusso.xyz/poodles/4"
+          href="https://poodlesvonapalusso.com/poodles/4"
           target="_blank"
           rel="noreferrer"
         >

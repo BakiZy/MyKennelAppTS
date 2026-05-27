@@ -262,14 +262,14 @@ const Home: React.FC = () => {
           name="description"
           content="Toy, miniature, red and fawn Poodle kennel from Serbia"
         />
-        <link rel="canonical" href="https://poodlesvonapalusso.xyz/" />
+        <link rel="canonical" href="https://poodlesvonapalusso.com/" />
         <meta
           name="poodles, pudle, red poodle, apricot poodle, fawn poodle, toy poodle, miniature poodle, toy pudla, pudla, pudle srbija"
           content="Toy, miniature, red and fawn Poodle kennel from Serbia"
         />
         <meta name="robots" content="index,follow" />
         {/* https://ogp.me/ */}
-        <meta property="og:url" content="https://poodlesvonapalusso.xyz/" />
+        <meta property="og:url" content="https://poodlesvonapalusso.com/" />
         <meta property="og:title" content="Poodles Von Apalusso website" />
         <meta
           property="og:description"

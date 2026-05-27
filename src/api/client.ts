@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? "https://poodlesvonapalusso.dog";
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? "https://api.poodlesvonapalusso.com";
 const csrfHeaderName = "X-CSRF-TOKEN";
 const unsafeMethods = new Set(["post", "put", "patch", "delete"]);
 let csrfToken: string | null = null;
