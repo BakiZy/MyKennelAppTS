@@ -1,17 +1,13 @@
 import React, { useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { AxiosError } from "axios";
 import api from "../api/client";
+import { getApiErrorMessage } from "../api/errorMessage";
 import classes from "../components/Authentication/LoginForm.module.css";
 
 const getErrorMessage = (error: unknown) => {
-  const axiosError = error as AxiosError<string>;
-
-  if (typeof axiosError.response?.data === "string") {
-    return axiosError.response.data;
-  }
-
-  return "Password reset failed. Please request a new reset link.";
+  return getApiErrorMessage(error, {
+    fallback: "Password reset failed. Please request a new reset link.",
+  });
 };
 
 const ResetPassword: React.FC = () => {

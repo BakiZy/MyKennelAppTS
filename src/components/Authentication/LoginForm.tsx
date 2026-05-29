@@ -1,39 +1,14 @@
 import React, { useState, useRef, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import api from "../../api/client";
+import { getApiErrorMessage } from "../../api/errorMessage";
 import classes from "./LoginForm.module.css";
 import AuthContext from "../../store/auth-context";
 import { ILoginResponse } from "../../interfaces/IAuthModel";
 import { Spinner } from "react-bootstrap";
 import { passwordRequirementsMessage, validEmail, validPassword } from "./Regex";
 import ErrorModal from "../UI/ErrorModal";
-
-const getErrorMessage = (error: unknown, fallback: string) => {
-  const axiosError = error as AxiosError<string | Record<string, string[]>>;
-  const responseData = axiosError.response?.data;
-
-  if (typeof responseData === "string" && responseData.trim().length > 0) {
-    return responseData;
-  }
-
-  if (responseData && typeof responseData === "object") {
-    const modelErrors = Object.values(responseData).flat();
-    if (modelErrors.length > 0) {
-      return modelErrors.join(" ");
-    }
-  }
-
-  if (axiosError.response?.status === 404) {
-    return "User was not found. Create an account first.";
-  }
-
-  if (axiosError.response?.status === 401) {
-    return "Username or password is incorrect.";
-  }
-
-  return fallback;
-};
 
 const LoginForm = () => {
   const usernameInputRef = useRef<HTMLInputElement>(null);
@@ -92,7 +67,13 @@ const LoginForm = () => {
         })
         .catch((error) => {
           setError({
-            message: getErrorMessage(error, "Login failed. Please try again."),
+            message: getApiErrorMessage(error, {
+              fallback: "Login failed. Please try again.",
+              statusMessages: {
+                401: "Username or password is incorrect.",
+                404: "User was not found. Create an account first.",
+              },
+            }),
             title: "Login error",
             popup: true,
           });
@@ -148,10 +129,9 @@ const LoginForm = () => {
         .catch((error) => {
           setIsLoading(false);
           setError({
-            message: getErrorMessage(
-              error,
-              "Registration failed. Please check your details and try again."
-            ),
+            message: getApiErrorMessage(error, {
+              fallback: "Registration failed. Please check your details and try again.",
+            }),
             title: "Registration error",
             popup: true,
           });

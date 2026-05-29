@@ -1,21 +1,16 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { AxiosError } from "axios";
 import api from "../api/client";
+import { getApiErrorMessage } from "../api/errorMessage";
 import classes from "../components/Authentication/LoginForm.module.css";
 
 const getErrorMessage = (error: unknown) => {
-  const axiosError = error as AxiosError<string>;
-
-  if (typeof axiosError.response?.data === "string") {
-    return axiosError.response.data;
-  }
-
-  if (axiosError.response?.status === 429) {
-    return "Too many password reset requests. Try again later.";
-  }
-
-  return "Password reset request failed. Please try again.";
+  return getApiErrorMessage(error, {
+    fallback: "Password reset request failed. Please try again.",
+    statusMessages: {
+      429: "Too many password reset requests. Try again later.",
+    },
+  });
 };
 
 const ForgotPassword: React.FC = () => {
