@@ -1,80 +1,145 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
+import { Alert, Spinner } from "react-bootstrap";
 import api from "../api/client";
-import AuthContext from "../store/auth-context";
-import { IUserModel } from "../interfaces/IAuthModel";
-import { Alert, Table, Button, Spinner } from "react-bootstrap";
+import { getApiErrorMessage } from "../api/errorMessage";
 import AdminReg from "../components/Authentication/AdminReg";
+import { IUserModel } from "../interfaces/IAuthModel";
+import AuthContext from "../store/auth-context";
+import classes from "./Admin.module.css";
 
-//import { validEmail, validPassword } from "../components/Authentication/Regex";
+type UserFormState = {
+  userName: string;
+  email: string;
+  role: string;
+};
 
-let controller = new AbortController();
+const getPrimaryRole = (user: IUserModel) => {
+  if (user.roles?.includes("Admin")) {
+    return "Admin";
+  }
+
+  if (user.roles?.includes("User")) {
+    return "User";
+  }
+
+  return user.roles?.[0] ?? "User";
+};
+
+const getEmptyForm = (user: IUserModel): UserFormState => ({
+  userName: user.userName,
+  email: user.email,
+  role: getPrimaryRole(user),
+});
+
 const AdminPage: React.FC = () => {
-  const [users, setUsers] = useState<IUserModel[]>([]);
-  const [admins, setAdmins] = useState<IUserModel[]>([]);
-  const [loading, setLoading] = useState(false);
-
   const authContext = useContext(AuthContext);
+  const [users, setUsers] = useState<IUserModel[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [savingId, setSavingId] = useState("");
+  const [editingId, setEditingId] = useState("");
+  const [form, setForm] = useState<UserFormState>({
+    userName: "",
+    email: "",
+    role: "User",
+  });
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
-  const removeHandler = (id: string) => {
+  const fetchUsers = useCallback(async () => {
     setLoading(true);
-    api
-      .delete(`/api/user/${id}`)
-      .then(() => {
-        setUsers(users.filter((user) => user.id !== id));
-        setAdmins(admins.filter((admin) => admin.id !== id));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    setLoading(false);
+    setError("");
+
+    try {
+      const response = await api.get<IUserModel[]>("/api/Admin/list-all-users");
+      setUsers(response.data);
+    } catch (requestError) {
+      setError(
+        getApiErrorMessage(requestError, {
+          fallback: "Could not load registered users.",
+        })
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (authContext.isAdmin) {
+      fetchUsers();
+    }
+  }, [authContext.isAdmin, fetchUsers]);
+
+  const startEdit = (user: IUserModel) => {
+    setEditingId(user.id);
+    setForm(getEmptyForm(user));
+    setMessage("");
+    setError("");
   };
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const loadedData: IUserModel[] = [];
-      await api
-        .get<IUserModel[]>("/api/Admin/list-users")
-        .then((response) => {
-          for (let i = 0; i < response.data.length; i++) {
-            loadedData.push({
-              userName: response.data[i].userName,
-              email: response.data[i].email,
-              id: response.data[i].id,
-            });
-          }
-          setUsers(loadedData);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      setLoading(false);
-    };
-    fetchUsers();
-    return () => {
-      controller?.abort();
-    };
-  }, []);
+  const cancelEdit = () => {
+    setEditingId("");
+    setForm({
+      userName: "",
+      email: "",
+      role: "User",
+    });
+  };
 
-  useEffect(() => {
-    setLoading(true);
-    const loadedData: IUserModel[] = [];
-    const fetchAdmins = () => {
-      api
-        .get<IUserModel[]>("/api/Admin/list-admins")
-        .then((response) => {
-          for (let i = 0; i < response.data.length; i++) {
-            loadedData.push({
-              userName: response.data[i].userName,
-              email: response.data[i].email,
-              id: response.data[i].id,
-            });
-          }
-          setAdmins(loadedData);
-        });
-      setLoading(false);
-    };
-    fetchAdmins();
-  }, []);
+  const saveUser = async (id: string) => {
+    setSavingId(id);
+    setMessage("");
+    setError("");
+
+    try {
+      const response = await api.put<IUserModel>(`/api/user/${id}`, form);
+      setUsers((currentUsers) =>
+        currentUsers.map((user) => (user.id === id ? response.data : user))
+      );
+      setMessage("User updated.");
+      cancelEdit();
+    } catch (requestError) {
+      setError(
+        getApiErrorMessage(requestError, {
+          fallback: "Could not update user.",
+          statusMessages: {
+            409: "This change would remove the last admin account.",
+          },
+        })
+      );
+    } finally {
+      setSavingId("");
+    }
+  };
+
+  const deleteUser = async (user: IUserModel) => {
+    if (!window.confirm(`Delete ${user.userName}? This cannot be undone.`)) {
+      return;
+    }
+
+    setSavingId(user.id);
+    setMessage("");
+    setError("");
+
+    try {
+      await api.delete(`/api/user/${user.id}`);
+      setUsers((currentUsers) => currentUsers.filter((currentUser) => currentUser.id !== user.id));
+      setMessage("User deleted.");
+      if (editingId === user.id) {
+        cancelEdit();
+      }
+    } catch (requestError) {
+      setError(
+        getApiErrorMessage(requestError, {
+          fallback: "Could not delete user.",
+          statusMessages: {
+            409: "You cannot delete the last admin account.",
+          },
+        })
+      );
+    } finally {
+      setSavingId("");
+    }
+  };
 
   if (!authContext.isAdmin) {
     return (
@@ -84,72 +149,155 @@ const AdminPage: React.FC = () => {
     );
   }
 
-  if (loading) {
-    return (
-      <Spinner animation="border" variant="info">
-        Load
-      </Spinner>
-    );
-  }
+  const adminCount = users.filter((user) => user.roles?.includes("Admin")).length;
+  const regularUserCount = users.length - adminCount;
 
   return (
-    <>
+    <main className={classes.page}>
       <AdminReg />
-      <br></br>
-      <h1>List of users</h1>
-      <Table variant="dark">
-        <thead>
-          <tr>
-            <th>Username </th>
-            <th>email</th>
-            <th>id</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user.userName}>
-              <td>{user.userName}</td>
-              <td>{user.email}</td>
-              <td>{user.id}</td>
-              <td>
-                <Button variant="danger" onClick={() => removeHandler(user.id)}>
-                  Delete
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-      <h1>List of admins</h1>
-      <Table variant="dark">
-        <thead>
-          <tr>
-            <th>Username </th>
-            <th>email</th>
-            <th>id</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {admins.map((admin) => (
-            <tr key={admin.userName}>
-              <td>{admin.userName}</td>
-              <td>{admin.email}</td>
-              <td>{admin.id}</td>
-              <td>
-                <Button
-                  variant="danger"
-                  onClick={() => removeHandler(admin.id)}
-                >
-                  Delete
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-    </>
+
+      <section className={classes.management}>
+        <div className={classes.header}>
+          <div>
+            <p className={classes.eyebrow}>Admin</p>
+            <h1>Registered users</h1>
+          </div>
+          <button type="button" className={classes.secondaryButton} onClick={fetchUsers} disabled={loading}>
+            Refresh
+          </button>
+        </div>
+
+        <div className={classes.stats}>
+          <span>{users.length} total</span>
+          <span>{adminCount} admins</span>
+          <span>{regularUserCount} users</span>
+        </div>
+
+        {message && <p className={classes.message}>{message}</p>}
+        {error && <p className={classes.error}>{error}</p>}
+
+        {loading ? (
+          <div className={classes.loadingState}>
+            <Spinner animation="border" variant="dark" />
+          </div>
+        ) : (
+          <div className={classes.tableWrap}>
+            <table className={classes.userTable}>
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Id</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className={classes.emptyCell}>
+                      No registered users.
+                    </td>
+                  </tr>
+                ) : (
+                  users.map((user) => {
+                    const isEditing = editingId === user.id;
+                    const role = getPrimaryRole(user);
+
+                    return (
+                      <tr key={user.id}>
+                        <td>
+                          {isEditing ? (
+                            <input
+                              value={form.userName}
+                              onChange={(event) =>
+                                setForm((current) => ({
+                                  ...current,
+                                  userName: event.target.value,
+                                }))
+                              }
+                            />
+                          ) : (
+                            user.userName
+                          )}
+                        </td>
+                        <td>
+                          {isEditing ? (
+                            <input
+                              type="email"
+                              value={form.email}
+                              onChange={(event) =>
+                                setForm((current) => ({
+                                  ...current,
+                                  email: event.target.value,
+                                }))
+                              }
+                            />
+                          ) : (
+                            user.email
+                          )}
+                        </td>
+                        <td>
+                          {isEditing ? (
+                            <select
+                              value={form.role}
+                              onChange={(event) =>
+                                setForm((current) => ({
+                                  ...current,
+                                  role: event.target.value,
+                                }))
+                              }
+                            >
+                              <option value="User">User</option>
+                              <option value="Admin">Admin</option>
+                            </select>
+                          ) : (
+                            <span className={role === "Admin" ? classes.adminRole : classes.userRole}>{role}</span>
+                          )}
+                        </td>
+                        <td className={classes.idCell}>{user.id}</td>
+                        <td>
+                          <div className={classes.actions}>
+                            {isEditing ? (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={() => saveUser(user.id)}
+                                  disabled={savingId === user.id}
+                                >
+                                  Save
+                                </button>
+                                <button type="button" className={classes.secondaryButton} onClick={cancelEdit}>
+                                  Cancel
+                                </button>
+                              </>
+                            ) : (
+                              <>
+                                <button type="button" onClick={() => startEdit(user)}>
+                                  Edit
+                                </button>
+                                <button
+                                  type="button"
+                                  className={classes.dangerButton}
+                                  onClick={() => deleteUser(user)}
+                                  disabled={savingId === user.id}
+                                >
+                                  Delete
+                                </button>
+                              </>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
+    </main>
   );
 };
 

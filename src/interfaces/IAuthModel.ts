@@ -15,6 +15,7 @@ export interface IUserModel {
   userName: string;
   id: string;
   email: string;
+  roles?: string[];
 }
 
 export interface IUserProps {
