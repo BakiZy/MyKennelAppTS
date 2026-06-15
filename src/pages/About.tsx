@@ -77,7 +77,7 @@ const About: React.FC = () => {
         </Card>
       </section>
       <div className={classes.sliderWrap}>
-        <h1>Currently available puppies</h1>
+        <h1>some of our beautiful puppies</h1>
         <ImageSlider slides={images} />
       </div>
       <Card.Footer className={classes.footer}>
