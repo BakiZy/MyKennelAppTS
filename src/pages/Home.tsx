@@ -8,7 +8,7 @@ import useGetSizes from "../hooks/getSizesHook";
 import useGetColors from "../hooks/getColorsHook";
 import { Spinner } from "react-bootstrap";
 import ErrorModal from "../components/UI/ErrorModal";
-import { Helmet, HelmetProvider } from "react-helmet-async";
+import Seo from "../components/SEO/Seo";
 
 let controller = new AbortController();
 
@@ -252,37 +252,41 @@ const Home: React.FC = () => {
       </main>
     );
   }
+  const homeDescription =
+    "Red toy and miniature poodle kennel in Serbia. Meet Von Apalusso poodles raised with health, temperament, and breed standards in focus.";
+  const homeStructuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      name: "Poodles Von Apalusso",
+      url: "https://poodlesvonapalusso.com/",
+      logo: "https://poodlesvonapalusso.com/logo512.png",
+      sameAs: [
+        "https://www.facebook.com/milos.petrov.10/photos_by",
+        "https://www.instagram.com/vonappalusso/",
+      ],
+      contactPoint: {
+        "@type": "ContactPoint",
+        telephone: "+381646149512",
+        contactType: "customer service",
+      },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: "Poodles Von Apalusso",
+      url: "https://poodlesvonapalusso.com/",
+    },
+  ];
+
   return (
-    <HelmetProvider>
-      <Helmet>
-        {" "}
-        <html lang="en" />
-        <title>Poodles Von Apalusso website</title>
-        <meta
-          name="description"
-          content="Toy, miniature, red and fawn Poodle kennel from Serbia"
-        />
-        <link rel="canonical" href="https://poodlesvonapalusso.com/" />
-        <meta
-          name="poodles, pudle, red poodle, apricot poodle, fawn poodle, toy poodle, miniature poodle, toy pudla, pudla, pudle srbija"
-          content="Toy, miniature, red and fawn Poodle kennel from Serbia"
-        />
-        <meta name="robots" content="index,follow" />
-        {/* https://ogp.me/ */}
-        <meta property="og:url" content="https://poodlesvonapalusso.com/" />
-        <meta property="og:title" content="Poodles Von Apalusso website" />
-        <meta
-          property="og:description"
-          content="Toy, miniature, red and fawn Poodle kennel from Serbia"
-        />
-        <meta property="og:type" content="..." />
-        <meta
-          property="og:image"
-          content={"https://i.imgur.com/6Ll5PQL.jpeg"}
-        />
-        {/* https://moz.com/blog/meta-referrer-tag */}
-        <meta name="referrer" content="origin-when-crossorigin" />
-      </Helmet>
+    <>
+      <Seo
+        title="Red toy and miniature poodle kennel in Serbia | Von Apalusso"
+        description={homeDescription}
+        canonical="https://poodlesvonapalusso.com/"
+        structuredData={homeStructuredData}
+      />
       {error.popup && (
         <ErrorModal
           message={error!.message}
@@ -294,7 +298,7 @@ const Home: React.FC = () => {
         <PoodleFilter />
         <PoodleList poodles={poodles} onRemove={onRemoveHandler} />
       </main>
-    </HelmetProvider>
+    </>
   );
 };
 

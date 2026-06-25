@@ -6,6 +6,7 @@ import { PoodleModel } from "../interfaces/IPoodleModel";
 import { Button, Spinner } from "react-bootstrap";
 import { AxiosResponse } from "axios";
 import api from "../api/client";
+import Seo from "../components/SEO/Seo";
 
 const Reservation = () => {
   const [loading, setLoading] = useState(true);
@@ -117,12 +118,38 @@ const Reservation = () => {
   const birthDate = poodle.dateOfBirth
     ? new Date(poodle.dateOfBirth).toLocaleDateString("en-GB")
     : "Unknown";
+  const poodleDescription = `${displayName} is a ${poodle.poodleColorName || ""} ${
+    poodle.poodleSizeName || ""
+  } poodle from Von Apalusso kennel in Serbia.`.replace(/\s+/g, " ");
+  const poodleStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    name: `${displayName} | Von Apalusso`,
+    url: `https://poodlesvonapalusso.com/poodles/${poodle.id}`,
+    description: poodleDescription,
+    image: poodle.imageUrl,
+  };
 
   return (
-    <main className={classes.page}>
-      <section className={classes.profilePanel} aria-labelledby="poodle-title">
+    <>
+      <Seo
+        title={`${displayName} | ${poodle.poodleColorName || "Poodle"} ${
+          poodle.poodleSizeName || ""
+        } | Von Apalusso`}
+        description={poodleDescription}
+        canonical={`https://poodlesvonapalusso.com/poodles/${poodle.id}`}
+        image={poodle.imageUrl || undefined}
+        type="profile"
+        structuredData={poodleStructuredData}
+      />
+      <main className={classes.page}>
+        <section className={classes.profilePanel} aria-labelledby="poodle-title">
         <div className={classes.photoPanel}>
-          <img src={poodle.imageUrl} alt={poodle.name} className={classes.imageProp} />
+          <img
+            src={poodle.imageUrl}
+            alt={`${displayName}, ${poodle.poodleColorName || "poodle"} ${poodle.poodleSizeName || ""} from Von Apalusso kennel`}
+            className={classes.imageProp}
+          />
         </div>
 
         <div className={classes.detailsPanel}>
@@ -161,14 +188,18 @@ const Reservation = () => {
         {poodle.imagePedigreeUrl && (
           <aside className={classes.pedigreePanel} aria-label={`${poodle.name} family tree`}>
             <a href={poodle.imagePedigreeUrl} target="_blank" rel="noreferrer">
-              <img src={poodle.imagePedigreeUrl} alt={`${poodle.name} pedigree`} className={classes.pedigreeImg} />
+              <img
+                src={poodle.imagePedigreeUrl}
+                alt={`${poodle.name} pedigree and family tree`}
+                className={classes.pedigreeImg}
+              />
             </a>
             <p>{poodle.name}'s family tree</p>
           </aside>
         )}
-      </section>
+        </section>
 
-      <section className={classes.contactPanel} aria-labelledby="contact-title">
+        <section className={classes.contactPanel} aria-labelledby="contact-title">
         <div className={classes.contactIntro}>
           <p className={classes.kicker}>Inquiry</p>
           <h2 id="contact-title">
@@ -251,8 +282,9 @@ const Reservation = () => {
             </p>
           </div>
         </form>
-      </section>
-    </main>
+        </section>
+      </main>
+    </>
   );
 };
 

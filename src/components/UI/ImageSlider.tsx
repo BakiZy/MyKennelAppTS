@@ -55,7 +55,7 @@ const ImageSlider: React.FC<ISliderProps> = (props) => {
                 <img
                   key={image.currentIndex}
                   src={image.url}
-                  alt="poodle red"
+                  alt={`${image.sex} red poodle puppy from Von Apalusso kennel`}
                   className={classes.sliderImage}
                 />
               </>

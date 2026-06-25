@@ -3,45 +3,35 @@ import classes from "./About.module.css";
 //import { ISliderImage } from "../interfaces/ISliderModel";
 import ImageSlider from "../components/UI/ImageSlider";
 import imageData from "../components/UI/ImageData";
-import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Card, Container } from "react-bootstrap";
+import Seo from "../components/SEO/Seo";
 
 const images = imageData;
 
 const About: React.FC = () => {
+  const aboutDescription =
+    "About Von Apalusso, a Serbian kennel focused on red, fawn, toy and miniature poodles raised in home conditions.";
+  const aboutStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    name: "About Von Apalusso poodle kennel",
+    url: "https://poodlesvonapalusso.com/about",
+    description: aboutDescription,
+    isPartOf: {
+      "@type": "WebSite",
+      name: "Poodles Von Apalusso",
+      url: "https://poodlesvonapalusso.com/",
+    },
+  };
+
   return (
-    <HelmetProvider>
-      <Helmet>
-        {" "}
-        <html lang="en" />
-        <title>About poodles Von Apalusso kennel</title>
-        <meta
-          name="description"
-          content="Toy, miniature, red and fawn Poodle kennel from Serbia"
-        />
-        <meta
-          name="poodles, pudle, red poodle, apricot poodle, fawn poodle, toy poodle, miniature poodle, toy pudla, pudla, pudle srbija"
-          content="About us "
-        />
-        <meta name="robots" content="noindex, nofollow" />
-        {/* https://ogp.me/ */}
-        <meta
-          property="og:url"
-          content="https://poodlesvonapalusso.com/about"
-        />
-        <meta property="og:title" content="About our poodle kennel" />
-        <meta
-          property="og:description"
-          content="Toy, miniature, red and fawn Poodle kennel from Serbia"
-        />
-        <meta property="og:type" content="..." />
-        <meta
-          property="og:image"
-          content={"https://i.imgur.com/6Ll5PQL.jpeg"}
-        />
-        {/* https://moz.com/blog/meta-referrer-tag */}
-        <meta name="referrer" content="origin-when-crossorigin" />
-      </Helmet>
+    <>
+      <Seo
+        title="About Von Apalusso poodle kennel in Serbia"
+        description={aboutDescription}
+        canonical="https://poodlesvonapalusso.com/about"
+        structuredData={aboutStructuredData}
+      />
       <section className={classes.about}>
         <h1>Welcome to Von Apalusso kennel page</h1>
         <Card>
@@ -77,7 +67,7 @@ const About: React.FC = () => {
         </Card>
       </section>
       <div className={classes.sliderWrap}>
-        <h1>some of our beautiful puppies</h1>
+        <h2>some of our beautiful puppies</h2>
         <ImageSlider slides={images} />
       </div>
       <Card.Footer className={classes.footer}>
@@ -91,7 +81,7 @@ const About: React.FC = () => {
           contact page
         </a>
       </Card.Footer>
-    </HelmetProvider>
+    </>
   );
 };
 

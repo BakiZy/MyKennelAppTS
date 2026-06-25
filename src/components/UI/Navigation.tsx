@@ -18,9 +18,9 @@ const Navigation = () => {
     <Navbar variant="dark" expand="lg" className={classes.navMain}>
       <Container fluid="xl" className={classes.navShell}>
         <Navbar.Brand className={classes.logoDivLeft}>
-          <img src={logo} alt="poodle" className={classes.logo} />
+          <img src={logo} alt="Von Apalusso poodle kennel logo" className={classes.logo} />
           <span>© Poodle Kennel Von Apalusso</span>
-          <img src={logo} alt="poodle" className={classes.logo} />
+          <img src={logo} alt="Von Apalusso poodle kennel logo" className={classes.logo} />
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="main-navigation" />

@@ -22,7 +22,7 @@ const PoodleList: React.FC<PoodleListProps> = (props) => {
               <img
                 src={poodle.imageUrl}
                 className={classes.imageProp}
-                alt={poodle.name}
+                alt={`${poodle.name}, ${poodle.poodleColorName} ${poodle.poodleSizeName} poodle from Von Apalusso kennel`}
               />
             </Link>
             <div className={classes.cardContent}>

@@ -5,6 +5,7 @@ import { LitterModel, PuppyModel } from "../interfaces/IPuppyModel";
 import { PoodleModel } from "../interfaces/IPoodleModel";
 import AuthContext from "../store/auth-context";
 import classes from "./Puppies.module.css";
+import Seo from "../components/SEO/Seo";
 
 type LitterFormState = {
   name: string;
@@ -70,6 +71,20 @@ const Puppies: React.FC = () => {
 
   const [litterForm, setLitterForm] = useState<LitterFormState>(emptyLitterForm);
   const [puppyForm, setPuppyForm] = useState<PuppyFormState>(emptyPuppyForm);
+  const puppiesDescription =
+    "Available and upcoming red toy and miniature poodle puppies from Von Apalusso kennel in Serbia.";
+  const puppiesStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Available red toy and miniature poodle puppies",
+    url: "https://poodlesvonapalusso.com/puppies",
+    description: puppiesDescription,
+    isPartOf: {
+      "@type": "WebSite",
+      name: "Poodles Von Apalusso",
+      url: "https://poodlesvonapalusso.com/",
+    },
+  };
 
   const fetchPuppies = useCallback(async () => {
     setLoading(true);
@@ -255,15 +270,22 @@ const Puppies: React.FC = () => {
   };
 
   return (
-    <main className={classes.page}>
-      <section className={classes.hero}>
+    <>
+      <Seo
+        title="Available red toy and miniature poodle puppies | Von Apalusso"
+        description={puppiesDescription}
+        canonical="https://poodlesvonapalusso.com/puppies"
+        structuredData={puppiesStructuredData}
+      />
+      <main className={classes.page}>
+        <section className={classes.hero}>
         <p className={classes.eyebrow}>Von Apalusso puppies</p>
         <h1>Available puppies and young poodles</h1>
         <p>
           Follow our current and upcoming litters, meet the parents, and ask us
           about puppies that may be the right match for your family.
         </p>
-      </section>
+        </section>
 
       {loading && <p className={classes.statusMessage}>Loading puppies...</p>}
 
@@ -524,7 +546,10 @@ const Puppies: React.FC = () => {
             {litters.map((litter) => (
               <article key={litter.id} className={classes.litterCard}>
                 {litter.coverImageUrl && (
-                  <img src={litter.coverImageUrl} alt={litter.name} />
+                  <img
+                    src={litter.coverImageUrl}
+                    alt={`${litter.name || "Upcoming litter"} from Von Apalusso poodle kennel`}
+                  />
                 )}
                 <div className={classes.cardBody}>
                   <div className={classes.cardTopLine}>
@@ -605,7 +630,12 @@ const Puppies: React.FC = () => {
             <div className={classes.puppyGrid}>
               {puppies.map((puppy) => (
                 <article key={puppy.id} className={classes.puppyCard}>
-                  {puppy.imageUrl && <img src={puppy.imageUrl} alt={puppy.name} />}
+                  {puppy.imageUrl && (
+                    <img
+                      src={puppy.imageUrl}
+                      alt={`${puppy.name || "Puppy"}, ${puppy.color || "poodle"} puppy from Von Apalusso kennel`}
+                    />
+                  )}
                   <div className={classes.cardBody}>
                     <div className={classes.cardTopLine}>
                       <h3>{puppy.name || "Puppy X"}</h3>
@@ -655,7 +685,8 @@ const Puppies: React.FC = () => {
           )}
         </section>
       )}
-    </main>
+      </main>
+    </>
   );
 };
 
