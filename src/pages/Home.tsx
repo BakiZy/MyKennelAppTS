@@ -128,7 +128,7 @@ const Home: React.FC = () => {
         <div className={classes.filterHeader}>
           <div>
             <p className={classes.eyebrow}>Von Apalusso kennel</p>
-            <h1>Family-raised poodles from Von Apalusso</h1>
+            <h1>Family-raised poodles Von Apalusso</h1>
             <p className={classes.leadText}>
               Meet the toy and miniature poodles who live with us as family,
               with health, temperament, and breed standards in focus.
