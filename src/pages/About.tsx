@@ -69,23 +69,23 @@ const About: React.FC = () => {
               puppy.
             </p>
             <section className={classes.serbianSection} lang="sr">
-              <h2>Toy, patuljaste i mini pudle u Srbiji</h2>
+              <h2>Toy i patuljaste (mini) pudle u Srbiji</h2>
               <p>
                 Von Apalusso je porodična odgajivačnica pudli u Srbiji, sa
                 tradicijom dugom više od 30 godina. Nalazimo se u Novom Sadu i
-                bavimo se toy pudlama, patuljastim pudlama i mini pudlama,
+                bavimo se toy i patuljastim (mini) pudlama,
                 posebno crvenim i aprikot linijama.
               </p>
               <p>
                 Naše pudle odrastaju u kućnim uslovima i deo su porodice.
                 Posebnu pažnju posvećujemo temperamentu, socijalizaciji,
-                pedigreu, standardu rase, genetskim testovima i proveri patela.
+                pedigreu, standardu rase i genetskim testovima.
               </p>
               <p>
-                Ako tražite štene toy pudle, patuljastu pudlu, mini pudlu ili
-                odgovornu odgajivačnicu pudli u Novom Sadu i Srbiji, na našem
-                sajtu možete pronaći informacije o psima, leglima, dostupnim
-                štencima i načinu rezervacije.
+                Ako tražite toy ili patuljastu pudlu, štene pudle ili odgovornu
+                odgajivačnicu pudli u Novom Sadu i Srbiji, na našem sajtu
+                možete pronaći informacije o psima, leglima, dostupnim štencima
+                i načinu rezervacije.
               </p>
             </section>
           </Container>

@@ -58,10 +58,10 @@ const pages = [
           <p>Today we are focused on red, fawn, toy and miniature poodles. Our dogs are raised in home conditions, live with us as family, and are selected with temperament, health, structure and breed standards in mind.</p>
           <p>Our poodles take part in dog shows, have completed health checks, and their patellas are checked. We care about responsible breeding, good socialization and finding suitable homes for every puppy.</p>
           <section lang="sr">
-            <h2>Toy, patuljaste i mini pudle u Srbiji</h2>
-            <p>Von Apalusso je porodična odgajivačnica pudli u Srbiji, sa tradicijom dugom više od 30 godina. Nalazimo se u Novom Sadu i bavimo se toy pudlama, patuljastim pudlama i mini pudlama, posebno crvenim i aprikot linijama.</p>
-            <p>Naše pudle odrastaju u kućnim uslovima i deo su porodice. Posebnu pažnju posvećujemo temperamentu, socijalizaciji, pedigreu, standardu rase, genetskim testovima i proveri patela.</p>
-            <p>Ako tražite štene toy pudle, patuljastu pudlu, mini pudlu ili odgovornu odgajivačnicu pudli u Novom Sadu i Srbiji, na našem sajtu možete pronaći informacije o psima, leglima, dostupnim štencima i načinu rezervacije.</p>
+            <h2>Toy i patuljaste (mini) pudle u Srbiji</h2>
+            <p>Von Apalusso je porodična odgajivačnica pudli u Srbiji, sa tradicijom dugom više od 30 godina. Nalazimo se u Novom Sadu i bavimo se toy i patuljastim (mini) pudlama, posebno crvenim i aprikot linijama.</p>
+            <p>Naše pudle odrastaju u kućnim uslovima i deo su porodice. Posebnu pažnju posvećujemo temperamentu, socijalizaciji, pedigreu, standardu rase i genetskim testovima.</p>
+            <p>Ako tražite toy ili patuljastu pudlu, štene pudle ili odgovornu odgajivačnicu pudli u Novom Sadu i Srbiji, na našem sajtu možete pronaći informacije o psima, leglima, dostupnim štencima i načinu rezervacije.</p>
           </section>
         </article>
       </main>
