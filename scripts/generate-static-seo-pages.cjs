@@ -14,6 +14,21 @@ const pages = [
     description:
       "Red toy and miniature poodle kennel in Serbia. Meet Von Apalusso poodles raised with health, temperament, and breed standards in focus.",
     canonical: "https://poodlesvonapalusso.com/",
+    staticHtml: `
+      <main>
+        <section>
+          <p>Von Apalusso kennel</p>
+          <h1>Red toy and miniature poodle kennel in Serbia</h1>
+          <p>Von Apalusso is a Serbian poodle kennel focused on red, fawn, toy and miniature poodles raised in home conditions.</p>
+          <p>Our poodles live with us as family, with health, temperament, socialization and breed standards in focus.</p>
+          <p>Explore our adult poodles, available puppies, upcoming litters and the story of the Von Apalusso kennel.</p>
+          <nav aria-label="Main kennel pages">
+            <a href="/about">About Von Apalusso</a>
+            <a href="/puppies">Available poodle puppies</a>
+          </nav>
+        </section>
+      </main>
+    `,
   },
   {
     outputPath: path.join(distDir, "about", "index.html"),
@@ -21,6 +36,22 @@ const pages = [
     description:
       "About Von Apalusso, a Serbian kennel focused on red, fawn, toy and miniature poodles raised in home conditions.",
     canonical: "https://poodlesvonapalusso.com/about",
+    staticHtml: `
+      <main>
+        <article>
+          <h1>About Von Apalusso poodle kennel in Serbia</h1>
+          <p>Von Apalusso is a Serbian kennel with a long family tradition in dogs and dog shows. The kennel was founded in 1984, first through German Shepherd Dogs, and poodles have been part of our family since the early 1990s.</p>
+          <p>Today we are focused on red, fawn, toy and miniature poodles. Our dogs are raised in home conditions, live with us as family, and are selected with temperament, health, structure and breed standards in mind.</p>
+          <p>Our poodles take part in dog shows, have completed health checks, and their patellas are checked. We care about responsible breeding, good socialization and finding suitable homes for every puppy.</p>
+          <section lang="sr">
+            <h2>Von Apalusso odgajivačnica pudli u Srbiji</h2>
+            <p>Von Apalusso je porodična odgajivačnica pudli u Srbiji. Bavimo se crvenim, aprikot, toy i patuljastim pudlama koje odrastaju u kućnim uslovima, uz pažnju, socijalizaciju i brigu o zdravlju.</p>
+            <p>Naše pudle su deo porodice, naviknute su na ljude i svakodnevni život u domu. Posebnu pažnju posvećujemo temperamentu, nezi dlake, patelama, pedigreu i standardu rase.</p>
+            <p>Ako tražite toy pudlu, patuljastu pudlu ili štene pudle u Srbiji, na sajtu možete pronaći informacije o našim psima, leglima i dostupnim štencima.</p>
+          </section>
+        </article>
+      </main>
+    `,
   },
   {
     outputPath: path.join(distDir, "puppies", "index.html"),
@@ -28,6 +59,17 @@ const pages = [
     description:
       "Available and upcoming red toy and miniature poodle puppies from Von Apalusso kennel in Serbia.",
     canonical: "https://poodlesvonapalusso.com/puppies",
+    staticHtml: `
+      <main>
+        <section>
+          <p>Von Apalusso puppies</p>
+          <h1>Available red toy and miniature poodle puppies</h1>
+          <p>Follow current and upcoming litters from Von Apalusso kennel in Serbia.</p>
+          <p>Our puppies are raised in home conditions and are prepared for families that understand the grooming, social and care needs of poodles.</p>
+          <p>Contact us to ask about available puppies, planned litters, parent dogs, pedigree information and reservation details.</p>
+        </section>
+      </main>
+    `,
   },
 ];
 
@@ -42,6 +84,7 @@ const applySeo = (html, page) => {
   const title = escapeHtml(page.title);
   const description = escapeHtml(page.description);
   const canonical = escapeHtml(page.canonical);
+  const staticHtml = page.staticHtml ? page.staticHtml.trim() : "";
 
   const seoBlock = [
     `    <link rel="canonical" href="${canonical}" />`,
@@ -67,6 +110,10 @@ const applySeo = (html, page) => {
     .replace(
       /<meta\s+name="description"[\s\S]*?\/>/,
       `<meta name="description" content="${description}" />\n${seoBlock}`
+    )
+    .replace(
+      /<div id="root"><\/div>/,
+      staticHtml ? `<div id="root">\n${staticHtml}\n    </div>` : '<div id="root"></div>'
     );
 };
 

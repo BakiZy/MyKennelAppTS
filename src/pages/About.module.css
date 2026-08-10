@@ -26,6 +26,17 @@
   margin: 0 auto;
 }
 
+.serbianSection {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.16);
+}
+
+.serbianSection h2 {
+  margin-bottom: 1rem;
+  font-size: 1.35rem;
+}
+
 @media only screen and (max-width: 601px) {
   .container {
     margin-left: 1rem;
