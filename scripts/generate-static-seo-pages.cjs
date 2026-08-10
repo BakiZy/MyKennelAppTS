@@ -36,6 +36,20 @@ const pages = [
     description:
       "About Von Apalusso, a Serbian kennel focused on red, fawn, toy and miniature poodles raised in home conditions.",
     canonical: "https://poodlesvonapalusso.com/about",
+    alternates: [
+      {
+        hrefLang: "en",
+        href: "https://poodlesvonapalusso.com/about",
+      },
+      {
+        hrefLang: "sr",
+        href: "https://poodlesvonapalusso.com/o-nama",
+      },
+      {
+        hrefLang: "x-default",
+        href: "https://poodlesvonapalusso.com/about",
+      },
+    ],
     staticHtml: `
       <main>
         <article>
@@ -49,6 +63,39 @@ const pages = [
             <p>Naše pudle odrastaju u kućnim uslovima i deo su porodice. Posebnu pažnju posvećujemo temperamentu, socijalizaciji, pedigreu, standardu rase, genetskim testovima i proveri patela.</p>
             <p>Ako tražite štene toy pudle, patuljastu pudlu, mini pudlu ili odgovornu odgajivačnicu pudli u Novom Sadu i Srbiji, na našem sajtu možete pronaći informacije o psima, leglima, dostupnim štencima i načinu rezervacije.</p>
           </section>
+        </article>
+      </main>
+    `,
+  },
+  {
+    outputPath: path.join(distDir, "o-nama", "index.html"),
+    title: "O nama | Toy, patuljaste i mini pudle Novi Sad | Von Apalusso",
+    description:
+      "Von Apalusso je porodicna odgajivacnica toy, patuljastih i mini pudli u Novom Sadu, Srbija, sa vise od 30 godina iskustva.",
+    canonical: "https://poodlesvonapalusso.com/o-nama",
+    lang: "sr",
+    alternates: [
+      {
+        hrefLang: "en",
+        href: "https://poodlesvonapalusso.com/about",
+      },
+      {
+        hrefLang: "sr",
+        href: "https://poodlesvonapalusso.com/o-nama",
+      },
+      {
+        hrefLang: "x-default",
+        href: "https://poodlesvonapalusso.com/about",
+      },
+    ],
+    staticHtml: `
+      <main>
+        <article>
+          <h1>O nama - Von Apalusso odgajivacnica pudli</h1>
+          <p>Von Apalusso je porodicna odgajivacnica pudli u Novom Sadu, Srbija. Tradicija nase odgajivacnice traje vise od 30 godina, od prvih izlozbi pasa i nemackih ovcara do danasnjeg rada sa toy, patuljastim i mini pudlama.</p>
+          <p>Bavimo se pre svega crvenim i aprikot pudlama koje odrastaju u kucnim uslovima. Nasi psi su deo porodice, naviknuti su na ljude, svakodnevni zivot u domu i pazljivo odabranu socijalizaciju.</p>
+          <p>U odgoju nam nisu bitni samo izgled i boja, vec temperament, zdravlje, pedigre, standard rase, genetski testovi i provera patela. Zelimo da svako stene pudle ode u dom koji razume potrebe ove rase, negu dlake i odgovornost koju nosi kupovina psa.</p>
+          <p>Ako trazite toy pudlu, patuljastu pudlu, mini pudlu, stene pudle ili odgovornu odgajivacnicu pudli u Novom Sadu i Srbiji, na nasem sajtu mozete pronaci informacije o nasim psima, leglima, dostupnim stencima i nacinu rezervacije.</p>
         </article>
       </main>
     `,
@@ -84,10 +131,20 @@ const applySeo = (html, page) => {
   const title = escapeHtml(page.title);
   const description = escapeHtml(page.description);
   const canonical = escapeHtml(page.canonical);
+  const lang = escapeHtml(page.lang || "en");
   const staticHtml = page.staticHtml ? page.staticHtml.trim() : "";
+  const alternateBlock = (page.alternates || [])
+    .map(
+      (alternate) =>
+        `    <link rel="alternate" hreflang="${escapeHtml(
+          alternate.hrefLang
+        )}" href="${escapeHtml(alternate.href)}" />`
+    )
+    .join("\n");
 
   const seoBlock = [
     `    <link rel="canonical" href="${canonical}" />`,
+    alternateBlock,
     '    <meta name="robots" content="index,follow" />',
     `    <meta property="og:url" content="${canonical}" />`,
     `    <meta property="og:title" content="${title}" />`,
@@ -106,6 +163,7 @@ const applySeo = (html, page) => {
   );
 
   return withoutManagedSeo
+    .replace(/<html lang="[^"]*">/, `<html lang="${lang}">`)
     .replace(/<title>.*?<\/title>/, `<title>${title}</title>`)
     .replace(
       /<meta\s+name="description"[\s\S]*?\/>/,

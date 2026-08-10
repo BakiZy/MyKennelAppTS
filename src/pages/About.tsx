@@ -30,6 +30,20 @@ const About: React.FC = () => {
         title="About Von Apalusso poodle kennel in Serbia"
         description={aboutDescription}
         canonical="https://poodlesvonapalusso.com/about"
+        alternates={[
+          {
+            hrefLang: "en",
+            href: "https://poodlesvonapalusso.com/about",
+          },
+          {
+            hrefLang: "sr",
+            href: "https://poodlesvonapalusso.com/o-nama",
+          },
+          {
+            hrefLang: "x-default",
+            href: "https://poodlesvonapalusso.com/about",
+          },
+        ]}
         structuredData={aboutStructuredData}
       />
       <section className={classes.about}>
@@ -91,6 +105,7 @@ const About: React.FC = () => {
         >
           contact page
         </a>
+        . <a href="/o-nama">O nama</a>
       </Card.Footer>
     </>
   );

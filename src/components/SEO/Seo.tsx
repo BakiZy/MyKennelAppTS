@@ -8,6 +8,11 @@ type SeoProps = {
   image?: string;
   type?: "website" | "profile";
   robots?: string;
+  lang?: string;
+  alternates?: Array<{
+    hrefLang: string;
+    href: string;
+  }>;
   structuredData?: object | object[];
 };
 
@@ -20,15 +25,25 @@ const Seo: React.FC<SeoProps> = ({
   image = defaultImage,
   type = "website",
   robots = "index,follow",
+  lang = "en",
+  alternates = [],
   structuredData,
 }) => {
   return (
     <Helmet>
-      <html lang="en" />
+      <html lang={lang} />
       <title>{title}</title>
       <meta name="description" content={description} />
       <meta name="robots" content={robots} />
       <link rel="canonical" href={canonical} />
+      {alternates.map((alternate) => (
+        <link
+          key={`${alternate.hrefLang}-${alternate.href}`}
+          rel="alternate"
+          hrefLang={alternate.hrefLang}
+          href={alternate.href}
+        />
+      ))}
 
       <meta property="og:url" content={canonical} />
       <meta property="og:title" content={title} />

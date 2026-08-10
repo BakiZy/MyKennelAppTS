@@ -11,6 +11,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://poodlesvonapalusso.com/o-nama</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://poodlesvonapalusso.com/puppies</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>

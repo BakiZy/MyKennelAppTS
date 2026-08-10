@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import React, { useContext } from "react";
 import Navigation from "./components/UI/Navigation";
 import About from "./pages/About";
+import AboutSr from "./pages/AboutSr";
 import Home from "./pages/Home";
 import LoginPage from "./pages/Login";
 import Profile from "./pages/Profile";
@@ -31,6 +32,7 @@ const App: React.FC = () => {
         <Route path="/" element={<Home />} />
 
         <Route path="/about" element={<About />} />
+        <Route path="/o-nama" element={<AboutSr />} />
         <Route path="/puppies" element={<Puppies />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
