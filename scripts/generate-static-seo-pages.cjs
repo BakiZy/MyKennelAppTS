@@ -69,9 +69,9 @@ const pages = [
   },
   {
     outputPath: path.join(distDir, "o-nama", "index.html"),
-    title: "O nama | Toy, patuljaste i mini pudle Novi Sad | Von Apalusso",
+    title: "O nama | Toy i patuljaste (mini) pudle Novi Sad | Von Apalusso",
     description:
-      "Von Apalusso je porodicna odgajivacnica toy, patuljastih i mini pudli u Novom Sadu, Srbija, sa vise od 30 godina iskustva.",
+      "Von Apalusso je porodicna odgajivacnica toy i patuljastih (mini) pudli u Novom Sadu, Srbija, sa vise od 30 godina iskustva.",
     canonical: "https://poodlesvonapalusso.com/o-nama",
     lang: "sr",
     alternates: [
@@ -92,10 +92,10 @@ const pages = [
       <main>
         <article>
           <h1>O nama - Von Apalusso odgajivacnica pudli</h1>
-          <p>Von Apalusso je porodicna odgajivacnica pudli u Novom Sadu, Srbija. Tradicija nase odgajivacnice traje vise od 30 godina, od prvih izlozbi pasa i nemackih ovcara do danasnjeg rada sa toy, patuljastim i mini pudlama.</p>
+          <p>Von Apalusso je porodicna odgajivacnica pudli u Novom Sadu, Srbija. Tradicija nase odgajivacnice traje vise od 30 godina, od prvih izlozbi pasa i nemackih ovcara do danasnjeg rada sa toy i patuljastim (mini) pudlama.</p>
           <p>Bavimo se pre svega crvenim i aprikot pudlama koje odrastaju u kucnim uslovima. Nasi psi su deo porodice, naviknuti su na ljude, svakodnevni zivot u domu i pazljivo odabranu socijalizaciju.</p>
-          <p>U odgoju nam nisu bitni samo izgled i boja, vec temperament, zdravlje, pedigre, standard rase, genetski testovi i provera patela. Zelimo da svako stene pudle ode u dom koji razume potrebe ove rase, negu dlake i odgovornost koju nosi kupovina psa.</p>
-          <p>Ako trazite toy pudlu, patuljastu pudlu, mini pudlu, stene pudle ili odgovornu odgajivacnicu pudli u Novom Sadu i Srbiji, na nasem sajtu mozete pronaci informacije o nasim psima, leglima, dostupnim stencima i nacinu rezervacije.</p>
+          <p>U odgoju nam je na prvom mestu zdravlje, dobri uslovi odrastanja psa, stabilan temperament, pedigre, standard rase i genetski testovi. Boja i izgled su deo odabira, ali ne smeju biti ispred zdravlja i pravilnog razvoja steneta.</p>
+          <p>Ako trazite toy ili patuljastu pudlu, stene pudle ili odgovornu odgajivacnicu pudli u Novom Sadu i Srbiji, na nasem sajtu mozete pronaci informacije o nasim psima, leglima, dostupnim stencima i nacinu rezervacije.</p>
         </article>
       </main>
     `,
