@@ -1,11 +1,9 @@
 import React, { useState, useRef, useCallback } from "react";
-import { AxiosResponse } from "axios";
 import api from "../../api/client";
 import { getApiErrorMessage } from "../../api/errorMessage";
 import classes from "./AdminReg.module.css";
 import { Spinner } from "react-bootstrap";
 import { passwordRequirementsMessage, validEmail, validPassword } from "./Regex";
-import { useNavigate } from "react-router-dom";
 
 const AdminReg: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -15,7 +13,6 @@ const AdminReg: React.FC = () => {
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const emailInputRef = useRef<HTMLInputElement>(null);
 
-  const navigate = useNavigate();
   const submitHandler = useCallback(
     async (event: React.FormEvent) => {
       event.preventDefault();
@@ -37,7 +34,7 @@ const AdminReg: React.FC = () => {
         return;
       }
       await api
-        .post<AxiosResponse>(
+        .post<string>(
           "/api/Admin/register-admin",
           {
             username: enteredUsername,
@@ -45,10 +42,9 @@ const AdminReg: React.FC = () => {
             email: enteredEmail,
           }
         )
-        .then(() => {
-          setMessage("Admin registration successful.");
+        .then((response) => {
+          setMessage(response.data);
           setLoading(false);
-          navigate("/profile");
         })
         .catch((requestError) => {
           setLoading(false);
@@ -59,7 +55,7 @@ const AdminReg: React.FC = () => {
           );
         });
     },
-    [navigate]
+    []
   );
 
   if (loading) {

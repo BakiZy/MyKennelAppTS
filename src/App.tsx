@@ -18,6 +18,8 @@ import ImagePage from "./pages/ImageUr";
 import Puppies from "./pages/Puppies";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import ConfirmEmail from "./pages/ConfirmEmail";
+import ResendConfirmation from "./pages/ResendConfirmation";
 import { axiosInterceptor } from "./components/Authentication/Axios";
 import axios from "axios";
 
@@ -36,6 +38,8 @@ const App: React.FC = () => {
         <Route path="/puppies" element={<Puppies />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/confirm-email" element={<ConfirmEmail />} />
+        <Route path="/resend-confirmation" element={<ResendConfirmation />} />
         {authContext.isLoggedIn ? (
           <Route path="/profile" element={<Profile />} />
         ) : (

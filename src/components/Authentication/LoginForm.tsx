@@ -1,6 +1,5 @@
 import React, { useState, useRef, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AxiosResponse } from "axios";
 import api from "../../api/client";
 import { getApiErrorMessage } from "../../api/errorMessage";
 import classes from "./LoginForm.module.css";
@@ -108,7 +107,7 @@ const LoginForm = () => {
       }
 
       await api
-        .post<AxiosResponse>(
+        .post<string>(
           "/api/Authentication/register",
           {
             username: enteredUsername,
@@ -116,11 +115,10 @@ const LoginForm = () => {
             email: enteredEmail,
           }
         )
-        .then(() => {
+        .then((response) => {
           setIsLoading(false);
           setError({
-            message:
-              "Registration successful. You can now log in with your account.",
+            message: response.data,
             title: "Account created",
             popup: true,
           });
@@ -214,6 +212,11 @@ const LoginForm = () => {
               {isLogin && (
                 <Link to="/forgot-password" className={classes.helperLink}>
                   Forgot password?
+                </Link>
+              )}
+              {isLogin && (
+                <Link to="/resend-confirmation" className={classes.helperLink}>
+                  Resend confirmation email
                 </Link>
               )}
             </div>
