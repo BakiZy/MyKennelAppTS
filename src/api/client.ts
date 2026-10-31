@@ -1,10 +1,12 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? "https://api.poodlesvonapalusso.com";
 const csrfHeaderName = "X-CSRF-TOKEN";
 const unsafeMethods = new Set(["post", "put", "patch", "delete"]);
 let csrfToken: string | null = null;
 let csrfTokenRequest: Promise<string> | null = null;
+
+type CsrfRetryConfig = AxiosRequestConfig & { csrfRetried?: boolean };
 
 const api = axios.create({
   baseURL: apiBaseUrl,
@@ -49,10 +51,24 @@ api.interceptors.request.use(async (config) => {
 });
 
 api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 400 || error.response?.status === 419) {
+  (response) => {
+    const path = response.config.url?.toLowerCase();
+    if (path?.endsWith("/api/authentication/login") || path?.endsWith("/api/authentication/logout")) {
+      // Antiforgery tokens are tied to the identity in the auth cookie.
       csrfToken = null;
+    }
+    return response;
+  },
+  (error) => {
+    const rejectedCsrfToken = error.response?.status === 400
+      && error.response?.data === "Invalid CSRF token.";
+    if (rejectedCsrfToken) {
+      csrfToken = null;
+      const config = error.config as CsrfRetryConfig | undefined;
+      if (config && !config.csrfRetried) {
+        config.csrfRetried = true;
+        return api.request(config);
+      }
     }
 
     return Promise.reject(error);
