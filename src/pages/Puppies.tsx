@@ -6,6 +6,7 @@ import { PoodleModel } from "../interfaces/IPoodleModel";
 import AuthContext from "../store/auth-context";
 import classes from "./Puppies.module.css";
 import Seo from "../components/SEO/Seo";
+import PuppyGuide from "../components/PuppyGuide";
 
 type LitterFormState = {
   name: string;
@@ -685,6 +686,7 @@ const Puppies: React.FC = () => {
           )}
         </section>
       )}
+      <PuppyGuide />
       </main>
     </>
   );

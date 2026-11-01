@@ -1,0 +1,156 @@
+.entry {
+  width: min(1360px, 100%);
+  margin: 1rem auto 0;
+  padding: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  border: 1px solid rgba(32, 32, 29, 0.12);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.entry h2,
+.entry p {
+  margin: 0;
+}
+
+.entry h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+
+.entry p:last-child {
+  margin-top: 0.4rem;
+  color: #5c625b;
+}
+
+.eyebrow {
+  color: #8d2f3f;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-bottom: 0.4rem !important;
+}
+
+.entry > button,
+.copy {
+  flex: 0 0 auto;
+  border: 1px solid #20201d;
+  border-radius: 999px;
+  background: #20201d;
+  color: #fff;
+  padding: 0.7rem 1rem;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.entry > button:hover,
+.copy:hover {
+  background: #8d2f3f;
+  border-color: #8d2f3f;
+}
+
+.dialog {
+  width: min(720px, calc(100vw - 2rem));
+  max-height: min(85vh, 900px);
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
+  color: #20201d;
+}
+
+.dialog::backdrop {
+  background: rgba(20, 22, 20, 0.7);
+}
+
+.dialogContent {
+  padding: clamp(1rem, 3vw, 2rem);
+  line-height: 1.55;
+  user-select: text;
+}
+
+.topbar,
+.languages {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.topbar {
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.languages button,
+.close {
+  border: 1px solid rgba(32, 32, 29, 0.2);
+  background: #fff;
+  color: #20201d;
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+.languages button[aria-pressed="true"] {
+  background: #20201d;
+  color: #fff;
+}
+
+.close {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.dialogContent h2 {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.topic {
+  margin-top: 1.3rem;
+}
+
+.topic h3 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin-bottom: 0.55rem;
+}
+
+.topic ul {
+  padding-left: 1.35rem;
+  margin: 0;
+}
+
+.topic li + li {
+  margin-top: 0.4rem;
+}
+
+.note {
+  margin: 1.5rem 0;
+  padding: 0.8rem 1rem;
+  border-left: 3px solid #8d2f3f;
+  background: #faf7f6;
+}
+
+.copyStatus {
+  display: block;
+  margin-top: 0.6rem;
+  color: #8d2f3f;
+}
+
+@media (max-width: 640px) {
+  .entry {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .entry > button {
+    width: 100%;
+  }
+}
