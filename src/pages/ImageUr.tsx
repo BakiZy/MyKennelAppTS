@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import api from "../api/client";
 import { getApiErrorMessage } from "../api/errorMessage";
+import ImageAssetEditor, { ImageRecord } from "../components/ImageAssetEditor";
 import classes from "./ImageUr.module.css";
-
-type ImageRecord = { id: number; name: string | null; url: string | null; pedigreeUrl: string | null };
 
 const ImagePage: React.FC = () => {
   const [saving, setSaving] = useState(false);
@@ -18,7 +17,6 @@ const ImagePage: React.FC = () => {
   const [search, setSearch] = useState("");
   const [editingId, setEditingId] = useState<number | null>(null);
   const [busyId, setBusyId] = useState<number | null>(null);
-  const [editForm, setEditForm] = useState({ name: "", url: "", pedigreeUrl: "" });
   const photoInputRef = useRef<HTMLInputElement>(null);
   const pedigreeInputRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState({
@@ -98,29 +96,7 @@ const ImagePage: React.FC = () => {
 
   const startEditing = (image: ImageRecord) => {
     setEditingId(image.id);
-    setEditForm({ name: image.name ?? "", url: image.url ?? "", pedigreeUrl: image.pedigreeUrl ?? "" });
     setListError("");
-  };
-
-  const saveEdit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (editingId === null) return;
-    setBusyId(editingId);
-    setListError("");
-    try {
-      await api.put(`/api/Images/${editingId}`, {
-        name: editForm.name.trim(),
-        url: editForm.url.trim(),
-        pedigreeUrl: editForm.pedigreeUrl.trim() || null,
-      });
-      setEditingId(null);
-      await loadImages();
-      setMessage("Image updated.");
-    } catch (requestError) {
-      setListError(getApiErrorMessage(requestError, { fallback: "Could not update image." }));
-    } finally {
-      setBusyId(null);
-    }
   };
 
   const deleteImage = async (image: ImageRecord) => {
@@ -226,28 +202,11 @@ const ImagePage: React.FC = () => {
                   </div>
                 </div>
                 {editingId === image.id ? (
-                  <form className={classes.form} onSubmit={saveEdit}>
-                    <div className={classes.field}>
-                      <label htmlFor={`edit-name-${image.id}`}>Image name</label>
-                      <input id={`edit-name-${image.id}`} value={editForm.name} required
-                        onChange={(event) => setEditForm((current) => ({ ...current, name: event.target.value }))} />
-                    </div>
-                    <div className={classes.field}>
-                      <label htmlFor={`edit-url-${image.id}`}>Image URL</label>
-                      <input id={`edit-url-${image.id}`} type="url" value={editForm.url} required
-                        onChange={(event) => setEditForm((current) => ({ ...current, url: event.target.value }))} />
-                    </div>
-                    <div className={classes.field}>
-                      <label htmlFor={`edit-pedigree-${image.id}`}>Pedigree URL</label>
-                      <input id={`edit-pedigree-${image.id}`} type="url" value={editForm.pedigreeUrl}
-                        onChange={(event) => setEditForm((current) => ({ ...current, pedigreeUrl: event.target.value }))} />
-                    </div>
-                    <div className={classes.actions}>
-                      <button type="submit" disabled={busyId !== null}>Save</button>
-                      <button type="button" className={classes.secondaryButton} disabled={busyId !== null}
-                        onClick={() => setEditingId(null)}>Cancel</button>
-                    </div>
-                  </form>
+                  <ImageAssetEditor image={image} onCancel={() => setEditingId(null)}
+                    onSaved={(updated) => {
+                      setImages((current) => current.map((item) => item.id === updated.id ? updated : item));
+                      setMessage("Image updated.");
+                    }} />
                 ) : (
                   <div className={classes.actions}>
                     <button type="button" disabled={busyId !== null} onClick={() => startEditing(image)}>Edit</button>

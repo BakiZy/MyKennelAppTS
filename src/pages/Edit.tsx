@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import AuthContext from "../store/auth-context";
 import useGetSizes from "../hooks/getSizesHook";
 import useGetColors from "../hooks/getColorsHook";
@@ -7,6 +7,7 @@ import useGetImgUr from "../hooks/getImgUrHook";
 import api from "../api/client";
 import { PoodleModel } from "../interfaces/IPoodleModel";
 import classes from "./Edit.module.css";
+import ImageAssetEditor, { ImageRecord } from "../components/ImageAssetEditor";
 
 const toInputDate = (value: string | Date) => {
   if (!value) {
@@ -26,6 +27,8 @@ const EditPoodle: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
+  const [savedImageId, setSavedImageId] = useState("");
+  const [imageOverride, setImageOverride] = useState<ImageRecord | null>(null);
   const [form, setForm] = useState({
     name: "",
     dateOfBirth: "",
@@ -53,6 +56,8 @@ const EditPoodle: React.FC = () => {
           poodleColorId: poodle.poodleColorId ? poodle.poodleColorId.toString() : "",
           imageId: poodle.imageId ? poodle.imageId.toString() : "",
         });
+        setSavedImageId(poodle.imageId ? poodle.imageId.toString() : "");
+        setImageOverride(null);
       } catch (error) {
         console.log(error);
         setMessage("Could not load poodle.");
@@ -75,6 +80,7 @@ const EditPoodle: React.FC = () => {
       ...current,
       [name]: type === "checkbox" ? checked : value,
     }));
+    if (name === "imageId") setImageOverride(null);
   };
 
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -95,6 +101,7 @@ const EditPoodle: React.FC = () => {
       });
 
       setMessage("Poodle updated.");
+      setSavedImageId(form.imageId);
     } catch (error) {
       console.log(error);
       setMessage("Could not update poodle.");
@@ -110,6 +117,10 @@ const EditPoodle: React.FC = () => {
   if (loading) {
     return <main className={classes.page}>Loading...</main>;
   }
+
+  const selectedImage = imageOverride?.id.toString() === form.imageId
+    ? imageOverride
+    : images.find((image) => image.id.toString() === form.imageId);
 
   return (
     <main className={classes.page}>
@@ -209,6 +220,7 @@ const EditPoodle: React.FC = () => {
                 </option>
               ))}
             </select>
+            <p className={classes.imageHint}>Choose the image entry assigned to this poodle. Its photo and pedigree can be changed independently below.</p>
           </div>
 
           <label className={classes.checkbox}>
@@ -225,6 +237,17 @@ const EditPoodle: React.FC = () => {
             {saving ? "Saving..." : "Update poodle"}
           </button>
         </form>
+        <section className={classes.imageSection} aria-labelledby="image-details-heading">
+          <h2 id="image-details-heading">Photo and pedigree image</h2>
+          {form.imageId !== savedImageId ? (
+            <p>Save the poodle above to assign the selected image, then edit its photo or pedigree here.</p>
+          ) : selectedImage ? (
+            <ImageAssetEditor key={selectedImage.id} image={selectedImage}
+              onSaved={(updated) => setImageOverride(updated)} />
+          ) : (
+            <p>No image entry is assigned. <Link to="/images">Add an image</Link>, then select it above and save the poodle.</p>
+          )}
+        </section>
       </section>
     </main>
   );

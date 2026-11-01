@@ -1,0 +1,79 @@
+.form {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.field {
+  display: grid;
+  gap: 0.4rem;
+  min-width: 0;
+  font-weight: 800;
+}
+
+.field input {
+  width: 100%;
+  min-width: 0;
+  min-height: 2.8rem;
+  border: 1px solid rgba(32, 32, 29, 0.18);
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  background: #fbfbf9;
+  color: #20201d;
+  font: inherit;
+  font-weight: 400;
+}
+
+.field input:focus {
+  outline: none;
+  border-color: #8d2f3f;
+  box-shadow: 0 0 0 3px rgba(141, 47, 63, 0.14);
+}
+
+.hint {
+  margin: 0;
+  color: #5c625b;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.error,
+.success {
+  margin: 0;
+  font-weight: 700;
+}
+
+.error { color: #9e2639; }
+.success { color: #315d3f; }
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.actions button {
+  min-height: 2.7rem;
+  border: 1px solid #20201d;
+  border-radius: 999px;
+  padding: 0.6rem 1rem;
+  background: #20201d;
+  color: white;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.actions .secondary {
+  background: white;
+  color: #20201d;
+}
+
+.actions button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+  .actions button { width: 100%; }
+}
