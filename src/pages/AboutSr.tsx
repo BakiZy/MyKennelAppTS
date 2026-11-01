@@ -4,16 +4,17 @@ import ImageSlider from "../components/UI/ImageSlider";
 import imageData from "../components/UI/ImageData";
 import { Card, Container } from "react-bootstrap";
 import Seo from "../components/SEO/Seo";
+import { Link } from "react-router-dom";
 
 const images = imageData;
 
 const AboutSr: React.FC = () => {
   const aboutDescription =
-    "Von Apalusso je porodicna odgajivacnica toy i patuljastih (mini) pudli u Novom Sadu, Srbija, sa vise od 30 godina iskustva.";
+    "Von Apalusso je porodična odgajivačnica toy i patuljastih pudli u Novom Sadu, sa tradicijom od 1984. godine.";
   const aboutStructuredData = {
     "@context": "https://schema.org",
     "@type": "AboutPage",
-    name: "O nama - Von Apalusso odgajivacnica pudli",
+    name: "O nama - odgajivačnica pudli Von Apalusso",
     url: "https://poodlesvonapalusso.com/o-nama",
     inLanguage: "sr",
     description: aboutDescription,
@@ -48,42 +49,41 @@ const AboutSr: React.FC = () => {
         structuredData={aboutStructuredData}
       />
       <section className={classes.about}>
-        <h1>O nama - Von Apalusso odgajivacnica pudli</h1>
+        <h1>O nama - odgajivačnica pudli Von Apalusso u Srbiji</h1>
         <Card>
           <Container>
             <p>
-              Von Apalusso je porodicna odgajivacnica pudli u Novom Sadu,
-              Srbija. Tradicija nase odgajivacnice traje vise od 30 godina, od
-              prvih izlozbi pasa i nemackih ovcara do danasnjeg rada sa toy i
-              patuljastim (mini) pudlama.
+              Von Apalusso je odgajivačnica u Novom Sadu, u Srbiji, sa dugom
+              porodičnom tradicijom u odgoju i izlaganju pasa. Osnovana je
+              1984. godine, najpre sa nemačkim ovčarima, a pudle su deo naše
+              porodice od početka devedesetih godina.
             </p>
             <p>
-              Bavimo se pre svega crvenim i aprikot pudlama koje odrastaju u
-              kucnim uslovima. Nasi psi su deo porodice, naviknuti su na ljude,
-              svakodnevni zivot u domu i pazljivo odabranu socijalizaciju.
+              Danas se bavimo prvenstveno crvenim i aprikot toy i patuljastim
+              pudlama. Naši psi odrastaju u kućnim uslovima, žive sa nama kao
+              deo porodice, a pri odabiru vodimo računa o temperamentu, zdravlju,
+              građi i standardu rase.
             </p>
             <p>
-              U odgoju nam je na prvom mestu zdravlje, dobri uslovi odrastanja
-              psa, stabilan temperament, pedigre, standard rase i genetski
-              testovi. Boja i izgled su deo odabira, ali ne smeju biti ispred
-              zdravlja i pravilnog razvoja steneta.
+              Naše pudle učestvuju na izložbama pasa, imaju obavljene zdravstvene
+              preglede i proverene čašice kolena. Važni su nam odgovoran odgoj,
+              dobra socijalizacija i pronalaženje odgovarajućeg doma za svako
+              štene.
             </p>
             <p>
-              Ako trazite toy ili patuljastu pudlu, stene pudle ili odgovornu
-              odgajivacnicu pudli u Novom Sadu i Srbiji, na nasem sajtu mozete
-              pronaci informacije o nasim psima, leglima, dostupnim stencima i
-              nacinu rezervacije.
+              Na našem sajtu možete pronaći informacije o našim psima, leglima,
+              dostupnim štencima i načinu rezervacije.
             </p>
           </Container>
         </Card>
       </section>
       <div className={classes.sliderWrap}>
-        <h2>Neki od nasih stenaca</h2>
+        <h2>Neki od naših štenaca</h2>
         <ImageSlider slides={images} />
       </div>
       <Card.Footer className={classes.footer}>
-        Ako ste zainteresovani za nase pudle ili stence, mozete nas kontaktirati
-        preko drustvenih mreza u gornjem delu sajta. <a href="/about">English</a>
+        Ako ste zainteresovani za naše pudle ili štence, možete nas kontaktirati
+        preko društvenih mreža u gornjem delu sajta. <Link to="/about">English</Link>
       </Card.Footer>
     </>
   );

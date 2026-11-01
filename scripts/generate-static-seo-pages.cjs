@@ -1,7 +1,9 @@
 const fs = require("fs");
 const path = require("path");
 
-const distDir = path.resolve(__dirname, "..", "dist");
+const distDir = process.env.SEO_DIST_DIR
+  ? path.resolve(process.env.SEO_DIST_DIR)
+  : path.resolve(__dirname, "..", "dist");
 const indexPath = path.join(distDir, "index.html");
 const baseHtml = fs.readFileSync(indexPath, "utf8");
 
@@ -34,7 +36,7 @@ const pages = [
     outputPath: path.join(distDir, "about", "index.html"),
     title: "About Von Apalusso poodle kennel in Serbia",
     description:
-      "About Von Apalusso, a Serbian kennel focused on red, fawn, toy and miniature poodles raised in home conditions.",
+      "About Von Apalusso, a kennel in Novi Sad, Serbia, focused on red, fawn, toy and miniature poodles raised in home conditions.",
     canonical: "https://poodlesvonapalusso.com/about",
     alternates: [
       {
@@ -54,15 +56,11 @@ const pages = [
       <main>
         <article>
           <h1>About Von Apalusso poodle kennel in Serbia</h1>
-          <p>Von Apalusso is a Serbian kennel with a long family tradition in dogs and dog shows. The kennel was founded in 1984, first through German Shepherd Dogs, and poodles have been part of our family since the early 1990s.</p>
+          <p>Von Apalusso is a kennel in Novi Sad, Serbia, with a long family tradition in dogs and dog shows. The kennel was founded in 1984, first through German Shepherd Dogs, and poodles have been part of our family since the early 1990s.</p>
           <p>Today we are focused on red, fawn, toy and miniature poodles. Our dogs are raised in home conditions, live with us as family, and are selected with temperament, health, structure and breed standards in mind.</p>
           <p>Our poodles take part in dog shows, have completed health checks, and their patellas are checked. We care about responsible breeding, good socialization and finding suitable homes for every puppy.</p>
-          <section lang="sr">
-            <h2>Toy i patuljaste (mini) pudle u Srbiji</h2>
-            <p>Von Apalusso je porodična odgajivačnica pudli u Srbiji, sa tradicijom dugom više od 30 godina. Nalazimo se u Novom Sadu i bavimo se toy i patuljastim (mini) pudlama, posebno crvenim i aprikot linijama.</p>
-            <p>Naše pudle odrastaju u kućnim uslovima i deo su porodice. Posebnu pažnju posvećujemo temperamentu, socijalizaciji, pedigreu, standardu rase i genetskim testovima.</p>
-            <p>Ako tražite toy ili patuljastu pudlu, štene pudle ili odgovornu odgajivačnicu pudli u Novom Sadu i Srbiji, na našem sajtu možete pronaći informacije o psima, leglima, dostupnim štencima i načinu rezervacije.</p>
-          </section>
+          <p>On our site you can learn about our dogs, litters, available puppies and how to make a reservation.</p>
+          <a href="/o-nama">O nama</a>
         </article>
       </main>
     `,
@@ -71,7 +69,7 @@ const pages = [
     outputPath: path.join(distDir, "o-nama", "index.html"),
     title: "O nama | Toy i patuljaste (mini) pudle Novi Sad | Von Apalusso",
     description:
-      "Von Apalusso je porodicna odgajivacnica toy i patuljastih (mini) pudli u Novom Sadu, Srbija, sa vise od 30 godina iskustva.",
+      "Von Apalusso je porodična odgajivačnica toy i patuljastih pudli u Novom Sadu, sa tradicijom od 1984. godine.",
     canonical: "https://poodlesvonapalusso.com/o-nama",
     lang: "sr",
     alternates: [
@@ -91,11 +89,12 @@ const pages = [
     staticHtml: `
       <main>
         <article>
-          <h1>O nama - Von Apalusso odgajivacnica pudli</h1>
-          <p>Von Apalusso je porodicna odgajivacnica pudli u Novom Sadu, Srbija. Tradicija nase odgajivacnice traje vise od 30 godina, od prvih izlozbi pasa i nemackih ovcara do danasnjeg rada sa toy i patuljastim (mini) pudlama.</p>
-          <p>Bavimo se pre svega crvenim i aprikot pudlama koje odrastaju u kucnim uslovima. Nasi psi su deo porodice, naviknuti su na ljude, svakodnevni zivot u domu i pazljivo odabranu socijalizaciju.</p>
-          <p>U odgoju nam je na prvom mestu zdravlje, dobri uslovi odrastanja psa, stabilan temperament, pedigre, standard rase i genetski testovi. Boja i izgled su deo odabira, ali ne smeju biti ispred zdravlja i pravilnog razvoja steneta.</p>
-          <p>Ako trazite toy ili patuljastu pudlu, stene pudle ili odgovornu odgajivacnicu pudli u Novom Sadu i Srbiji, na nasem sajtu mozete pronaci informacije o nasim psima, leglima, dostupnim stencima i nacinu rezervacije.</p>
+          <h1>O nama - odgajivačnica pudli Von Apalusso u Srbiji</h1>
+          <p>Von Apalusso je odgajivačnica u Novom Sadu, u Srbiji, sa dugom porodičnom tradicijom u odgoju i izlaganju pasa. Osnovana je 1984. godine, najpre sa nemačkim ovčarima, a pudle su deo naše porodice od početka devedesetih godina.</p>
+          <p>Danas se bavimo prvenstveno crvenim i aprikot toy i patuljastim pudlama. Naši psi odrastaju u kućnim uslovima, žive sa nama kao deo porodice, a pri odabiru vodimo računa o temperamentu, zdravlju, građi i standardu rase.</p>
+          <p>Naše pudle učestvuju na izložbama pasa, imaju obavljene zdravstvene preglede i proverene čašice kolena. Važni su nam odgovoran odgoj, dobra socijalizacija i pronalaženje odgovarajućeg doma za svako štene.</p>
+          <p>Na našem sajtu možete pronaći informacije o našim psima, leglima, dostupnim štencima i načinu rezervacije.</p>
+          <a href="/about">English</a>
         </article>
       </main>
     `,

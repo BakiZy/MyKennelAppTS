@@ -5,12 +5,13 @@ import ImageSlider from "../components/UI/ImageSlider";
 import imageData from "../components/UI/ImageData";
 import { Card, Container } from "react-bootstrap";
 import Seo from "../components/SEO/Seo";
+import { Link } from "react-router-dom";
 
 const images = imageData;
 
 const About: React.FC = () => {
   const aboutDescription =
-    "About Von Apalusso, a Serbian kennel focused on red, fawn, toy and miniature poodles raised in home conditions.";
+    "About Von Apalusso, a kennel in Novi Sad, Serbia, focused on red, fawn, toy and miniature poodles raised in home conditions.";
   const aboutStructuredData = {
     "@context": "https://schema.org",
     "@type": "AboutPage",
@@ -51,7 +52,7 @@ const About: React.FC = () => {
         <Card>
           <Container>
             <p>
-              Von Apalusso is a Serbian kennel with a long family tradition in
+              Von Apalusso is a kennel in Novi Sad, Serbia, with a long family tradition in
               dogs and dog shows. The kennel was founded in 1984, first through
               German Shepherd Dogs, and poodles have been part of our family
               since the early 1990s.
@@ -68,26 +69,10 @@ const About: React.FC = () => {
               breeding, good socialization and finding suitable homes for every
               puppy.
             </p>
-            <section className={classes.serbianSection} lang="sr">
-              <h2>Toy i patuljaste (mini) pudle u Srbiji</h2>
-              <p>
-                Von Apalusso je porodična odgajivačnica pudli u Srbiji, sa
-                tradicijom dugom više od 30 godina. Nalazimo se u Novom Sadu i
-                bavimo se toy i patuljastim (mini) pudlama,
-                posebno crvenim i aprikot linijama.
-              </p>
-              <p>
-                Naše pudle odrastaju u kućnim uslovima i deo su porodice.
-                Posebnu pažnju posvećujemo temperamentu, socijalizaciji,
-                pedigreu, standardu rase i genetskim testovima.
-              </p>
-              <p>
-                Ako tražite toy ili patuljastu pudlu, štene pudle ili odgovornu
-                odgajivačnicu pudli u Novom Sadu i Srbiji, na našem sajtu
-                možete pronaći informacije o psima, leglima, dostupnim štencima
-                i načinu rezervacije.
-              </p>
-            </section>
+            <p>
+              On our site you can learn about our dogs, litters, available
+              puppies and how to make a reservation.
+            </p>
           </Container>
         </Card>
       </section>
@@ -105,7 +90,7 @@ const About: React.FC = () => {
         >
           contact page
         </a>
-        . <a href="/o-nama">O nama</a>
+        . <Link to="/o-nama">O nama</Link>
       </Card.Footer>
     </>
   );
