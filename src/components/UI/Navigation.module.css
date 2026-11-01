@@ -120,12 +120,26 @@
 }
 
 @media only screen and (max-width: 480px) {
+  .navShell {
+    gap: 0.25rem;
+  }
+
+  .logoDivLeft {
+    max-width: calc(100% - 4rem);
+    margin-right: 0;
+  }
+
+  .logoDivLeft img:last-of-type {
+    display: none;
+  }
+
   .logo {
     width: 36px;
     height: 36px;
   }
 
   .logoDivLeft span {
-    max-width: 13rem;
+    max-width: 8rem;
+    font-size: 0.75rem;
   }
 }

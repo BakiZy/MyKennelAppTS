@@ -1,82 +1,70 @@
-.leftArrow {
-  position: absolute;
-  left: -9.6rem;
-  bottom: 0rem;
-  font-size: 3rem;
-  color: black;
-  cursor: pointer;
-  padding-bottom: 1.5rem;
-  border-radius: 1rem;
-  background-color: seashell;
-}
-
-.rightArrow {
-  position: absolute;
-  bottom: 0rem;
-  right: -9.5rem;
-  font-size: 3rem;
-  color: black;
-  cursor: pointer;
-  user-select: none;
-  border-radius: 1rem;
-  padding-bottom: 1.5rem;
-  background-color: seashell;
-}
-
 .slider {
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 100%;
+}
+
+.slider > div {
+  width: 100%;
+}
+
+.slider p {
+  margin: 0;
 }
 
 .sliderImage {
-  width: 50rem;
-  height: 40rem;
+  display: block;
+  width: 100%;
+  max-height: 40rem;
+  aspect-ratio: 5 / 4;
   border-radius: 1rem;
   object-fit: cover;
 }
 
-.symbol {
-  color: #ffe2ed;
-  background-color: #212529;
-  border-radius: 1rem;
+.leftArrow,
+.rightArrow {
   position: absolute;
-  font-size: 5rem;
-  font-weight: 500;
-  top: 1rem;
+  z-index: 1;
+  bottom: 0.75rem;
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 250, 245, 0.9);
+  color: #20201d;
+  font-size: 1.8rem;
+  cursor: pointer;
 }
 
-@media only screen and (max-width: 601px) {
-  .rightArrow {
-    font-size: 2rem;
-    color: black;
-    cursor: pointer;
-    user-select: none;
-    margin-right: 20rem;
-    height: 4rem;
-    top: 42rem;
-    background-color: seashell;
-  }
+.leftArrow {
+  left: 0.75rem;
+}
 
-  .leftArrow {
-    position: absolute;
-    font-size: 2rem;
-    color: rgb(0, 0, 0);
-    cursor: pointer;
-    padding-bottom: 1.5rem;
-    margin-left: 20rem;
-    height: 4rem;
-    top: 42rem;
-    background-color: seashell;
-  }
+.rightArrow {
+  right: 0.75rem;
+}
 
+.symbol {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1;
+  padding: 0.25rem;
+  border-radius: 50%;
+  background: #212529;
+  color: #ffe2ed;
+  font-size: 2.5rem;
+}
+
+@media (max-width: 601px) {
   .sliderImage {
-    object-fit: contain;
+    aspect-ratio: 4 / 3;
   }
 
-  .symbol {
-    top: 1.5rem;
-    left: 0.5rem;
+  .leftArrow,
+  .rightArrow {
+    width: 2.75rem;
+    height: 2.75rem;
   }
 }
