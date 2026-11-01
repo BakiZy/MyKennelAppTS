@@ -20,12 +20,13 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import ConfirmEmail from "./pages/ConfirmEmail";
 import ResendConfirmation from "./pages/ResendConfirmation";
-import { axiosInterceptor } from "./components/Authentication/Axios";
-import axios from "axios";
 
 const App: React.FC = () => {
   const authContext = useContext(AuthContext);
-  axiosInterceptor(axios);
+
+  if (!authContext.isReady) {
+    return <p role="status" style={{ padding: "2rem" }}>Loading account...</p>;
+  }
 
   return (
     <>

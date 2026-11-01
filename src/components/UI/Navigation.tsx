@@ -10,8 +10,12 @@ import logo from "../../../src/poodle.svg";
 const Navigation = () => {
   const authContext = useContext(AuthContext);
 
-  const logoutHandler = () => {
-    authContext.logout();
+  const logoutHandler = async () => {
+    try {
+      await authContext.logout();
+    } catch {
+      window.alert("Logout failed. Please try again.");
+    }
   };
 
   return (

@@ -57,7 +57,8 @@ const LoginForm = () => {
         .then((response) => {
           authContext.login(
             response.data.role,
-            response.data.expiration
+            response.data.expiration,
+            response.data.refreshExpiration
           );
           setIsLogin(true);
           setIsLoading(false);

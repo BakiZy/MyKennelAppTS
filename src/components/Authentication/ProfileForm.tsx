@@ -21,9 +21,13 @@ const ProfileForm = () => {
   });
   const [message, setMessage] = useState("");
 
-  const logoutHandler = () => {
-    authContext.logout();
-    navigate("/");
+  const logoutHandler = async () => {
+    try {
+      await authContext.logout();
+      navigate("/");
+    } catch {
+      setError({ message: "Logout failed. Please try again.", title: "Logout error", popup: true });
+    }
   };
 
   const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {

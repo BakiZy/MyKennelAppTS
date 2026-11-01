@@ -1,95 +1,105 @@
-import React, { useState } from "react";
-import { useEffect, useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ChildrenProp } from "../interfaces/IPoodleModel";
-import api from "../api/client";
-
-let logoutTimer: ReturnType<typeof setTimeout>;
+import { logoutSession, onSessionChange, refreshSession, SessionResponse } from "../api/client";
 
 export interface IAuthContext {
   isLoggedIn: boolean;
   isAdmin: boolean;
-  login: (role: string, expiration: string) => void;
-  logout: () => void;
+  isReady: boolean;
+  login: (role: string, expiration: string, refreshExpiration: string) => void;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = React.createContext<IAuthContext>({
   isLoggedIn: false,
   isAdmin: false,
+  isReady: false,
   login: () => {},
-  logout: () => {},
+  logout: async () => {},
 });
 
-const retrieveStoredUserInfo = () => {
-  localStorage.removeItem("token");
-  const storedExpiration = localStorage.getItem("expiration");
-  const storedRole = localStorage.getItem("role");
-  const remainingTime = storedExpiration
-    ? Number(calculateExpirationTime(storedExpiration))
-    : 0;
-
-  if (!storedExpiration || remainingTime <= 0) {
-    localStorage.removeItem("role");
-    localStorage.removeItem("expiration");
-    return null;
-  }
-
-  return {
-    expiration: storedExpiration,
-    role: storedRole,
-  };
-};
-
-const calculateExpirationTime = (tokenExpiration: string) => {
-  const currentTime = new Date().getTime();
-  const tokenExpirationTime = new Date(tokenExpiration).getTime();
-  const expirationTime = tokenExpirationTime - currentTime;
-  return expirationTime.toString();
-};
-
 export const AuthContextProvider: React.FC<ChildrenProp> = ({ children }) => {
-  const tokenData = retrieveStoredUserInfo();
-  const [isLoggedIn, setIsLoggedIn] = useState(!!tokenData?.expiration);
-  const [isAdmin, setIsAdmin] = useState(tokenData?.role === "Admin");
-
-  const logoutHandler = useCallback(() => {
-    api.post("/api/Authentication/logout").catch(() => undefined);
-    setIsLoggedIn(false);
-    setIsAdmin(false);
-    localStorage.removeItem("role");
-    localStorage.removeItem("expiration");
-  }, []);
-
-  const loginHandler = (
-    role: string,
-    expirationTime: string
-  ) => {
-    setIsLoggedIn(true);
-    setIsAdmin(role === "Admin");
-    localStorage.setItem("expiration", expirationTime);
-    localStorage.setItem("role", role);
-    const remainingTime = calculateExpirationTime(expirationTime);
-    logoutTimer = setTimeout(logoutHandler, parseInt(remainingTime));
-  };
+  const [session, setSession] = useState<SessionResponse | null>(null);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    if (tokenData?.expiration) {
-      const remainingTime = Number(calculateExpirationTime(tokenData.expiration));
-      logoutTimer = setTimeout(logoutHandler, remainingTime);
-      return () => clearTimeout(logoutTimer);
+    // Remove the old UI-only session values. Authentication now comes from server cookies.
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    localStorage.removeItem("expiration");
+    let active = true;
+    const unsubscribe = onSessionChange((updatedSession) => {
+      if (active) setSession(updatedSession);
+    });
+    refreshSession()
+      .catch(() => {
+        if (active) setSession(null);
+      })
+      .finally(() => {
+        if (active) setIsReady(true);
+      });
+    return () => {
+      active = false;
+      unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!session) return undefined;
+    let timer: ReturnType<typeof setTimeout>;
+    const renew = () => {
+      refreshSession().catch((error) => {
+        if (error.response?.status !== 401) {
+          timer = setTimeout(renew, 60_000);
+        }
+      });
+    };
+    const refreshRemaining = new Date(session.refreshExpiration).getTime() - Date.now();
+    const accessRemaining = new Date(session.expiration).getTime() - Date.now();
+    if (refreshRemaining <= 0) {
+      setSession(null);
+      return undefined;
     }
+    if (refreshRemaining <= 60_000 && accessRemaining >= refreshRemaining - 1_000) {
+      timer = setTimeout(() => setSession(null), refreshRemaining);
+    } else {
+      timer = setTimeout(renew, Math.max(1_000, accessRemaining - 60_000));
+    }
+    return () => clearTimeout(timer);
+  }, [session]);
 
-    return undefined;
-  }, [tokenData?.expiration, logoutHandler]);
+  useEffect(() => {
+    if (!session) return undefined;
+    const refreshWhenVisible = () => {
+      if (document.visibilityState === "visible"
+        && new Date(session.expiration).getTime() - Date.now() < 60_000) {
+        refreshSession().catch(() => undefined);
+      }
+    };
+    document.addEventListener("visibilitychange", refreshWhenVisible);
+    return () => document.removeEventListener("visibilitychange", refreshWhenVisible);
+  }, [session]);
 
-  const contextValue = {
-    isAdmin: isAdmin,
-    isLoggedIn: isLoggedIn,
-    login: loginHandler,
-    logout: logoutHandler,
-  };
+  const loginHandler = useCallback((role: string, expiration: string, refreshExpiration: string) => {
+    setSession({ role, expiration, refreshExpiration });
+    setIsReady(true);
+  }, []);
+
+  const logoutHandler = useCallback(async () => {
+    await logoutSession();
+    setSession(null);
+  }, []);
 
   return (
-    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{
+      isLoggedIn: !!session,
+      isAdmin: session?.role === "Admin",
+      isReady,
+      login: loginHandler,
+      logout: logoutHandler,
+    }}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 
