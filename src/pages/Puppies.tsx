@@ -145,7 +145,9 @@ const Puppies: React.FC = () => {
     name: puppyForm.name || "Puppy X",
     sex: puppyForm.sex,
     color: puppyForm.color,
-    dateOfBirth: puppyForm.dateOfBirth || null,
+    dateOfBirth: puppyForm.litterId
+      ? litters.find((litter) => String(litter.id) === puppyForm.litterId)?.dateOfBirth || null
+      : puppyForm.dateOfBirth || null,
     status: puppyForm.status,
     imageUrl: puppyForm.imageUrl,
     description: puppyForm.description,
@@ -361,7 +363,10 @@ const Puppies: React.FC = () => {
                 }
               >
                 <option value="">To be announced</option>
-                {poodles.map((poodle) => (
+                {poodles.filter((poodle) =>
+                  poodle.sex?.trim().toLowerCase() === "female"
+                  || String(poodle.id) === litterForm.motherId
+                ).map((poodle) => (
                   <option key={poodle.id} value={poodle.id}>
                     {poodle.name}
                   </option>
@@ -474,18 +479,28 @@ const Puppies: React.FC = () => {
                 }
                 placeholder="Red, apricot..."
               />
-              <label htmlFor="puppyDate">Date of birth</label>
-              <input
-                id="puppyDate"
-                type="date"
-                value={puppyForm.dateOfBirth}
-                onChange={(event) =>
-                  setPuppyForm((current) => ({
-                    ...current,
-                    dateOfBirth: event.target.value,
-                  }))
-                }
-              />
+              {puppyForm.litterId ? (
+                <p className={classes.fieldNote}>
+                  Date of birth comes from the selected litter: {formatDate(
+                    litters.find((litter) => String(litter.id) === puppyForm.litterId)?.dateOfBirth
+                  )}.
+                </p>
+              ) : (
+                <>
+                  <label htmlFor="puppyDate">Date of birth</label>
+                  <input
+                    id="puppyDate"
+                    type="date"
+                    value={puppyForm.dateOfBirth}
+                    onChange={(event) =>
+                      setPuppyForm((current) => ({
+                        ...current,
+                        dateOfBirth: event.target.value,
+                      }))
+                    }
+                  />
+                </>
+              )}
               <label htmlFor="puppyStatus">Status</label>
               <select
                 id="puppyStatus"
@@ -547,10 +562,13 @@ const Puppies: React.FC = () => {
             {litters.map((litter) => (
               <article key={litter.id} className={classes.litterCard}>
                 {litter.coverImageUrl && (
-                  <img
-                    src={litter.coverImageUrl}
-                    alt={`${litter.name || "Upcoming litter"} from Von Apalusso poodle kennel`}
-                  />
+                  <a className={classes.imageLink} href={litter.coverImageUrl} target="_blank" rel="noopener noreferrer" aria-label={`Open full image of ${litter.name || "litter"}`}>
+                    <img
+                      src={litter.coverImageUrl}
+                      alt={`${litter.name || "Upcoming litter"} from Von Apalusso poodle kennel`}
+                      loading="lazy"
+                    />
+                  </a>
                 )}
                 <div className={classes.cardBody}>
                   <div className={classes.cardTopLine}>
@@ -632,10 +650,13 @@ const Puppies: React.FC = () => {
               {puppies.map((puppy) => (
                 <article key={puppy.id} className={classes.puppyCard}>
                   {puppy.imageUrl && (
-                    <img
-                      src={puppy.imageUrl}
-                      alt={`${puppy.name || "Puppy"}, ${puppy.color || "poodle"} puppy from Von Apalusso kennel`}
-                    />
+                    <a className={classes.imageLink} href={puppy.imageUrl} target="_blank" rel="noopener noreferrer" aria-label={`Open full image of ${puppy.name || "puppy"}`}>
+                      <img
+                        src={puppy.imageUrl}
+                        alt={`${puppy.name || "Puppy"}, ${puppy.color || "poodle"} puppy from Von Apalusso kennel`}
+                        loading="lazy"
+                      />
+                    </a>
                   )}
                   <div className={classes.cardBody}>
                     <div className={classes.cardTopLine}>
@@ -646,7 +667,9 @@ const Puppies: React.FC = () => {
                     <dl>
                       <div>
                         <dt>Born</dt>
-                        <dd>{formatDate(puppy.dateOfBirth)}</dd>
+                        <dd>{formatDate(puppy.litterId
+                          ? litters.find((litter) => litter.id === puppy.litterId)?.dateOfBirth
+                          : puppy.dateOfBirth)}</dd>
                       </div>
                       <div>
                         <dt>Sex</dt>

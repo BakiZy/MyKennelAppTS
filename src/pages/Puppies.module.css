@@ -93,12 +93,21 @@
   box-shadow: 0 16px 40px rgba(31, 35, 29, 0.08);
 }
 
-.litterCard img,
-.puppyCard img {
+.imageLink {
+  display: block;
+  background: #f4f0eb;
+}
+
+.imageLink:focus-visible {
+  outline: 3px solid #8d2f3f;
+  outline-offset: -3px;
+}
+
+.imageLink img {
   display: block;
   width: 100%;
   aspect-ratio: 4 / 3;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .cardBody {
@@ -258,6 +267,16 @@
   color: #3a4039;
   font-size: 0.88rem;
   font-weight: 800;
+}
+
+.fieldNote {
+  margin: 0;
+  border-radius: 8px;
+  background: #f4f7f0;
+  color: #3a4039;
+  padding: 0.65rem 0.75rem;
+  font-size: 0.9rem;
+  line-height: 1.45;
 }
 
 .adminForm input,
