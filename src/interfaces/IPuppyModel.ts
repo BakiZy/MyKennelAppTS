@@ -7,6 +7,8 @@ export interface PuppyModel {
   status?: string;
   description?: string;
   imageUrl?: string;
+  imageUrl2?: string;
+  imageUrl3?: string;
   litterId?: number;
   litterName?: string;
 }

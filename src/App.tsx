@@ -16,6 +16,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import EditPoodle from "./pages/Edit";
 import ImagePage from "./pages/ImageUr";
 import Puppies from "./pages/Puppies";
+import PuppyDetails from "./pages/PuppyDetails";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import ConfirmEmail from "./pages/ConfirmEmail";
@@ -37,6 +38,7 @@ const App: React.FC = () => {
         <Route path="/about" element={<About />} />
         <Route path="/o-nama" element={<AboutSr />} />
         <Route path="/puppies" element={<Puppies />} />
+        <Route path="/puppies/:puppyId" element={<PuppyDetails />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/confirm-email" element={<ConfirmEmail />} />

@@ -279,6 +279,46 @@
   line-height: 1.45;
 }
 
+.photoManager {
+  display: grid;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.photoManagerGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.photoManagerGrid > div {
+  min-width: 0;
+}
+
+.photoManagerGrid img {
+  display: block;
+  width: 100%;
+  height: 5rem;
+  border-radius: 6px;
+  background: #f4f0eb;
+  object-fit: contain;
+}
+
+.adminForm .photoManagerGrid button {
+  width: 100%;
+  min-height: 2rem;
+  margin-top: 0.35rem;
+  padding: 0.4rem;
+  font-size: 0.8rem;
+}
+
+.adminForm input:disabled,
+.adminForm button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
 .adminForm input,
 .adminForm select,
 .adminForm textarea {

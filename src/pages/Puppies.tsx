@@ -7,6 +7,10 @@ import AuthContext from "../store/auth-context";
 import classes from "./Puppies.module.css";
 import Seo from "../components/SEO/Seo";
 import PuppyGuide from "../components/PuppyGuide";
+import { getApiErrorMessage } from "../api/errorMessage";
+
+const puppyPhotos = (puppy: PuppyModel): string[] =>
+  [puppy.imageUrl, puppy.imageUrl2, puppy.imageUrl3].filter((url): url is string => !!url);
 
 type LitterFormState = {
   name: string;
@@ -24,7 +28,6 @@ type PuppyFormState = {
   color: string;
   dateOfBirth: string;
   status: string;
-  imageUrl: string;
   description: string;
   litterId: string;
 };
@@ -45,7 +48,6 @@ const emptyPuppyForm: PuppyFormState = {
   color: "",
   dateOfBirth: "",
   status: "Available",
-  imageUrl: "",
   description: "",
   litterId: "",
 };
@@ -72,6 +74,9 @@ const Puppies: React.FC = () => {
 
   const [litterForm, setLitterForm] = useState<LitterFormState>(emptyLitterForm);
   const [puppyForm, setPuppyForm] = useState<PuppyFormState>(emptyPuppyForm);
+  const [puppyFiles, setPuppyFiles] = useState<File[]>([]);
+  const [savingPuppy, setSavingPuppy] = useState(false);
+  const puppyPhotoInputRef = useRef<HTMLInputElement>(null);
   const puppiesDescription =
     "Available and upcoming red toy and miniature poodle puppies from Von Apalusso kennel in Serbia.";
   const puppiesStructuredData = {
@@ -129,6 +134,8 @@ const Puppies: React.FC = () => {
   const resetPuppyForm = () => {
     setEditingPuppyId(null);
     setPuppyForm(emptyPuppyForm);
+    setPuppyFiles([]);
+    if (puppyPhotoInputRef.current) puppyPhotoInputRef.current.value = "";
   };
 
   const getLitterPayload = () => ({
@@ -149,7 +156,6 @@ const Puppies: React.FC = () => {
       ? litters.find((litter) => String(litter.id) === puppyForm.litterId)?.dateOfBirth || null
       : puppyForm.dateOfBirth || null,
     status: puppyForm.status,
-    imageUrl: puppyForm.imageUrl,
     description: puppyForm.description,
     litterId: puppyForm.litterId ? parseInt(puppyForm.litterId) : null,
   });
@@ -188,20 +194,59 @@ const Puppies: React.FC = () => {
     event.preventDefault();
     setAdminMessage("");
 
+    const existingPuppy = puppies.find((puppy) => puppy.id === editingPuppyId);
+    const remainingSlots = 3 - (existingPuppy ? puppyPhotos(existingPuppy).length : 0);
+    if (puppyFiles.length > remainingSlots) {
+      setAdminMessage(`Choose at most ${remainingSlots} more photos.`);
+      return;
+    }
+    if (puppyFiles.some((file) => file.size === 0 || file.size > 5 * 1024 * 1024)) {
+      setAdminMessage("Each photo must be between 1 byte and 5 MB.");
+      return;
+    }
+
+    setSavingPuppy(true);
+    let savedPuppyId: number | null = null;
+
     try {
       if (editingPuppyId) {
         await api.put(`/api/puppies/${editingPuppyId}`, getPuppyPayload());
-        setAdminMessage("Puppy updated.");
+        savedPuppyId = editingPuppyId;
       } else {
-        await api.post("/api/puppies", getPuppyPayload());
-        setAdminMessage("Puppy added.");
+        const response = await api.post<PuppyModel>("/api/puppies", getPuppyPayload());
+        savedPuppyId = response.data.id;
       }
 
+      if (puppyFiles.length > 0) {
+        const data = new FormData();
+        puppyFiles.forEach((file) => data.append("photos", file));
+        await api.post(`/api/puppies/${savedPuppyId}/photos`, data);
+      }
+
+      setAdminMessage(editingPuppyId ? "Puppy updated." : "Puppy added.");
       resetPuppyForm();
-      fetchPuppies();
+      await fetchPuppies();
     } catch (requestError) {
-      console.log(requestError);
-      setAdminMessage("Could not save puppy. Check admin session and database migration.");
+      if (savedPuppyId && !editingPuppyId) setEditingPuppyId(savedPuppyId);
+      setAdminMessage(getApiErrorMessage(requestError, {
+        fallback: savedPuppyId
+          ? "Puppy details were saved, but photos could not be uploaded. Try saving again."
+          : "Could not save puppy. Please try again.",
+      }));
+      if (savedPuppyId) await fetchPuppies();
+    } finally {
+      setSavingPuppy(false);
+    }
+  };
+
+  const deletePuppyPhoto = async (puppy: PuppyModel, slot: number) => {
+    if (!window.confirm(`Remove photo ${slot} from ${puppy.name || "this puppy"}?`)) return;
+    try {
+      await api.delete(`/api/puppies/${puppy.id}/photos/${slot}`);
+      setAdminMessage("Photo removed.");
+      await fetchPuppies();
+    } catch (requestError) {
+      setAdminMessage(getApiErrorMessage(requestError, { fallback: "Could not remove photo." }));
     }
   };
 
@@ -222,13 +267,14 @@ const Puppies: React.FC = () => {
 
   const startPuppyEdit = (puppy: PuppyModel) => {
     setEditingPuppyId(puppy.id);
+    setPuppyFiles([]);
+    if (puppyPhotoInputRef.current) puppyPhotoInputRef.current.value = "";
     setPuppyForm({
       name: puppy.name ?? "",
       sex: puppy.sex ?? "Male",
       color: puppy.color ?? "",
       dateOfBirth: toDateInputValue(puppy.dateOfBirth),
       status: puppy.status ?? "Available",
-      imageUrl: puppy.imageUrl ?? "",
       description: puppy.description ?? "",
       litterId: puppy.litterId ? String(puppy.litterId) : "",
     });
@@ -516,17 +562,33 @@ const Puppies: React.FC = () => {
                 <option value="Reserved">Reserved</option>
                 <option value="Sold">Sold</option>
               </select>
-              <label htmlFor="puppyImageUrl">Image URL</label>
+              {editingPuppyId && (() => {
+                const current = puppies.find((puppy) => puppy.id === editingPuppyId);
+                return current && puppyPhotos(current).length > 0 ? (
+                  <div className={classes.photoManager}>
+                    <span>Current photos ({puppyPhotos(current).length}/3)</span>
+                    <div className={classes.photoManagerGrid}>
+                      {puppyPhotos(current).map((url, index) => (
+                        <div key={url}>
+                          <img src={url} alt={`${current.name || "Puppy"} photo ${index + 1}`} />
+                          <button type="button" onClick={() => deletePuppyPhoto(current, index + 1)}>
+                            Remove
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : null;
+              })()}
+              <label htmlFor="puppyPhotos">Photos (up to 3, 5 MB each)</label>
               <input
-                id="puppyImageUrl"
-                value={puppyForm.imageUrl}
-                onChange={(event) =>
-                  setPuppyForm((current) => ({
-                    ...current,
-                    imageUrl: event.target.value,
-                  }))
-                }
-                placeholder="https://..."
+                ref={puppyPhotoInputRef}
+                id="puppyPhotos"
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                multiple
+                disabled={editingPuppyId !== null && puppyPhotos(puppies.find((puppy) => puppy.id === editingPuppyId) || { id: 0 }).length === 3}
+                onChange={(event) => setPuppyFiles(Array.from(event.target.files || []))}
               />
               <label htmlFor="puppyDescription">Description</label>
               <textarea
@@ -539,7 +601,9 @@ const Puppies: React.FC = () => {
                   }))
                 }
               />
-              <button type="submit">{editingPuppyId ? "Save puppy" : "Add puppy"}</button>
+              <button type="submit" disabled={savingPuppy}>
+                {savingPuppy ? "Saving..." : editingPuppyId ? "Save puppy" : "Add puppy"}
+              </button>
             </form>
           </div>
         </section>
@@ -650,13 +714,13 @@ const Puppies: React.FC = () => {
               {puppies.map((puppy) => (
                 <article key={puppy.id} className={classes.puppyCard}>
                   {puppy.imageUrl && (
-                    <a className={classes.imageLink} href={puppy.imageUrl} target="_blank" rel="noopener noreferrer" aria-label={`Open full image of ${puppy.name || "puppy"}`}>
+                    <Link className={classes.imageLink} to={`/puppies/${puppy.id}`} aria-label={`View ${puppy.name || "puppy"} profile`}>
                       <img
                         src={puppy.imageUrl}
                         alt={`${puppy.name || "Puppy"}, ${puppy.color || "poodle"} puppy from Von Apalusso kennel`}
                         loading="lazy"
                       />
-                    </a>
+                    </Link>
                   )}
                   <div className={classes.cardBody}>
                     <div className={classes.cardTopLine}>
@@ -684,7 +748,10 @@ const Puppies: React.FC = () => {
                         <dd>{puppy.litterName || "Not assigned"}</dd>
                       </div>
                     </dl>
-                    {authContext.isAdmin ? (
+                    <Link className={classes.inquiryLink} to={`/puppies/${puppy.id}`}>
+                      View puppy and photos
+                    </Link>
+                    {authContext.isAdmin && (
                       <div className={classes.cardActions}>
                         <button type="button" onClick={() => startPuppyEdit(puppy)}>
                           Edit
@@ -697,10 +764,6 @@ const Puppies: React.FC = () => {
                           Delete
                         </button>
                       </div>
-                    ) : (
-                      <a className={classes.inquiryLink} href="/about">
-                        Send an inquiry
-                      </a>
                     )}
                   </div>
                 </article>
