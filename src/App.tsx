@@ -37,8 +37,10 @@ const App: React.FC = () => {
 
         <Route path="/about" element={<About />} />
         <Route path="/o-nama" element={<AboutSr />} />
-        <Route path="/puppies" element={<Puppies />} />
-        <Route path="/puppies/:puppyId" element={<PuppyDetails />} />
+        <Route path="/puppies" element={<Puppies language="en" />} />
+        <Route path="/puppies/:puppyId" element={<PuppyDetails language="en" />} />
+        <Route path="/stenci-pudle" element={<Puppies language="sr" />} />
+        <Route path="/stenci-pudle/:puppyId" element={<PuppyDetails language="sr" />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/confirm-email" element={<ConfirmEmail />} />

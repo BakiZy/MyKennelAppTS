@@ -103,13 +103,18 @@ const pages = [
     outputPath: path.join(distDir, "puppies", "index.html"),
     title: "Available red toy and miniature poodle puppies | Von Apalusso",
     description:
-      "Available and upcoming red toy and miniature poodle puppies from Von Apalusso kennel in Serbia.",
+      "Meet toy and miniature poodle puppies from Von Apalusso kennel in Novi Sad, Serbia. Explore litters, parents, photos and availability.",
     canonical: "https://poodlesvonapalusso.com/puppies",
+    alternates: [
+      { hrefLang: "en", href: "https://poodlesvonapalusso.com/puppies" },
+      { hrefLang: "sr", href: "https://poodlesvonapalusso.com/stenci-pudle" },
+      { hrefLang: "x-default", href: "https://poodlesvonapalusso.com/puppies" },
+    ],
     staticHtml: `
       <main>
         <section>
           <p>Von Apalusso puppies</p>
-          <h1>Available red toy and miniature poodle puppies</h1>
+          <h1>Toy and miniature poodle puppies in Serbia</h1>
           <p>Follow current and upcoming litters from Von Apalusso kennel in Serbia.</p>
           <p>Our puppies are raised in home conditions and are prepared for families that understand the grooming, social and care needs of poodles.</p>
           <p>Contact us to ask about available puppies, planned litters, parent dogs, pedigree information and reservation details.</p>
@@ -120,7 +125,7 @@ const pages = [
 ];
 
 const escapeHtml = (value) =>
-  value
+  String(value ?? "")
     .replace(/&/g, "&amp;")
     .replace(/"/g, "&quot;")
     .replace(/</g, "&lt;")
@@ -149,11 +154,14 @@ const applySeo = (html, page) => {
     `    <meta property="og:title" content="${title}" />`,
     `    <meta property="og:description" content="${description}" />`,
     '    <meta property="og:type" content="website" />',
-    `    <meta property="og:image" content="${defaultImage}" />`,
+    `    <meta property="og:image" content="${escapeHtml(page.image || defaultImage)}" />`,
     '    <meta name="twitter:card" content="summary_large_image" />',
     `    <meta name="twitter:title" content="${title}" />`,
     `    <meta name="twitter:description" content="${description}" />`,
-    `    <meta name="twitter:image" content="${defaultImage}" />`,
+    `    <meta name="twitter:image" content="${escapeHtml(page.image || defaultImage)}" />`,
+    page.structuredData
+      ? `    <script type="application/ld+json">${JSON.stringify(page.structuredData).replace(/</g, "\\u003c")}</script>`
+      : "",
   ].join("\n");
 
   const withoutManagedSeo = html.replace(
@@ -178,3 +186,6 @@ pages.forEach((page) => {
   fs.mkdirSync(path.dirname(page.outputPath), { recursive: true });
   fs.writeFileSync(page.outputPath, applySeo(baseHtml, page));
 });
+
+require("./generate-puppy-seo-pages.cjs")({ fs, path, distDir, baseHtml, pages, applySeo, escapeHtml })
+  .catch((error) => { console.error(error); process.exitCode = 1; });

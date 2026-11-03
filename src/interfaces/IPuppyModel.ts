@@ -6,6 +6,7 @@ export interface PuppyModel {
   dateOfBirth?: string;
   status?: string;
   description?: string;
+  descriptionSr?: string;
   imageUrl?: string;
   imageUrl2?: string;
   imageUrl3?: string;
@@ -22,6 +23,7 @@ export interface LitterModel {
   motherId?: number;
   motherName?: string;
   description?: string;
+  descriptionSr?: string;
   status?: string;
   coverImageUrl?: string;
   puppyCount: number;

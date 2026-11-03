@@ -1,6 +1,6 @@
 import classes from "./Navigation.module.css";
 import { FaFacebook, FaInstagram, FaWhatsapp } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useContext } from "react";
 import AuthContext from "../../store/auth-context";
 import { Container, Nav, Navbar } from "react-bootstrap";
@@ -9,6 +9,7 @@ import logo from "../../../src/poodle.svg";
 
 const Navigation = () => {
   const authContext = useContext(AuthContext);
+  const isSerbian = useLocation().pathname.startsWith("/stenci-pudle");
 
   const logoutHandler = async () => {
     try {
@@ -42,11 +43,11 @@ const Navigation = () => {
                 Login
               </Nav.Link>
             )}
-            <Nav.Link as={Link} to="/about">
-              About
+            <Nav.Link as={Link} to={isSerbian ? "/o-nama" : "/about"}>
+              {isSerbian ? "O nama" : "About"}
             </Nav.Link>
-            <Nav.Link as={Link} to="/puppies">
-              Puppies
+            <Nav.Link as={Link} to={isSerbian ? "/stenci-pudle" : "/puppies"}>
+              {isSerbian ? "Štenci" : "Puppies"}
             </Nav.Link>
             {authContext.isAdmin && (
               <Nav.Link as={Link} to="/admin">

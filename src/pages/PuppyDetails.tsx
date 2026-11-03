@@ -4,8 +4,10 @@ import api from "../api/client";
 import Seo from "../components/SEO/Seo";
 import { PuppyModel } from "../interfaces/IPuppyModel";
 import classes from "./PuppyDetails.module.css";
+import { puppyColor, puppyDescription, puppyDetailPath, puppyListPath, puppySex, puppyStatus, PuppyLanguage } from "../puppiesI18n";
 
-const PuppyDetails: React.FC = () => {
+const PuppyDetails: React.FC<{ language: PuppyLanguage }> = ({ language }) => {
+  const isSerbian = language === "sr";
   const { puppyId } = useParams();
   const [puppy, setPuppy] = useState<PuppyModel | null>(null);
   const [loading, setLoading] = useState(true);
@@ -23,32 +25,38 @@ const PuppyDetails: React.FC = () => {
     return () => { active = false; };
   }, [puppyId]);
 
-  if (loading) return <main className={classes.page}><p>Loading puppy...</p></main>;
+  if (loading) return <main className={classes.page}><p>{isSerbian ? "Učitavanje šteneta..." : "Loading puppy..."}</p></main>;
   if (!puppy) return (
     <main className={classes.page}>
-      <h1>Puppy not found</h1>
-      <Link to="/puppies">Back to puppies</Link>
+      <h1>{isSerbian ? "Štene nije pronađeno" : "Puppy not found"}</h1>
+      <Link to={puppyListPath(language)}>{isSerbian ? "Nazad na štence" : "Back to puppies"}</Link>
     </main>
   );
 
   const photos = [puppy.imageUrl, puppy.imageUrl2, puppy.imageUrl3]
     .filter((url): url is string => !!url);
   const date = puppy.dateOfBirth
-    ? new Date(puppy.dateOfBirth).toLocaleDateString("en-GB")
-    : "To be announced";
-  const name = puppy.name || "Von Apalusso puppy";
-  const description = puppy.description || `${name}, a ${puppy.color || "poodle"} puppy from Von Apalusso kennel in Serbia.`;
-  const canonical = `https://poodlesvonapalusso.com/puppies/${puppy.id}`;
+    ? new Date(puppy.dateOfBirth).toLocaleDateString(isSerbian ? "sr-RS" : "en-GB")
+    : (isSerbian ? "Biće objavljeno" : "To be announced");
+  const name = puppy.name || (isSerbian ? "Štene Von Apalusso" : "Von Apalusso puppy");
+  const description = puppyDescription(puppy, language);
+  const canonical = `https://poodlesvonapalusso.com${puppyDetailPath(language, puppy.id)}`;
   const photoIndex = Math.min(activePhoto, Math.max(photos.length - 1, 0));
 
   return (
     <>
       <Seo
-        title={`${name} | Von Apalusso puppy`}
+        title={isSerbian ? `${name} | Štene toy ili patuljaste pudle | Von Apalusso` : `${name} | Toy or miniature poodle puppy | Von Apalusso`}
         description={description}
         canonical={canonical}
         image={photos[0]}
         type="profile"
+        lang={language}
+        alternates={[
+          { hrefLang: "en", href: `https://poodlesvonapalusso.com${puppyDetailPath("en", puppy.id)}` },
+          { hrefLang: "sr", href: `https://poodlesvonapalusso.com${puppyDetailPath("sr", puppy.id)}` },
+          { hrefLang: "x-default", href: `https://poodlesvonapalusso.com${puppyDetailPath("en", puppy.id)}` },
+        ]}
         structuredData={{
           "@context": "https://schema.org",
           "@type": "ProfilePage",
@@ -56,28 +64,35 @@ const PuppyDetails: React.FC = () => {
           url: canonical,
           description,
           image: photos,
+          inLanguage: language,
         }}
       />
       <main className={classes.page}>
-        <Link className={classes.backLink} to="/puppies">← All puppies</Link>
+        <div className={classes.topLinks}>
+          <Link className={classes.backLink} to={puppyListPath(language)}>{isSerbian ? "← Svi štenci" : "← All puppies"}</Link>
+          <nav className={classes.languageSwitch} aria-label="Language / Jezik">
+            <Link to={puppyDetailPath("en", puppy.id)} aria-current={!isSerbian ? "page" : undefined}>English</Link>
+            <Link to={puppyDetailPath("sr", puppy.id)} aria-current={isSerbian ? "page" : undefined}>Srpski</Link>
+          </nav>
+        </div>
         <div className={classes.layout}>
-          <section className={classes.gallery} aria-label={`${name} photos`}>
+          <section className={classes.gallery} aria-label={isSerbian ? `Fotografije šteneta ${name}` : `${name} photos`}>
             {photos.length > 0 ? (
               <>
-                <a href={photos[photoIndex]} target="_blank" rel="noopener noreferrer" aria-label="Open current photo in full size">
-                  <img className={classes.mainPhoto} src={photos[photoIndex]} alt={`${name}, photo ${photoIndex + 1} of ${photos.length}`} />
+                <a href={photos[photoIndex]} target="_blank" rel="noopener noreferrer" aria-label={isSerbian ? "Otvori fotografiju u punoj veličini" : "Open current photo in full size"}>
+                  <img className={classes.mainPhoto} src={photos[photoIndex]} alt={isSerbian ? `${name}, fotografija ${photoIndex + 1} od ${photos.length}` : `${name}, photo ${photoIndex + 1} of ${photos.length}`} />
                 </a>
                 {photos.length > 1 && (
                   <>
                     <div className={classes.galleryControls}>
-                      <button type="button" onClick={() => setActivePhoto((photoIndex + photos.length - 1) % photos.length)} aria-label="Previous photo">‹</button>
+                      <button type="button" onClick={() => setActivePhoto((photoIndex + photos.length - 1) % photos.length)} aria-label={isSerbian ? "Prethodna fotografija" : "Previous photo"}>‹</button>
                       <span>{photoIndex + 1} / {photos.length}</span>
-                      <button type="button" onClick={() => setActivePhoto((photoIndex + 1) % photos.length)} aria-label="Next photo">›</button>
+                      <button type="button" onClick={() => setActivePhoto((photoIndex + 1) % photos.length)} aria-label={isSerbian ? "Sledeća fotografija" : "Next photo"}>›</button>
                     </div>
                     <div className={classes.thumbnails}>
                       {photos.map((photo, index) => (
                         <button key={photo} type="button" className={index === photoIndex ? classes.selected : ""}
-                          onClick={() => setActivePhoto(index)} aria-label={`Show photo ${index + 1}`} aria-pressed={index === photoIndex}>
+                          onClick={() => setActivePhoto(index)} aria-label={isSerbian ? `Prikaži fotografiju ${index + 1}` : `Show photo ${index + 1}`} aria-pressed={index === photoIndex}>
                           <img src={photo} alt="" loading="lazy" />
                         </button>
                       ))}
@@ -85,20 +100,20 @@ const PuppyDetails: React.FC = () => {
                   </>
                 )}
               </>
-            ) : <p className={classes.noPhoto}>Photos coming soon.</p>}
+            ) : <p className={classes.noPhoto}>{isSerbian ? "Fotografije uskoro." : "Photos coming soon."}</p>}
           </section>
           <section className={classes.details}>
-            <p className={classes.kicker}>Von Apalusso puppy</p>
+            <p className={classes.kicker}>{isSerbian ? "Štene Von Apalusso" : "Von Apalusso puppy"}</p>
             <h1>{name}</h1>
-            <span className={classes.status}>{puppy.status || "Available"}</span>
+            <span className={classes.status}>{puppyStatus(puppy.status, language)}</span>
             <p className={classes.description}>{description}</p>
             <dl>
-              <div><dt>Born</dt><dd>{date}</dd></div>
-              <div><dt>Sex</dt><dd>{puppy.sex || "To be confirmed"}</dd></div>
-              <div><dt>Color</dt><dd>{puppy.color || "To be confirmed"}</dd></div>
-              <div><dt>Litter</dt><dd>{puppy.litterName || "Not assigned"}</dd></div>
+              <div><dt>{isSerbian ? "Rođeno" : "Born"}</dt><dd>{date}</dd></div>
+              <div><dt>{isSerbian ? "Pol" : "Sex"}</dt><dd>{puppySex(puppy.sex, language)}</dd></div>
+              <div><dt>{isSerbian ? "Boja" : "Color"}</dt><dd>{puppyColor(puppy.color, language)}</dd></div>
+              <div><dt>{isSerbian ? "Leglo" : "Litter"}</dt><dd>{puppy.litterName || (isSerbian ? "Nije dodeljeno" : "Not assigned")}</dd></div>
             </dl>
-            <Link className={classes.contactLink} to="/about">Ask about this puppy</Link>
+            <Link className={classes.contactLink} to={isSerbian ? "/o-nama" : "/about"}>{isSerbian ? "Pitajte nas o ovom štenetu" : "Ask about this puppy"}</Link>
           </section>
         </div>
       </main>

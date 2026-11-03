@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import classes from "./PuppyGuide.module.css";
 
 type Language = "en" | "sr";
@@ -84,11 +84,10 @@ const guideAsText = (language: Language) => {
   return [guide.title, guide.intro, ...guide.topics.flatMap((topic) => [topic.title, ...topic.points.map((point) => `• ${point}`)]), guide.note].join("\n\n");
 };
 
-const PuppyGuide = () => {
+const PuppyGuide = ({ initialLanguage = "en" }: { initialLanguage?: Language }) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const [language, setLanguage] = useState<Language>(() =>
-    typeof navigator !== "undefined" && navigator.language.toLowerCase().startsWith("sr") ? "sr" : "en"
-  );
+  const [language, setLanguage] = useState<Language>(initialLanguage);
+  useEffect(() => { setLanguage(initialLanguage); }, [initialLanguage]);
   const [copied, setCopied] = useState(false);
   const [copyError, setCopyError] = useState(false);
   const guide = guides[language];
@@ -108,8 +107,8 @@ const PuppyGuide = () => {
     <section className={classes.entry} aria-labelledby="puppy-guide-heading">
       <div>
         <p className={classes.eyebrow}>For new puppy families / Za nove vlasnike</p>
-        <h2 id="puppy-guide-heading">A little help for the first days at home</h2>
-        <p>Read or copy our puppy care guide in English or Serbian.</p>
+        <h2 id="puppy-guide-heading">{initialLanguage === "sr" ? "Saveti za prve dane šteneta u novom domu" : "A little help for the first days at home"}</h2>
+        <p>{initialLanguage === "sr" ? "Pročitajte ili kopirajte vodič za negu šteneta na srpskom ili engleskom." : "Read or copy our puppy care guide in English or Serbian."}</p>
       </div>
       <button type="button" onClick={() => dialogRef.current?.showModal()}>Open puppy guide / Otvori vodič</button>
 

@@ -72,7 +72,7 @@ const AboutSr: React.FC = () => {
             </p>
             <p>
               Na našem sajtu možete pronaći informacije o našim psima, leglima,
-              dostupnim štencima i načinu rezervacije.
+              <Link to="/stenci-pudle"> dostupnim štencima</Link> i načinu rezervacije.
             </p>
           </Container>
         </Card>
