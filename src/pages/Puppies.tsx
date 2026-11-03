@@ -713,15 +713,16 @@ const Puppies: React.FC = () => {
             <div className={classes.puppyGrid}>
               {puppies.map((puppy) => (
                 <article key={puppy.id} className={classes.puppyCard}>
-                  {puppy.imageUrl && (
-                    <Link className={classes.imageLink} to={`/puppies/${puppy.id}`} aria-label={`View ${puppy.name || "puppy"} profile`}>
-                      <img
-                        src={puppy.imageUrl}
-                        alt={`${puppy.name || "Puppy"}, ${puppy.color || "poodle"} puppy from Von Apalusso kennel`}
-                        loading="lazy"
-                      />
-                    </Link>
-                  )}
+                  <Link className={classes.imageLink} to={`/puppies/${puppy.id}`} aria-label={`View ${puppy.name || "puppy"} profile`}>
+                    <img
+                      src={puppyPhotos(puppy)[0] || "/poodle.svg"}
+                      alt={puppyPhotos(puppy).length > 0
+                        ? `${puppy.name || "Puppy"}, ${puppy.color || "poodle"} puppy from Von Apalusso kennel`
+                        : "Poodle illustration; puppy photo coming soon"}
+                      loading="lazy"
+                      className={puppyPhotos(puppy).length === 0 ? classes.placeholderImage : undefined}
+                    />
+                  </Link>
                   <div className={classes.cardBody}>
                     <div className={classes.cardTopLine}>
                       <h3>{puppy.name || "Puppy X"}</h3>

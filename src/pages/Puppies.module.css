@@ -110,6 +110,11 @@
   object-fit: contain;
 }
 
+.imageLink .placeholderImage {
+  padding: 16%;
+  object-fit: contain;
+}
+
 .cardBody {
   padding: 1rem;
 }
