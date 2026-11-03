@@ -6,13 +6,13 @@ const ErrorModal = (props: IErrorProps) => {
     <div className={classes.backdrop} role="presentation">
       <section className={classes.modal} role="alertdialog" aria-modal="true">
         <div className={classes.header}>
-          <p>Error</p>
+          <p>{props.language === "sr" ? "Greška" : "Error"}</p>
           <h2>{props.title}</h2>
         </div>
         <p className={classes.info}>{props.message}</p>
         <div className={classes.return}>
           <button type="button" onClick={props.onConfirm}>
-            Return
+            {props.language === "sr" ? "Nazad" : "Return"}
           </button>
         </div>
       </section>

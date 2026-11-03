@@ -9,10 +9,12 @@ import useGetColors from "../hooks/getColorsHook";
 import { Spinner } from "react-bootstrap";
 import ErrorModal from "../components/UI/ErrorModal";
 import Seo from "../components/SEO/Seo";
+import { homePath, localizedColor, localizedSize, SiteLanguage } from "../i18n/siteLanguage";
 
 let controller = new AbortController();
 
-const Home: React.FC = () => {
+const Home: React.FC<{ language: SiteLanguage }> = ({ language }) => {
+  const isSerbian = language === "sr";
   const [poodles, setPoodles] = useState<PoodleModel[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState({
@@ -37,8 +39,8 @@ const Home: React.FC = () => {
         event.preventDefault();
         if (!selectedColorName || !selectedSizeName) {
           setError({
-            message: "Choose a size and color to filter the poodles.",
-            title: "Search error",
+            message: isSerbian ? "Izaberite veličinu i boju za pretragu pudli." : "Choose a size and color to filter the poodles.",
+            title: isSerbian ? "Greška pri pretrazi" : "Search error",
             popup: true,
           });
           return;
@@ -57,8 +59,8 @@ const Home: React.FC = () => {
             if (response.data.length < 1) {
               setLoading(false);
               setError({
-                message: "Currently we don't have this combination of poodle",
-                title: "Search error",
+                message: isSerbian ? "Trenutno nemamo pudlu sa ovom kombinacijom veličine i boje." : "Currently we don't have this combination of poodle",
+                title: isSerbian ? "Greška pri pretrazi" : "Search error",
                 popup: true,
               });
             } else {
@@ -88,7 +90,7 @@ const Home: React.FC = () => {
           });
         return setLoading(false);
       },
-      [selectedColorName, selectedSizeName]
+      [selectedColorName, selectedSizeName, isSerbian]
     );
 
     const onReset = useCallback(async () => {
@@ -127,17 +129,18 @@ const Home: React.FC = () => {
       <form onSubmit={getFilters} className={classes.filterMain}>
         <div className={classes.filterHeader}>
           <div>
-            <p className={classes.eyebrow}>Von Apalusso kennel</p>
-            <h1>Family-raised poodles Von Apalusso</h1>
+            <p className={classes.eyebrow}>{isSerbian ? "Odgajivačnica Von Apalusso" : "Von Apalusso kennel"}</p>
+            <h1>{isSerbian ? "Toy i patuljaste pudle Von Apalusso" : "Family-raised poodles Von Apalusso"}</h1>
             <p className={classes.leadText}>
-              Meet the toy and miniature poodles who live with us as family,
-              with health, temperament, and breed standards in focus.
+              {isSerbian
+                ? "Upoznajte naše toy i patuljaste pudle koje odrastaju sa nama kao deo porodice, uz pažnju posvećenu zdravlju, temperamentu i standardu rase."
+                : "Meet the toy and miniature poodles who live with us as family, with health, temperament, and breed standards in focus."}
             </p>
           </div>
         </div>
         <div className={classes.filterGroups}>
           <fieldset className={classes.filterGroup}>
-            <legend>Find by size</legend>
+            <legend>{isSerbian ? "Izaberite veličinu" : "Find by size"}</legend>
             <div className={classes.chipList}>
               {sizes.map((size) => (
                 <button
@@ -148,13 +151,13 @@ const Home: React.FC = () => {
                   }`}
                   onClick={() => setSelectedSizeOption(size.id)}
                 >
-                  {size.name}
+                  {localizedSize(size.name, language)}
                 </button>
               ))}
             </div>
           </fieldset>
           <fieldset className={classes.filterGroup}>
-            <legend>Find by color</legend>
+            <legend>{isSerbian ? "Izaberite boju" : "Find by color"}</legend>
             <div className={classes.chipList}>
               {colors.map((color) => (
                 <button
@@ -165,7 +168,7 @@ const Home: React.FC = () => {
                   }`}
                   onClick={() => setSelectedColorOption(color.id)}
                 >
-                  {color.name}
+                  {localizedColor(color.name, language)}
                 </button>
               ))}
             </div>
@@ -173,18 +176,18 @@ const Home: React.FC = () => {
         </div>
         <div className={classes.filterButtons}>
           <p className={classes.resultCount}>
-            Showing <strong>{poodles.length}</strong>{" "}
-            {poodles.length === 1 ? "poodle" : "poodles"}
+            {isSerbian ? "Prikazano" : "Showing"} <strong>{poodles.length}</strong>{" "}
+            {isSerbian ? (poodles.length === 1 ? "pudla" : "pudli") : (poodles.length === 1 ? "poodle" : "poodles")}
           </p>
           <button type="submit" className={classes.primaryAction}>
-            Filter
+            {isSerbian ? "Filtriraj" : "Filter"}
           </button>
           <button
             type="button"
             onClick={onReset}
             className={classes.secondaryAction}
           >
-            Show all
+            {isSerbian ? "Prikaži sve" : "Show all"}
           </button>
         </div>
       </form>
@@ -252,8 +255,9 @@ const Home: React.FC = () => {
       </main>
     );
   }
-  const homeDescription =
-    "Red toy and miniature poodle kennel in Serbia. Meet Von Apalusso poodles raised with health, temperament, and breed standards in focus.";
+  const homeDescription = isSerbian
+    ? "Odgajivačnica crvenih toy i patuljastih pudli Von Apalusso u Novom Sadu. Upoznajte naše pudle, legla i dostupne štence."
+    : "Red toy and miniature poodle kennel in Serbia. Meet Von Apalusso poodles raised with health, temperament, and breed standards in focus.";
   const homeStructuredData = [
     {
       "@context": "https://schema.org",
@@ -275,16 +279,23 @@ const Home: React.FC = () => {
       "@context": "https://schema.org",
       "@type": "WebSite",
       name: "Poodles Von Apalusso",
-      url: "https://poodlesvonapalusso.com/",
+      url: `https://poodlesvonapalusso.com${homePath(language)}`,
+      inLanguage: language,
     },
   ];
 
   return (
     <>
       <Seo
-        title="Red toy and miniature poodle kennel in Serbia | Von Apalusso"
+        title={isSerbian ? "Odgajivačnica toy i patuljastih pudli Novi Sad | Von Apalusso" : "Red toy and miniature poodle kennel in Serbia | Von Apalusso"}
         description={homeDescription}
-        canonical="https://poodlesvonapalusso.com/"
+        canonical={`https://poodlesvonapalusso.com${homePath(language)}`}
+        lang={language}
+        alternates={[
+          { hrefLang: "en", href: "https://poodlesvonapalusso.com/" },
+          { hrefLang: "sr", href: "https://poodlesvonapalusso.com/sr" },
+          { hrefLang: "x-default", href: "https://poodlesvonapalusso.com/" },
+        ]}
         structuredData={homeStructuredData}
       />
       {error.popup && (
@@ -292,11 +303,12 @@ const Home: React.FC = () => {
           message={error!.message}
           title={error!.title}
           onConfirm={errorHandler}
+          language={language}
         />
       )}
       <main className={classes.page}>
         <PoodleFilter />
-        <PoodleList poodles={poodles} onRemove={onRemoveHandler} />
+        <PoodleList poodles={poodles} onRemove={onRemoveHandler} language={language} />
       </main>
     </>
   );

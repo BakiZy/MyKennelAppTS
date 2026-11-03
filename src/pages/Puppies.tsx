@@ -376,10 +376,6 @@ const Puppies: React.FC<{ language: PuppyLanguage }> = ({ language }) => {
       />
       <main className={classes.page}>
         <section className={classes.hero}>
-        <nav className={classes.languageSwitch} aria-label="Language / Jezik">
-          <Link to="/puppies" aria-current={!isSerbian ? "page" : undefined}>English</Link>
-          <Link to="/stenci-pudle" aria-current={isSerbian ? "page" : undefined}>Srpski</Link>
-        </nav>
         <p className={classes.eyebrow}>{isSerbian ? "Štenci Von Apalusso" : "Von Apalusso puppies"}</p>
         <h1>{isSerbian ? "Štenci toy i patuljastih pudli u Novom Sadu" : "Toy and miniature poodle puppies in Serbia"}</h1>
         <p>{isSerbian
@@ -387,7 +383,7 @@ const Puppies: React.FC<{ language: PuppyLanguage }> = ({ language }) => {
           : "Explore our litters, parents and puppy photos. Contact Von Apalusso kennel to ask about availability and reservations."}</p>
         </section>
 
-      {loading && <p className={classes.statusMessage}>Loading puppies...</p>}
+      {loading && <p className={classes.statusMessage}>{isSerbian ? "Učitavanje štenaca..." : "Loading puppies..."}</p>}
 
       {authContext.isAdmin && (
         <section className={classes.adminPanel} ref={adminPanelRef}>

@@ -83,7 +83,7 @@ const AboutSr: React.FC = () => {
       </div>
       <Card.Footer className={classes.footer}>
         Ako ste zainteresovani za naše pudle ili štence, možete nas kontaktirati
-        preko društvenih mreža u gornjem delu sajta. <Link to="/about">English</Link>
+        preko društvenih mreža u gornjem delu sajta.
       </Card.Footer>
     </>
   );

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import api from "../api/client";
 import { getApiErrorMessage } from "../api/errorMessage";
 import classes from "../components/Authentication/LoginForm.module.css";
+import { accountPath, languageForPath } from "../i18n/siteLanguage";
+import AuthSeo from "../components/SEO/AuthSeo";
 
 const getErrorMessage = (error: unknown) => {
   return getApiErrorMessage(error, {
@@ -14,6 +16,8 @@ const getErrorMessage = (error: unknown) => {
 };
 
 const ForgotPassword: React.FC = () => {
+  const language = languageForPath(useLocation().pathname);
+  const sr = language === "sr";
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -29,9 +33,9 @@ const ForgotPassword: React.FC = () => {
       const response = await api.post<string>("/api/Authentication/forgot-password", {
         email,
       });
-      setMessage(response.data);
+      setMessage(sr ? "Ako nalog postoji, poslali smo link za promenu lozinke na vašu adresu e-pošte." : response.data);
     } catch (requestError) {
-      setError(getErrorMessage(requestError));
+      setError(sr ? "Zahtev nije uspeo. Pokušajte ponovo kasnije." : getErrorMessage(requestError));
     } finally {
       setIsLoading(false);
     }
@@ -39,12 +43,13 @@ const ForgotPassword: React.FC = () => {
 
   return (
     <main className={classes.page}>
+      <AuthSeo language={language} page="forgot-password" />
       <section className={classes.auth}>
         <form onSubmit={submitHandler} className={classes.form}>
           {message && <p className={classes.statusMessage}>{message}</p>}
           {error && <p className={classes.errorMessage}>{error}</p>}
           <div className={classes.control}>
-            <label htmlFor="email">E-mail address</label>
+            <label htmlFor="email">{sr ? "Adresa e-pošte" : "E-mail address"}</label>
             <input
               id="email"
               type="email"
@@ -59,10 +64,10 @@ const ForgotPassword: React.FC = () => {
               className={classes.primaryAction}
               disabled={isLoading}
             >
-              {isLoading ? "Sending..." : "Send reset link"}
+              {isLoading ? (sr ? "Slanje..." : "Sending...") : (sr ? "Pošalji link za promenu lozinke" : "Send reset link")}
             </button>
-            <Link to="/login" className={classes.helperLink}>
-              Back to login
+            <Link to={accountPath(language, "login")} className={classes.helperLink}>
+              {sr ? "Nazad na prijavu" : "Back to login"}
             </Link>
           </div>
         </form>

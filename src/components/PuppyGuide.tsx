@@ -106,22 +106,22 @@ const PuppyGuide = ({ initialLanguage = "en" }: { initialLanguage?: Language }) 
   return (
     <section className={classes.entry} aria-labelledby="puppy-guide-heading">
       <div>
-        <p className={classes.eyebrow}>For new puppy families / Za nove vlasnike</p>
+        <p className={classes.eyebrow}>{initialLanguage === "sr" ? "Za nove vlasnike" : "For new puppy families"}</p>
         <h2 id="puppy-guide-heading">{initialLanguage === "sr" ? "Saveti za prve dane šteneta u novom domu" : "A little help for the first days at home"}</h2>
         <p>{initialLanguage === "sr" ? "Pročitajte ili kopirajte vodič za negu šteneta na srpskom ili engleskom." : "Read or copy our puppy care guide in English or Serbian."}</p>
       </div>
-      <button type="button" onClick={() => dialogRef.current?.showModal()}>Open puppy guide / Otvori vodič</button>
+      <button type="button" onClick={() => dialogRef.current?.showModal()}>{initialLanguage === "sr" ? "Otvori vodič za štene" : "Open puppy guide"}</button>
 
       <dialog ref={dialogRef} className={classes.dialog} aria-labelledby="guide-title" onClose={() => { setCopied(false); setCopyError(false); }} onClick={(event) => {
         if (event.target === dialogRef.current) dialogRef.current?.close();
       }}>
         <div className={classes.dialogContent} lang={language}>
           <div className={classes.topbar}>
-            <div className={classes.languages} aria-label="Guide language">
+            <div className={classes.languages} aria-label={language === "sr" ? "Jezik vodiča" : "Guide language"}>
               <button type="button" aria-pressed={language === "en"} onClick={() => { setLanguage("en"); setCopied(false); setCopyError(false); }}>English</button>
               <button type="button" aria-pressed={language === "sr"} onClick={() => { setLanguage("sr"); setCopied(false); setCopyError(false); }}>Srpski</button>
             </div>
-            <button type="button" className={classes.close} onClick={() => dialogRef.current?.close()} aria-label="Close guide">×</button>
+            <button type="button" className={classes.close} onClick={() => dialogRef.current?.close()} aria-label={language === "sr" ? "Zatvori vodič" : "Close guide"}>×</button>
           </div>
           <h2 id="guide-title">{guide.title}</h2>
           <p>{guide.intro}</p>

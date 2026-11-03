@@ -68,13 +68,7 @@ const PuppyDetails: React.FC<{ language: PuppyLanguage }> = ({ language }) => {
         }}
       />
       <main className={classes.page}>
-        <div className={classes.topLinks}>
-          <Link className={classes.backLink} to={puppyListPath(language)}>{isSerbian ? "← Svi štenci" : "← All puppies"}</Link>
-          <nav className={classes.languageSwitch} aria-label="Language / Jezik">
-            <Link to={puppyDetailPath("en", puppy.id)} aria-current={!isSerbian ? "page" : undefined}>English</Link>
-            <Link to={puppyDetailPath("sr", puppy.id)} aria-current={isSerbian ? "page" : undefined}>Srpski</Link>
-          </nav>
-        </div>
+        <Link className={classes.backLink} to={puppyListPath(language)}>{isSerbian ? "← Svi štenci" : "← All puppies"}</Link>
         <div className={classes.layout}>
           <section className={classes.gallery} aria-label={isSerbian ? `Fotografije šteneta ${name}` : `${name} photos`}>
             {photos.length > 0 ? (

@@ -29,4 +29,5 @@ export interface IErrorProps {
   title: string;
   message: string;
   onConfirm: () => void;
+  language?: "en" | "sr";
 }

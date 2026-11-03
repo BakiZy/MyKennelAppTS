@@ -149,7 +149,7 @@ const applySeo = (html, page) => {
   const seoBlock = [
     `    <link rel="canonical" href="${canonical}" />`,
     alternateBlock,
-    '    <meta name="robots" content="index,follow" />',
+    `    <meta name="robots" content="${escapeHtml(page.robots || "index,follow")}" />`,
     `    <meta property="og:url" content="${canonical}" />`,
     `    <meta property="og:title" content="${title}" />`,
     `    <meta property="og:description" content="${description}" />`,
@@ -187,5 +187,5 @@ pages.forEach((page) => {
   fs.writeFileSync(page.outputPath, applySeo(baseHtml, page));
 });
 
-require("./generate-puppy-seo-pages.cjs")({ fs, path, distDir, baseHtml, pages, applySeo, escapeHtml })
+require("./generate-dynamic-seo-pages.cjs")({ fs, path, distDir, baseHtml, pages, applySeo, escapeHtml })
   .catch((error) => { console.error(error); process.exitCode = 1; });

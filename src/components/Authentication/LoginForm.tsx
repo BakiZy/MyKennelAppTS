@@ -8,8 +8,11 @@ import { ILoginResponse } from "../../interfaces/IAuthModel";
 import { Spinner } from "react-bootstrap";
 import { passwordRequirementsMessage, validEmail, validPassword } from "./Regex";
 import ErrorModal from "../UI/ErrorModal";
+import { accountPath, homePath, SiteLanguage } from "../../i18n/siteLanguage";
+import AuthSeo from "../SEO/AuthSeo";
 
-const LoginForm = () => {
+const LoginForm = ({ language }: { language: SiteLanguage }) => {
+  const sr = language === "sr";
   const usernameInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const emailInputRef = useRef<HTMLInputElement>(null);
@@ -38,8 +41,8 @@ const LoginForm = () => {
 
       if (!enteredPassword) {
         setError({
-          message: "Password is required.",
-          title: "Login error",
+          message: sr ? "Lozinka je obavezna." : "Password is required.",
+          title: sr ? "Greška pri prijavi" : "Login error",
           popup: true,
         });
         setIsLoading(false);
@@ -62,19 +65,19 @@ const LoginForm = () => {
           );
           setIsLogin(true);
           setIsLoading(false);
-          navigate("/");
+          navigate(homePath(language));
           return response;
         })
         .catch((error) => {
           setError({
-            message: getApiErrorMessage(error, {
+            message: sr ? "Prijava nije uspela. Proverite korisničko ime, lozinku i potvrdu e-pošte." : getApiErrorMessage(error, {
               fallback: "Login failed. Please try again.",
               statusMessages: {
                 401: "Username or password is incorrect.",
                 404: "User was not found. Create an account first.",
               },
             }),
-            title: "Login error",
+            title: sr ? "Greška pri prijavi" : "Login error",
             popup: true,
           });
           setIsLoading(false);
@@ -89,8 +92,8 @@ const LoginForm = () => {
 
       if (!validEmail.test(enteredEmail)) {
         setError({
-          message: "Enter a valid email address.",
-          title: "Registration error",
+          message: sr ? "Unesite ispravnu adresu e-pošte." : "Enter a valid email address.",
+          title: sr ? "Greška pri registraciji" : "Registration error",
           popup: true,
         });
         setIsLoading(false);
@@ -99,8 +102,8 @@ const LoginForm = () => {
 
       if (!validPassword.test(enteredPassword)) {
         setError({
-          message: passwordRequirementsMessage,
-          title: "Registration error",
+          message: sr ? "Lozinka mora imati najmanje 8 znakova, veliko i malo slovo, broj i poseban znak." : passwordRequirementsMessage,
+          title: sr ? "Greška pri registraciji" : "Registration error",
           popup: true,
         });
         setIsLoading(false);
@@ -119,8 +122,12 @@ const LoginForm = () => {
         .then((response) => {
           setIsLoading(false);
           setError({
-            message: response.data,
-            title: "Account created",
+            message: sr
+              ? (response.data.includes("could not be sent")
+                ? "Nalog je kreiran, ali poruka za potvrdu nije poslata. Zatražite novi link za potvrdu."
+                : "Nalog je kreiran. Potvrdite adresu e-pošte pre prijave.")
+              : response.data,
+            title: sr ? "Nalog je kreiran" : "Account created",
             popup: true,
           });
           setIsLogin(true);
@@ -128,10 +135,10 @@ const LoginForm = () => {
         .catch((error) => {
           setIsLoading(false);
           setError({
-            message: getApiErrorMessage(error, {
+            message: sr ? "Registracija nije uspela. Proverite podatke ili pokušajte sa drugim korisničkim imenom i adresom e-pošte." : getApiErrorMessage(error, {
               fallback: "Registration failed. Please check your details and try again.",
             }),
-            title: "Registration error",
+            title: sr ? "Greška pri registraciji" : "Registration error",
             popup: true,
           });
         });
@@ -164,29 +171,32 @@ const LoginForm = () => {
 
   return (
     <>
+      <AuthSeo language={language} page="login" />
       {error.popup && (
         <ErrorModal
           message={error.message}
           onConfirm={errorHandler}
           title={error.title}
+          language={language}
         />
       )}
       <main className={classes.page}>
         <section className={classes.auth}>
           <form onSubmit={submitHandler} className={classes.form}>
+            <h1>{isLogin ? (sr ? "Prijava" : "Login") : (sr ? "Registracija" : "Create account")}</h1>
             {!isLogin && (
               <div className={classes.control}>
-                <label htmlFor="email">E-mail address</label>
+                <label htmlFor="email">{sr ? "Adresa e-pošte" : "E-mail address"}</label>
                 <input type="email" id="email" required ref={emailInputRef} />
               </div>
             )}
             <div className={classes.control}>
-              <label htmlFor="username">Username</label>
+              <label htmlFor="username">{sr ? "Korisničko ime" : "Username"}</label>
               <input type="text" id="username" required ref={usernameInputRef} />
             </div>
 
             <div className={classes.control}>
-              <label htmlFor="password">Password</label>
+              <label htmlFor="password">{sr ? "Lozinka" : "Password"}</label>
               <input
                 type="password"
                 id="password"
@@ -197,27 +207,27 @@ const LoginForm = () => {
             <div className={classes.actions}>
               {!isLoading && (
                 <button type="submit" className={classes.primaryAction}>
-                  {isLogin ? "Login" : "Create account"}
+                  {isLogin ? (sr ? "Prijavi se" : "Login") : (sr ? "Napravi nalog" : "Create account")}
                 </button>
               )}
-              {isLoading && <div>Loading...</div>}
+              {isLoading && <div>{sr ? "Učitavanje..." : "Loading..."}</div>}
               <button
                 type="button"
                 onClick={switchLoginHandler}
                 className={classes.secondaryAction}
               >
                 {isLogin
-                  ? "Create a new account"
-                  : "Login with existing account"}
+                  ? (sr ? "Napravi novi nalog" : "Create a new account")
+                  : (sr ? "Prijavi se postojećim nalogom" : "Login with existing account")}
               </button>
               {isLogin && (
-                <Link to="/forgot-password" className={classes.helperLink}>
-                  Forgot password?
+                <Link to={accountPath(language, "forgot-password")} className={classes.helperLink}>
+                  {sr ? "Zaboravili ste lozinku?" : "Forgot password?"}
                 </Link>
               )}
               {isLogin && (
-                <Link to="/resend-confirmation" className={classes.helperLink}>
-                  Resend confirmation email
+                <Link to={accountPath(language, "resend-confirmation")} className={classes.helperLink}>
+                  {sr ? "Pošalji ponovo poruku za potvrdu" : "Resend confirmation email"}
                 </Link>
               )}
             </div>

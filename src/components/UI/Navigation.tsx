@@ -6,16 +6,19 @@ import AuthContext from "../../store/auth-context";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import logo from "../../../src/poodle.svg";
+import { aboutPath, accountPath, alternatePath, homePath, languageForPath, puppiesPath } from "../../i18n/siteLanguage";
 
 const Navigation = () => {
   const authContext = useContext(AuthContext);
-  const isSerbian = useLocation().pathname.startsWith("/stenci-pudle");
+  const location = useLocation();
+  const language = languageForPath(location.pathname);
+  const isSerbian = language === "sr";
 
   const logoutHandler = async () => {
     try {
       await authContext.logout();
     } catch {
-      window.alert("Logout failed. Please try again.");
+      window.alert(isSerbian ? "Odjava nije uspela. Pokušajte ponovo." : "Logout failed. Please try again.");
     }
   };
 
@@ -28,25 +31,30 @@ const Navigation = () => {
           <img src={logo} alt="Von Apalusso poodle kennel logo" className={classes.logo} />
         </Navbar.Brand>
 
+        <nav className={classes.languageTabs} aria-label="Language / Jezik">
+          <Link to={alternatePath(location.pathname, "sr") + location.search} aria-current={isSerbian ? "page" : undefined} lang="sr">SR</Link>
+          <Link to={alternatePath(location.pathname, "en") + location.search} aria-current={!isSerbian ? "page" : undefined} lang="en">EN</Link>
+        </nav>
+
         <Navbar.Toggle aria-controls="main-navigation" />
         <Navbar.Collapse id="main-navigation" className={classes.navCollapse}>
           <Nav className={classes.mainMenu}>
-            <Nav.Link as={Link} to="/">
-              Home
+            <Nav.Link as={Link} to={homePath(language)}>
+              {isSerbian ? "Početna" : "Home"}
             </Nav.Link>
             {authContext.isLoggedIn ? (
-              <Nav.Link as={Link} to="/profile">
-                Profile
+              <Nav.Link as={Link} to={accountPath(language, "profile")}>
+                {isSerbian ? "Profil" : "Profile"}
               </Nav.Link>
             ) : (
-              <Nav.Link as={Link} to="/login">
-                Login
+              <Nav.Link as={Link} to={accountPath(language, "login")}>
+                {isSerbian ? "Prijava" : "Login"}
               </Nav.Link>
             )}
-            <Nav.Link as={Link} to={isSerbian ? "/o-nama" : "/about"}>
+            <Nav.Link as={Link} to={aboutPath(language)}>
               {isSerbian ? "O nama" : "About"}
             </Nav.Link>
-            <Nav.Link as={Link} to={isSerbian ? "/stenci-pudle" : "/puppies"}>
+            <Nav.Link as={Link} to={puppiesPath(language)}>
               {isSerbian ? "Štenci" : "Puppies"}
             </Nav.Link>
             {authContext.isAdmin && (
@@ -70,7 +78,7 @@ const Navigation = () => {
                 onClick={logoutHandler}
                 className={classes.logoutLink}
               >
-                Logout
+                {isSerbian ? "Odjava" : "Logout"}
               </Nav.Link>
             )}
           </Nav>

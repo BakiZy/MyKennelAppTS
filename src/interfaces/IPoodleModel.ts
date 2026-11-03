@@ -46,6 +46,7 @@ export interface ChildrenProp {
 export interface PoodleListProps {
   poodles: PoodleModel[];
   onRemove: (id: number) => void;
+  language: "en" | "sr";
 }
 
 export interface PoodleModelEdit {

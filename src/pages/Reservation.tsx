@@ -7,8 +7,10 @@ import { Button, Spinner } from "react-bootstrap";
 import { AxiosResponse } from "axios";
 import api from "../api/client";
 import Seo from "../components/SEO/Seo";
+import { localizedColor, localizedSex, localizedSize, poodlePath, SiteLanguage } from "../i18n/siteLanguage";
 
-const Reservation = () => {
+const Reservation = ({ language }: { language: SiteLanguage }) => {
+  const sr = language === "sr";
   const [loading, setLoading] = useState(true);
   const [isSending, setIsSending] = useState(false);
   const [formMessage, setFormMessage] = useState("");
@@ -72,7 +74,7 @@ const Reservation = () => {
     const formData = new FormData(formInputRef.current);
     const honeypotValue = formData.get("website");
     if (typeof honeypotValue === "string" && honeypotValue.trim().length > 0) {
-      setFormMessage("Thank you. Your message has been sent.");
+      setFormMessage(sr ? "Hvala. Vaša poruka je poslata." : "Thank you. Your message has been sent.");
       formInputRef.current.reset();
       return;
     }
@@ -81,7 +83,7 @@ const Reservation = () => {
     const cooldownMs = 120000;
 
     if (Date.now() - lastInquiryAt < cooldownMs) {
-      setFormError("Please wait a moment before sending another inquiry.");
+      setFormError(sr ? "Sačekajte malo pre slanja novog upita." : "Please wait a moment before sending another inquiry.");
       return;
     }
 
@@ -94,10 +96,10 @@ const Reservation = () => {
     try {
       await emailjs.sendForm(serviceId, templateId, formInputRef.current, publicKey);
       localStorage.setItem("lastPoodleInquiryAt", Date.now().toString());
-      setFormMessage("Thank you. Your message has been sent.");
+      setFormMessage(sr ? "Hvala. Vaša poruka je poslata." : "Thank you. Your message has been sent.");
       formInputRef.current.reset();
     } catch {
-      setFormError("Message could not be sent. Please try again or contact us directly.");
+      setFormError(sr ? "Poruka nije poslata. Pokušajte ponovo ili nas kontaktirajte direktno." : "Message could not be sent. Please try again or contact us directly.");
     } finally {
       setIsSending(false);
     }
@@ -105,39 +107,46 @@ const Reservation = () => {
   if (loading) {
     return (
       <Spinner animation="border" variant="info" className={classes.spinner}>
-        loading
+        {sr ? "Učitavanje" : "loading"}
       </Spinner>
     );
   }
 
   if (!poodle) {
-    return <div>No poodle found</div>;
+    return <div>{sr ? "Pudla nije pronađena" : "No poodle found"}</div>;
   }
 
   const displayName = poodle.nickName || poodle.name;
   const birthDate = poodle.dateOfBirth
-    ? new Date(poodle.dateOfBirth).toLocaleDateString("en-GB")
-    : "Unknown";
-  const poodleDescription = `${displayName} is a ${poodle.poodleColorName || ""} ${
-    poodle.poodleSizeName || ""
-  } poodle from Von Apalusso kennel in Serbia.`.replace(/\s+/g, " ");
+    ? new Date(poodle.dateOfBirth).toLocaleDateString(sr ? "sr-RS" : "en-GB")
+    : (sr ? "Nepoznato" : "Unknown");
+  const poodleDescription = sr
+    ? `${displayName} je ${localizedColor(poodle.poodleColorName, language).toLowerCase()} ${localizedSize(poodle.poodleSizeName, language).toLowerCase()} pudla odgajivačnice Von Apalusso u Novom Sadu.`
+    : `${displayName} is a ${poodle.poodleColorName || ""} ${poodle.poodleSizeName || ""} poodle from Von Apalusso kennel in Serbia.`.replace(/\s+/g, " ");
   const poodleStructuredData = {
     "@context": "https://schema.org",
     "@type": "ProfilePage",
     name: `${displayName} | Von Apalusso`,
-    url: `https://poodlesvonapalusso.com/poodles/${poodle.id}`,
+    url: `https://poodlesvonapalusso.com${poodlePath(language, poodle.id)}`,
     description: poodleDescription,
     image: poodle.imageUrl,
+    inLanguage: language,
   };
 
   return (
     <>
       <Seo
-        title={`${displayName} | ${poodle.poodleColorName || "Poodle"} ${
-          poodle.poodleSizeName || ""
-        } | Von Apalusso`}
+        title={sr
+          ? `${displayName} | ${localizedColor(poodle.poodleColorName, language)} ${localizedSize(poodle.poodleSizeName, language)} pudla | Von Apalusso`
+          : `${displayName} | ${poodle.poodleColorName || "Poodle"} ${poodle.poodleSizeName || ""} | Von Apalusso`}
         description={poodleDescription}
-        canonical={`https://poodlesvonapalusso.com/poodles/${poodle.id}`}
+        canonical={`https://poodlesvonapalusso.com${poodlePath(language, poodle.id)}`}
+        lang={language}
+        alternates={[
+          { hrefLang: "en", href: `https://poodlesvonapalusso.com${poodlePath("en", poodle.id)}` },
+          { hrefLang: "sr", href: `https://poodlesvonapalusso.com${poodlePath("sr", poodle.id)}` },
+          { hrefLang: "x-default", href: `https://poodlesvonapalusso.com${poodlePath("en", poodle.id)}` },
+        ]}
         image={poodle.imageUrl || undefined}
         type="profile"
         structuredData={poodleStructuredData}
@@ -147,65 +156,65 @@ const Reservation = () => {
         <div className={classes.photoPanel}>
           <img
             src={poodle.imageUrl}
-            alt={`${displayName}, ${poodle.poodleColorName || "poodle"} ${poodle.poodleSizeName || ""} from Von Apalusso kennel`}
+            alt={sr ? `${displayName}, pudla Von Apalusso` : `${displayName}, ${poodle.poodleColorName || "poodle"} ${poodle.poodleSizeName || ""} from Von Apalusso kennel`}
             className={classes.imageProp}
           />
         </div>
 
         <div className={classes.detailsPanel}>
-          <p className={classes.kicker}>{poodle.isPuppy ? "Available puppy" : "Von Apalusso poodle"}</p>
+          <p className={classes.kicker}>{sr ? (poodle.isPuppy ? "Dostupno štene" : "Pudla Von Apalusso") : (poodle.isPuppy ? "Available puppy" : "Von Apalusso poodle")}</p>
           <h1 id="poodle-title">{displayName}</h1>
           {poodle.nickName && <p className={classes.registeredName}>{poodle.name}</p>}
 
           <dl className={classes.metaGrid}>
             <div>
-              <dt>Sex</dt>
-              <dd>{poodle.sex || "Unknown"}</dd>
+              <dt>{sr ? "Pol" : "Sex"}</dt>
+              <dd>{localizedSex(poodle.sex, language) || (sr ? "Nepoznato" : "Unknown")}</dd>
             </div>
             <div>
-              <dt>Size</dt>
-              <dd>{poodle.poodleSizeName || "Unknown"}</dd>
+              <dt>{sr ? "Veličina" : "Size"}</dt>
+              <dd>{localizedSize(poodle.poodleSizeName, language) || (sr ? "Nepoznato" : "Unknown")}</dd>
             </div>
             <div>
-              <dt>Color</dt>
-              <dd>{poodle.poodleColorName || "Unknown"}</dd>
+              <dt>{sr ? "Boja" : "Color"}</dt>
+              <dd>{localizedColor(poodle.poodleColorName, language) || (sr ? "Nepoznato" : "Unknown")}</dd>
             </div>
             <div>
-              <dt>Date of birth</dt>
+              <dt>{sr ? "Datum rođenja" : "Date of birth"}</dt>
               <dd>{birthDate}</dd>
             </div>
             <div>
-              <dt>Pedigree</dt>
-              <dd>{poodle.pedigreeNumber || "Available on request"}</dd>
+              <dt>{sr ? "Rodovnik" : "Pedigree"}</dt>
+              <dd>{poodle.pedigreeNumber || (sr ? "Dostupno na upit" : "Available on request")}</dd>
             </div>
             <div>
-              <dt>Genetic testing</dt>
-              <dd>{poodle.geneticTests ? "Yes" : "No"}</dd>
+              <dt>{sr ? "Genetski testovi" : "Genetic testing"}</dt>
+              <dd>{poodle.geneticTests ? (sr ? "Da" : "Yes") : (sr ? "Ne" : "No")}</dd>
             </div>
           </dl>
         </div>
 
         {poodle.imagePedigreeUrl && (
-          <aside className={classes.pedigreePanel} aria-label={`${poodle.name} family tree`}>
+          <aside className={classes.pedigreePanel} aria-label={sr ? `Porodično stablo za ${poodle.name}` : `${poodle.name} family tree`}>
             <a href={poodle.imagePedigreeUrl} target="_blank" rel="noreferrer">
               <img
                 src={poodle.imagePedigreeUrl}
-                alt={`${poodle.name} pedigree and family tree`}
+                alt={sr ? `Rodovnik i porodično stablo za ${poodle.name}` : `${poodle.name} pedigree and family tree`}
                 className={classes.pedigreeImg}
               />
             </a>
-            <p>{poodle.name}'s family tree</p>
+            <p>{sr ? `Porodično stablo za ${poodle.name}` : `${poodle.name}'s family tree`}</p>
           </aside>
         )}
         </section>
 
         <section className={classes.contactPanel} aria-labelledby="contact-title">
         <div className={classes.contactIntro}>
-          <p className={classes.kicker}>Inquiry</p>
+          <p className={classes.kicker}>{sr ? "Upit" : "Inquiry"}</p>
           <h2 id="contact-title">
-            {poodle.isPuppy
-              ? `Interested in ${displayName}?`
-              : `Interested in ${displayName}'s puppies?`}
+            {sr
+              ? (poodle.isPuppy ? `Zanima vas ${displayName}?` : `Zanimaju vas štenci psa ${displayName}?`)
+              : (poodle.isPuppy ? `Interested in ${displayName}?` : `Interested in ${displayName}'s puppies?`)}
           </h2>
         </div>
 
@@ -223,7 +232,7 @@ const Reservation = () => {
           <input type="hidden" name="poodle_id" value={poodle.id} />
           <div className={classes.formGrid}>
             <div className={classes.formGroup}>
-              <label htmlFor="name">Your name</label>
+              <label htmlFor="name">{sr ? "Vaše ime" : "Your name"}</label>
               <input
                 id="name"
                 type="text"
@@ -234,7 +243,7 @@ const Reservation = () => {
               />
             </div>
             <div className={classes.formGroup}>
-              <label htmlFor="email">Your email</label>
+              <label htmlFor="email">{sr ? "Vaša e-pošta" : "Your email"}</label>
               <input
                 id="email"
                 type="email"
@@ -245,7 +254,7 @@ const Reservation = () => {
               />
             </div>
             <div className={classes.formGroup}>
-              <label htmlFor="phone">Phone number</label>
+              <label htmlFor="phone">{sr ? "Broj telefona" : "Phone number"}</label>
               <input
                 id="phone"
                 type="tel"
@@ -255,13 +264,13 @@ const Reservation = () => {
               />
             </div>
             <div className={`${classes.formGroup} ${classes.messageField}`}>
-              <label htmlFor="message">Message</label>
+              <label htmlFor="message">{sr ? "Poruka" : "Message"}</label>
               <textarea
                 id="message"
                 className={classes.textarea}
                 name="message"
                 maxLength={1200}
-                placeholder="Tell us what kind of puppy would you like"
+                placeholder={sr ? "Napišite kakvo štene tražite" : "Tell us what kind of puppy would you like"}
                 required
               />
             </div>
@@ -274,11 +283,10 @@ const Reservation = () => {
               className={classes.submitButton}
               disabled={isSending}
             >
-              {isSending ? "Sending..." : "Send information"}
+              {isSending ? (sr ? "Slanje..." : "Sending...") : (sr ? "Pošalji upit" : "Send information")}
             </Button>
             <p>
-              You do not need an account for this inquiry. We only need a valid way
-              to contact you back.
+              {sr ? "Za ovaj upit nije potreban nalog. Potreban nam je samo način da vam odgovorimo." : "You do not need an account for this inquiry. We only need a valid way to contact you back."}
             </p>
           </div>
         </form>

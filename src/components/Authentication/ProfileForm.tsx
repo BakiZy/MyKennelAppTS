@@ -4,8 +4,11 @@ import AuthContext from "../../store/auth-context";
 import api from "../../api/client";
 import classes from "./ProfileForm.module.css";
 import ErrorModal from "../UI/ErrorModal";
+import { homePath, SiteLanguage } from "../../i18n/siteLanguage";
+import AuthSeo from "../SEO/AuthSeo";
 
-const ProfileForm = () => {
+const ProfileForm = ({ language }: { language: SiteLanguage }) => {
+  const sr = language === "sr";
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -24,9 +27,9 @@ const ProfileForm = () => {
   const logoutHandler = async () => {
     try {
       await authContext.logout();
-      navigate("/");
+      navigate(homePath(language));
     } catch {
-      setError({ message: "Logout failed. Please try again.", title: "Logout error", popup: true });
+      setError({ message: sr ? "Odjava nije uspela. Pokušajte ponovo." : "Logout failed. Please try again.", title: sr ? "Greška pri odjavi" : "Logout error", popup: true });
     }
   };
 
@@ -44,8 +47,8 @@ const ProfileForm = () => {
 
     if (form.newPassword.length < 7 || form.newPassword !== form.confirmPassword) {
       setError({
-        message: "Password must be at least 7 characters and both values must match.",
-        title: "Password error",
+        message: sr ? "Lozinka mora imati najmanje 7 znakova i oba unosa moraju biti ista." : "Password must be at least 7 characters and both values must match.",
+        title: sr ? "Greška sa lozinkom" : "Password error",
         popup: true,
       });
       return;
@@ -54,7 +57,7 @@ const ProfileForm = () => {
     try {
       setIsLoading(true);
       await api.post("/api/Authentication/change-password", form);
-      setMessage("Password changed.");
+      setMessage(sr ? "Lozinka je promenjena." : "Password changed.");
       setForm({
         currentPassword: "",
         newPassword: "",
@@ -63,8 +66,8 @@ const ProfileForm = () => {
     } catch (requestError) {
       console.log(requestError);
       setError({
-        message: "Could not change password. Check the current password and try again.",
-        title: "Password error",
+        message: sr ? "Lozinka nije promenjena. Proverite trenutnu lozinku i pokušajte ponovo." : "Could not change password. Check the current password and try again.",
+        title: sr ? "Greška sa lozinkom" : "Password error",
         popup: true,
       });
     } finally {
@@ -82,23 +85,25 @@ const ProfileForm = () => {
 
   return (
     <>
+      <AuthSeo language={language} page="profile" />
       {error.popup && (
         <ErrorModal
           message={error.message}
           title={error.title}
           onConfirm={errorHandler}
+          language={language}
         />
       )}
       <main className={classes.page}>
         <section className={classes.panel}>
           <div className={classes.header}>
-            <p>Account</p>
-            <h1>Profile</h1>
+            <p>{sr ? "Nalog" : "Account"}</p>
+            <h1>{sr ? "Profil" : "Profile"}</h1>
           </div>
           {message && <p className={classes.message}>{message}</p>}
           <form className={classes.form} onSubmit={submitHandler}>
             <div className={classes.field}>
-              <label htmlFor="currentPassword">Current password</label>
+              <label htmlFor="currentPassword">{sr ? "Trenutna lozinka" : "Current password"}</label>
               <input
                 type="password"
                 id="currentPassword"
@@ -110,7 +115,7 @@ const ProfileForm = () => {
               />
             </div>
             <div className={classes.field}>
-              <label htmlFor="newPassword">New password</label>
+              <label htmlFor="newPassword">{sr ? "Nova lozinka" : "New password"}</label>
               <input
                 type="password"
                 id="newPassword"
@@ -122,7 +127,7 @@ const ProfileForm = () => {
               />
             </div>
             <div className={classes.field}>
-              <label htmlFor="confirmPassword">Confirm password</label>
+              <label htmlFor="confirmPassword">{sr ? "Potvrdite lozinku" : "Confirm password"}</label>
               <input
                 type="password"
                 id="confirmPassword"
@@ -135,10 +140,10 @@ const ProfileForm = () => {
             </div>
             <div className={classes.actions}>
               <button type="submit" disabled={isLoading}>
-                {isLoading ? "Saving..." : "Change password"}
+                {isLoading ? (sr ? "Čuvanje..." : "Saving...") : (sr ? "Promeni lozinku" : "Change password")}
               </button>
               <button type="button" onClick={logoutHandler} className={classes.secondary}>
-                Logout
+                {sr ? "Odjava" : "Logout"}
               </button>
             </div>
           </form>

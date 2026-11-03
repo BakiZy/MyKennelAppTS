@@ -1,6 +1,6 @@
 import AuthContext from "./store/auth-context";
 
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import React, { useContext } from "react";
 import Navigation from "./components/UI/Navigation";
 import About from "./pages/About";
@@ -21,19 +21,22 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import ConfirmEmail from "./pages/ConfirmEmail";
 import ResendConfirmation from "./pages/ResendConfirmation";
+import { languageForPath } from "./i18n/siteLanguage";
 
 const App: React.FC = () => {
   const authContext = useContext(AuthContext);
+  const language = languageForPath(useLocation().pathname);
 
   if (!authContext.isReady) {
-    return <p role="status" style={{ padding: "2rem" }}>Loading account...</p>;
+    return <p role="status" style={{ padding: "2rem" }}>{language === "sr" ? "Učitavanje naloga..." : "Loading account..."}</p>;
   }
 
   return (
     <>
       <Navigation />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home language="en" />} />
+        <Route path="/sr" element={<Home language="sr" />} />
 
         <Route path="/about" element={<About />} />
         <Route path="/o-nama" element={<AboutSr />} />
@@ -42,14 +45,17 @@ const App: React.FC = () => {
         <Route path="/stenci-pudle" element={<Puppies language="sr" />} />
         <Route path="/stenci-pudle/:puppyId" element={<PuppyDetails language="sr" />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/sr/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/sr/reset-password" element={<ResetPassword />} />
         <Route path="/confirm-email" element={<ConfirmEmail />} />
+        <Route path="/sr/confirm-email" element={<ConfirmEmail />} />
         <Route path="/resend-confirmation" element={<ResendConfirmation />} />
-        {authContext.isLoggedIn ? (
-          <Route path="/profile" element={<Profile />} />
-        ) : (
-          <Route path="/login" element={<LoginPage />} />
-        )}
+        <Route path="/sr/resend-confirmation" element={<ResendConfirmation />} />
+        <Route path="/profile" element={authContext.isLoggedIn ? <Profile language="en" /> : <Navigate to="/login" replace />} />
+        <Route path="/sr/profile" element={authContext.isLoggedIn ? <Profile language="sr" /> : <Navigate to="/sr/login" replace />} />
+        <Route path="/login" element={authContext.isLoggedIn ? <Navigate to="/profile" replace /> : <LoginPage language="en" />} />
+        <Route path="/sr/login" element={authContext.isLoggedIn ? <Navigate to="/sr/profile" replace /> : <LoginPage language="sr" />} />
         {authContext.isAdmin ? (
           <Route path="/admin" element={<Admin />} />
         ) : (
@@ -64,7 +70,8 @@ const App: React.FC = () => {
         {authContext.isAdmin && (
           <Route path="/images" element={<ImagePage />} />
         )}
-        <Route path="/poodles/:poodleId" element={<Reservation />} />
+        <Route path="/poodles/:poodleId" element={<Reservation language="en" />} />
+        <Route path="/sr/poodles/:poodleId" element={<Reservation language="sr" />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

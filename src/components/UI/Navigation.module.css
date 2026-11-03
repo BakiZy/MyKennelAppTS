@@ -35,6 +35,35 @@
   gap: 1rem;
 }
 
+.languageTabs {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 0.2rem;
+  margin-left: auto;
+}
+
+.languageTabs a {
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 999px;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 800;
+  line-height: 1;
+  padding: 0.5rem 0.55rem;
+  text-decoration: none;
+}
+
+.languageTabs a[aria-current="page"] {
+  border-color: #ffe2ed;
+  background: #ffe2ed;
+  color: #212529;
+}
+
+.languageTabs a:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
 .mainMenu {
   display: flex;
   align-items: center;
@@ -139,7 +168,11 @@
   }
 
   .logoDivLeft span {
-    max-width: 8rem;
+    max-width: 6rem;
     font-size: 0.75rem;
+  }
+
+  .languageTabs a {
+    padding: 0.4rem 0.45rem;
   }
 }

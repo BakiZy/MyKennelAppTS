@@ -90,7 +90,7 @@ const About: React.FC = () => {
         >
           contact page
         </a>
-        . <Link to="/o-nama">O nama</Link>
+        . <Link to="/puppies">View available puppies</Link>
       </Card.Footer>
     </>
   );
