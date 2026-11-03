@@ -7,6 +7,7 @@ import AuthContext from "../store/auth-context";
 import classes from "./Puppies.module.css";
 import Seo from "../components/SEO/Seo";
 import PuppyGuide from "../components/PuppyGuide";
+import { ImageRecord } from "../components/ImageAssetEditor";
 import { getApiErrorMessage } from "../api/errorMessage";
 
 const puppyPhotos = (puppy: PuppyModel): string[] =>
@@ -65,6 +66,8 @@ const Puppies: React.FC = () => {
   const [puppies, setPuppies] = useState<PuppyModel[]>([]);
   const [litters, setLitters] = useState<LitterModel[]>([]);
   const [poodles, setPoodles] = useState<PoodleModel[]>([]);
+  const [libraryImages, setLibraryImages] = useState<ImageRecord[]>([]);
+  const [coverImagesError, setCoverImagesError] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [adminMessage, setAdminMessage] = useState("");
@@ -117,6 +120,32 @@ const Puppies: React.FC = () => {
   useEffect(() => {
     fetchPuppies();
   }, [fetchPuppies]);
+
+  useEffect(() => {
+    if (!authContext.isAdmin) return;
+    let active = true;
+    api.get<ImageRecord[]>("/api/Images")
+      .then((response) => {
+        if (active) setLibraryImages(response.data);
+      })
+      .catch(() => {
+        if (active) setCoverImagesError("Could not load image library. Puppy photos are still available.");
+      });
+    return () => { active = false; };
+  }, [authContext.isAdmin]);
+
+  const puppyCoverChoices = puppies.flatMap((puppy) =>
+    puppyPhotos(puppy).map((url, index) => ({
+      key: `${puppy.id}-${index}`,
+      url,
+      label: `${puppy.name || `Puppy ${puppy.id}`} — photo ${index + 1}`,
+    }))
+  );
+  const libraryCoverChoices = libraryImages
+    .filter((image): image is ImageRecord & { url: string } => !!image.url)
+    .map((image) => ({ key: String(image.id), url: image.url, label: image.name || `Image ${image.id}` }));
+  const coverIsListed = [...puppyCoverChoices, ...libraryCoverChoices]
+    .some((choice) => choice.url === litterForm.coverImageUrl);
 
   const formatDate = (value?: string) => {
     if (!value) {
@@ -434,8 +463,8 @@ const Puppies: React.FC = () => {
                 <option value="Available">Available</option>
                 <option value="Closed">Closed</option>
               </select>
-              <label htmlFor="coverImageUrl">Cover image URL</label>
-              <input
+              <label htmlFor="coverImageUrl">Cover image</label>
+              <select
                 id="coverImageUrl"
                 value={litterForm.coverImageUrl}
                 onChange={(event) =>
@@ -444,8 +473,30 @@ const Puppies: React.FC = () => {
                     coverImageUrl: event.target.value,
                   }))
                 }
-                placeholder="https://..."
-              />
+              >
+                <option value="">No cover image</option>
+                {litterForm.coverImageUrl && !coverIsListed && (
+                  <option value={litterForm.coverImageUrl}>Current cover image</option>
+                )}
+                {puppyCoverChoices.length > 0 && (
+                  <optgroup label="Puppy photos">
+                    {puppyCoverChoices.map((choice) => (
+                      <option key={`puppy-${choice.key}`} value={choice.url}>{choice.label}</option>
+                    ))}
+                  </optgroup>
+                )}
+                {libraryCoverChoices.length > 0 && (
+                  <optgroup label="Image library">
+                    {libraryCoverChoices.map((choice) => (
+                      <option key={`library-${choice.key}`} value={choice.url}>{choice.label}</option>
+                    ))}
+                  </optgroup>
+                )}
+              </select>
+              {coverImagesError && <p className={classes.fieldNote}>{coverImagesError}</p>}
+              {litterForm.coverImageUrl && (
+                <img className={classes.coverPreview} src={litterForm.coverImageUrl} alt="Selected litter cover" />
+              )}
               <label htmlFor="litterDescription">Description</label>
               <textarea
                 id="litterDescription"
