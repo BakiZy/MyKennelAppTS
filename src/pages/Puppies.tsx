@@ -9,6 +9,7 @@ import Seo from "../components/SEO/Seo";
 import PuppyGuide from "../components/PuppyGuide";
 import { ImageRecord } from "../components/ImageAssetEditor";
 import { getApiErrorMessage } from "../api/errorMessage";
+import { poodlePath } from "../i18n/siteLanguage";
 import {
   litterDescription, puppyColor, puppyDescription, puppyDetailPath, puppyListDescription,
   puppyListPath, puppyListTitle, puppySex, puppyStatus, PuppyLanguage,
@@ -707,7 +708,7 @@ const Puppies: React.FC<{ language: PuppyLanguage }> = ({ language }) => {
             {litters.map((litter) => (
               <article key={litter.id} className={classes.litterCard}>
                 {litter.coverImageUrl && (
-                  <a className={classes.imageLink} href={litter.coverImageUrl} target="_blank" rel="noopener noreferrer" aria-label={`Open full image of ${litter.name || "litter"}`}>
+                  <a className={classes.imageLink} href={litter.coverImageUrl} target="_blank" rel="noopener noreferrer" aria-label={isSerbian ? `Otvori celu fotografiju legla ${litter.name || ""}` : `Open full image of ${litter.name || "litter"}`}>
                     <img
                       src={litter.coverImageUrl}
                       alt={isSerbian ? `${litter.name || "Leglo"} odgajivačnice Von Apalusso` : `${litter.name || "Upcoming litter"} from Von Apalusso poodle kennel`}
@@ -715,9 +716,15 @@ const Puppies: React.FC<{ language: PuppyLanguage }> = ({ language }) => {
                     />
                   </a>
                 )}
+                {!litter.coverImageUrl && (
+                  <div className={classes.imagePlaceholder}>
+                    <img src="/poodle.svg" alt="" />
+                    <span>{isSerbian ? "Fotografija legla uskoro" : "Litter photo coming soon"}</span>
+                  </div>
+                )}
                 <div className={classes.cardBody}>
                   <div className={classes.cardTopLine}>
-                    <h3>{litter.name || "Upcoming litter"}</h3>
+                    <h3>{litter.name || (isSerbian ? "Planirano leglo" : "Upcoming litter")}</h3>
                     <span>{puppyStatus(litter.status || "Planned", language)}</span>
                   </div>
                   <p>{litterDescription(litter, language)}</p>
@@ -730,7 +737,7 @@ const Puppies: React.FC<{ language: PuppyLanguage }> = ({ language }) => {
                       <dt>{isSerbian ? "Otac" : "Father"}</dt>
                       <dd>
                         {litter.fatherId && litter.fatherName ? (
-                          <Link className={classes.poodleLink} to={`/poodles/${litter.fatherId}`}>
+                          <Link className={classes.poodleLink} to={poodlePath(language, litter.fatherId)}>
                             {litter.fatherName}
                           </Link>
                         ) : (
@@ -742,7 +749,7 @@ const Puppies: React.FC<{ language: PuppyLanguage }> = ({ language }) => {
                       <dt>{isSerbian ? "Majka" : "Mother"}</dt>
                       <dd>
                         {litter.motherId && litter.motherName ? (
-                          <Link className={classes.poodleLink} to={`/poodles/${litter.motherId}`}>
+                          <Link className={classes.poodleLink} to={poodlePath(language, litter.motherId)}>
                             {litter.motherName}
                           </Link>
                         ) : (
@@ -803,7 +810,7 @@ const Puppies: React.FC<{ language: PuppyLanguage }> = ({ language }) => {
                   </Link>
                   <div className={classes.cardBody}>
                     <div className={classes.cardTopLine}>
-                      <h3>{puppy.name || "Puppy X"}</h3>
+                      <h3>{puppy.name || (isSerbian ? "Štene" : "Puppy X")}</h3>
                       <span>{puppyStatus(puppy.status, language)}</span>
                     </div>
                     <p>{puppyDescription(puppy, language)}</p>

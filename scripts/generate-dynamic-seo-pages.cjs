@@ -22,8 +22,8 @@ const sex = (value, lang) => lang === "sr"
   ? ({ Male: "Mužjak", Female: "Ženka" })[value] || value || "Biće potvrđeno"
   : value || "To be confirmed";
 const color = (value, lang) => lang === "sr"
-  ? ({ red: "crvena", apricot: "aprikot", fawn: "riđa" })[(value || "").toLowerCase()] || value || "Biće potvrđeno"
-  : value || "To be confirmed";
+  ? localizedColor(value, lang) || "Biće potvrđeno"
+  : (value || "").trim().toLowerCase() === "appricot" ? "Apricot" : value || "To be confirmed";
 
 const fetchJson = (url) => new Promise((resolve, reject) => {
   https.get(url, { timeout: 10000, headers: { Accept: "application/json" } }, (response) => {
@@ -51,8 +51,8 @@ const localizedSize = (value, lang) => lang === "sr"
   ? ({ toy: "toy", miniature: "patuljasta", mini: "patuljasta", medium: "srednja", standard: "standardna" })[(value || "").toLowerCase()] || value || ""
   : value || "";
 const localizedColor = (value, lang) => lang === "sr"
-  ? ({ red: "crvena", apricot: "aprikot", fawn: "riđa", black: "crna", white: "bela", brown: "braon", gray: "siva", "black and tan": "crna sa paležom", harelquin: "harlekin", harlequin: "harlekin" })[(value || "").toLowerCase()] || value || ""
-  : value || "";
+  ? ({ red: "crvena", "light red": "svetlocrvena", "dark red": "tamnocrvena", apricot: "aprikot", appricot: "aprikot", fawn: "riđa", black: "crna", white: "bela", brown: "braon", gray: "siva", "black and tan": "crna sa paležom", harelquin: "harlekin", harlequin: "harlekin" })[(value || "").trim().toLowerCase().replace(/\s+/g, " ")] || value || ""
+  : (value || "").trim().toLowerCase() === "appricot" ? "Apricot" : value || "";
 const poodleDescription = (poodle, lang) => {
   const name = poodle.nickName || poodle.name || (lang === "sr" ? "Pudla Von Apalusso" : "Von Apalusso poodle");
   return lang === "sr"

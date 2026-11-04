@@ -137,6 +137,10 @@ const applySeo = (html, page) => {
   const canonical = escapeHtml(page.canonical);
   const lang = escapeHtml(page.lang || "en");
   const staticHtml = page.staticHtml ? page.staticHtml.trim() : "";
+  const initialRenderGuard = staticHtml
+    ? `    <style>html.seo-app-loading #root { visibility: hidden; }</style>
+    <script>document.documentElement.classList.add("seo-app-loading"); setTimeout(function () { document.documentElement.classList.remove("seo-app-loading"); }, 5000);</script>`
+    : "";
   const alternateBlock = (page.alternates || [])
     .map(
       (alternate) =>
@@ -171,6 +175,7 @@ const applySeo = (html, page) => {
 
   return withoutManagedSeo
     .replace(/<html lang="[^"]*">/, `<html lang="${lang}">`)
+    .replace("</head>", `${initialRenderGuard}\n  </head>`)
     .replace(/<title>.*?<\/title>/, `<title>${title}</title>`)
     .replace(
       /<meta\s+name="description"[\s\S]*?\/>/,

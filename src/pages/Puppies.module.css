@@ -76,10 +76,15 @@
   font-weight: 800;
 }
 
-.litterGrid,
-.puppyGrid {
+.litterGrid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.puppyGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1rem;
 }
 
@@ -91,6 +96,19 @@
   border-radius: 8px;
   background: #ffffff;
   box-shadow: 0 16px 40px rgba(31, 35, 29, 0.08);
+}
+
+.puppyCard {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.puppyCard:hover {
+  border-color: rgba(141, 47, 63, 0.25);
+  box-shadow: 0 20px 46px rgba(31, 35, 29, 0.12);
+  transform: translateY(-3px);
 }
 
 .imageLink {
@@ -115,8 +133,58 @@
   object-fit: contain;
 }
 
+.litterCard .imageLink img,
+.imagePlaceholder {
+  aspect-ratio: 4 / 5;
+}
+
+.litterCard .imageLink img {
+  object-fit: cover;
+}
+
+.imagePlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.8rem;
+  background: #e8e2da;
+  color: #5c625b;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.imagePlaceholder img {
+  width: 28%;
+  max-height: 28%;
+  object-fit: contain;
+}
+
+.puppyCard .imageLink {
+  background: #e8e2da;
+}
+
+.puppyCard .imageLink img {
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+.puppyCard .imageLink .placeholderImage {
+  object-fit: contain;
+}
+
 .cardBody {
   padding: 1rem;
+}
+
+.puppyCard .cardBody {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.puppyCard .cardBody dl {
+  margin-bottom: 1rem;
 }
 
 .cardTopLine {
@@ -203,6 +271,10 @@
   font-weight: 800;
   line-height: 1;
   text-decoration: none;
+}
+
+.puppyCard .inquiryLink {
+  margin-top: auto;
 }
 
 .inquiryLink:hover {
@@ -418,8 +490,19 @@
   color: #ffffff;
 }
 
+@media only screen and (max-width: 1180px) {
+  .puppyGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 @media only screen and (max-width: 980px) {
-  .litterGrid,
+  .litterGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media only screen and (max-width: 900px) {
   .puppyGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }

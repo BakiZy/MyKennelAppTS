@@ -1,4 +1,5 @@
 import { LitterModel, PuppyModel } from "./interfaces/IPuppyModel";
+import { localizedColor } from "./i18n/siteLanguage";
 
 export type PuppyLanguage = "en" | "sr";
 
@@ -45,6 +46,6 @@ export const puppySex = (sex: string | undefined, language: PuppyLanguage) => {
 
 export const puppyColor = (color: string | undefined, language: PuppyLanguage) => {
   if (!color) return language === "sr" ? "Biće potvrđeno" : "To be confirmed";
-  if (language === "en") return color;
-  return ({ red: "crvena", apricot: "aprikot", fawn: "riđa" } as Record<string, string>)[color.toLowerCase()] || color;
+  const translated = localizedColor(color, language);
+  return language === "sr" ? translated.toLocaleLowerCase("sr-RS") : translated;
 };

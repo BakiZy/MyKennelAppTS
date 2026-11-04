@@ -34,12 +34,14 @@ export const localizedSize = (name: string, language: SiteLanguage) => {
 };
 
 export const localizedColor = (name: string, language: SiteLanguage) => {
-  if (language === "en") return name;
+  const normalized = name.trim().toLowerCase().replace(/\s+/g, " ");
+  if (language === "en") return normalized === "appricot" ? "Apricot" : name;
   const colors: Record<string, string> = {
-    red: "Crvena", apricot: "Aprikot", fawn: "Riđa", black: "Crna", white: "Bela", brown: "Braon",
+    red: "Crvena", "light red": "Svetlocrvena", "dark red": "Tamnocrvena",
+    apricot: "Aprikot", appricot: "Aprikot", fawn: "Riđa", black: "Crna", white: "Bela", brown: "Braon",
     gray: "Siva", "black and tan": "Crna sa paležom", harelquin: "Harlekin", harlequin: "Harlekin",
   };
-  return colors[name.trim().toLowerCase()] || name;
+  return colors[normalized] || name;
 };
 
 export const localizedSex = (name: string, language: SiteLanguage) => {

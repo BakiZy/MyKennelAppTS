@@ -1,7 +1,7 @@
 import AuthContext from "./store/auth-context";
 
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import React, { useContext } from "react";
+import React, { useContext, useLayoutEffect } from "react";
 import Navigation from "./components/UI/Navigation";
 import About from "./pages/About";
 import AboutSr from "./pages/AboutSr";
@@ -26,6 +26,12 @@ import { languageForPath } from "./i18n/siteLanguage";
 const App: React.FC = () => {
   const authContext = useContext(AuthContext);
   const language = languageForPath(useLocation().pathname);
+
+  useLayoutEffect(() => {
+    if (authContext.isReady) {
+      document.documentElement.classList.remove("seo-app-loading");
+    }
+  }, [authContext.isReady]);
 
   if (!authContext.isReady) {
     return <p role="status" style={{ padding: "2rem" }}>{language === "sr" ? "Učitavanje naloga..." : "Loading account..."}</p>;
