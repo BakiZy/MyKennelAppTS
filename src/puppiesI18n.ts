@@ -9,6 +9,9 @@ export const puppyListPath = (language: PuppyLanguage) =>
 export const puppyDetailPath = (language: PuppyLanguage, id: number) =>
   `${puppyListPath(language)}/${id}`;
 
+export const litterDetailPath = (language: PuppyLanguage, id: number | string) =>
+  language === "sr" ? `/stenci-pudle/legla/${id}` : `/puppies/litters/${id}`;
+
 export const puppyListTitle = (language: PuppyLanguage) => language === "sr"
   ? "Štenci toy i patuljastih pudli u Novom Sadu | Von Apalusso"
   : "Toy and miniature poodle puppies in Serbia | Von Apalusso";

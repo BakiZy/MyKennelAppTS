@@ -17,6 +17,7 @@ import EditPoodle from "./pages/Edit";
 import ImagePage from "./pages/ImageUr";
 import Puppies from "./pages/Puppies";
 import PuppyDetails from "./pages/PuppyDetails";
+import LitterDetails from "./pages/LitterDetails";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import ConfirmEmail from "./pages/ConfirmEmail";
@@ -48,8 +49,10 @@ const App: React.FC = () => {
         <Route path="/o-nama" element={<AboutSr />} />
         <Route path="/puppies" element={<Puppies language="en" />} />
         <Route path="/puppies/:puppyId" element={<PuppyDetails language="en" />} />
+        <Route path="/puppies/litters/:litterId" element={<LitterDetails language="en" />} />
         <Route path="/stenci-pudle" element={<Puppies language="sr" />} />
         <Route path="/stenci-pudle/:puppyId" element={<PuppyDetails language="sr" />} />
+        <Route path="/stenci-pudle/legla/:litterId" element={<LitterDetails language="sr" />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/sr/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />

@@ -18,6 +18,9 @@ export const alternatePath = (pathname: string, language: SiteLanguage): string 
   if (pathname === "/about" || pathname === "/o-nama") return aboutPath(language);
   if (pathname === "/puppies" || pathname === "/stenci-pudle") return puppiesPath(language);
 
+  const litter = pathname.match(/^\/(?:puppies\/litters|stenci-pudle\/legla)\/(\d+)$/);
+  if (litter) return language === "sr" ? `/stenci-pudle/legla/${litter[1]}` : `/puppies/litters/${litter[1]}`;
+
   const puppy = pathname.match(/^\/(?:puppies|stenci-pudle)\/(\d+)$/);
   if (puppy) return `${puppiesPath(language)}/${puppy[1]}`;
   const poodle = pathname.match(/^\/(?:sr\/)?poodles\/(\d+)$/);

@@ -4,7 +4,7 @@ import api from "../api/client";
 import Seo from "../components/SEO/Seo";
 import { PuppyModel } from "../interfaces/IPuppyModel";
 import classes from "./PuppyDetails.module.css";
-import { puppyColor, puppyDescription, puppyDetailPath, puppyListPath, puppySex, puppyStatus, PuppyLanguage } from "../puppiesI18n";
+import { litterDetailPath, puppyColor, puppyDescription, puppyDetailPath, puppyListPath, puppySex, puppyStatus, PuppyLanguage } from "../puppiesI18n";
 
 const PuppyDetails: React.FC<{ language: PuppyLanguage }> = ({ language }) => {
   const isSerbian = language === "sr";
@@ -105,7 +105,7 @@ const PuppyDetails: React.FC<{ language: PuppyLanguage }> = ({ language }) => {
               <div><dt>{isSerbian ? "Rođeno" : "Born"}</dt><dd>{date}</dd></div>
               <div><dt>{isSerbian ? "Pol" : "Sex"}</dt><dd>{puppySex(puppy.sex, language)}</dd></div>
               <div><dt>{isSerbian ? "Boja" : "Color"}</dt><dd>{puppyColor(puppy.color, language)}</dd></div>
-              <div><dt>{isSerbian ? "Leglo" : "Litter"}</dt><dd>{puppy.litterName || (isSerbian ? "Nije dodeljeno" : "Not assigned")}</dd></div>
+              <div><dt>{isSerbian ? "Leglo" : "Litter"}</dt><dd>{puppy.litterId && puppy.litterName ? <Link to={litterDetailPath(language, puppy.litterId)}>{puppy.litterName}</Link> : (isSerbian ? "Nije dodeljeno" : "Not assigned")}</dd></div>
             </dl>
             <Link className={classes.contactLink} to={isSerbian ? "/o-nama" : "/about"}>{isSerbian ? "Pitajte nas o ovom štenetu" : "Ask about this puppy"}</Link>
           </section>

@@ -95,6 +95,8 @@
 .details dl div { display: flex; justify-content: space-between; gap: 1rem; border-bottom: 1px solid rgba(32, 32, 29, 0.1); padding-bottom: 0.6rem; }
 .details dt { color: #6b7069; font-weight: 700; }
 .details dd { margin: 0; font-weight: 800; text-align: right; }
+.details dd a { color: #8d2f3f; text-decoration: none; }
+.details dd a:hover { text-decoration: underline; }
 .contactLink { display: inline-block; margin-top: 1.5rem; border-radius: 999px; background: #20201d; color: #fff; padding: 0.75rem 1.2rem; font-weight: 800; text-decoration: none; }
 .contactLink:hover { background: #8d2f3f; color: #fff; }
 

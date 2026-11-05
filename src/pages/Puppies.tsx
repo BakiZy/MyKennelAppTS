@@ -11,7 +11,7 @@ import { ImageRecord } from "../components/ImageAssetEditor";
 import { getApiErrorMessage } from "../api/errorMessage";
 import { poodlePath } from "../i18n/siteLanguage";
 import {
-  litterDescription, puppyColor, puppyDescription, puppyDetailPath, puppyListDescription,
+  litterDescription, litterDetailPath, puppyColor, puppyDescription, puppyDetailPath, puppyListDescription,
   puppyListPath, puppyListTitle, puppySex, puppyStatus, PuppyLanguage,
 } from "../puppiesI18n";
 
@@ -380,8 +380,8 @@ const Puppies: React.FC<{ language: PuppyLanguage }> = ({ language }) => {
         <p className={classes.eyebrow}>{isSerbian ? "Štenci Von Apalusso" : "Von Apalusso puppies"}</p>
         <h1>{isSerbian ? "Štenci toy i patuljastih pudli u Novom Sadu" : "Toy and miniature poodle puppies in Serbia"}</h1>
         <p>{isSerbian
-          ? "Pogledajte naša legla, roditelje i fotografije štenaca. Za informacije o dostupnosti i rezervaciji, kontaktirajte odgajivačnicu Von Apalusso."
-          : "Explore our litters, parents and puppy photos. Contact Von Apalusso kennel to ask about availability and reservations."}</p>
+          ? "Upoznajte naše štence i pogledajte njihove fotografije. Ispod možete istražiti legla i roditelje, a za informacije o rezervaciji kontaktirajte odgajivačnicu Von Apalusso."
+          : "Meet our puppies and explore their photos. Browse litters and parents below, then contact Von Apalusso kennel to ask about reservations."}</p>
         </section>
 
       {loading && <p className={classes.statusMessage}>{isSerbian ? "Učitavanje štenaca..." : "Loading puppies..."}</p>}
@@ -698,91 +698,6 @@ const Puppies: React.FC<{ language: PuppyLanguage }> = ({ language }) => {
         </section>
       )}
 
-      {!loading && !error && litters.length > 0 && (
-        <section className={classes.section}>
-          <div className={classes.sectionHeader}>
-            <h2>{isSerbian ? "Legla" : "Litters"}</h2>
-            <span>{litters.length}</span>
-          </div>
-          <div className={classes.litterGrid}>
-            {litters.map((litter) => (
-              <article key={litter.id} className={classes.litterCard}>
-                {litter.coverImageUrl && (
-                  <a className={classes.imageLink} href={litter.coverImageUrl} target="_blank" rel="noopener noreferrer" aria-label={isSerbian ? `Otvori celu fotografiju legla ${litter.name || ""}` : `Open full image of ${litter.name || "litter"}`}>
-                    <img
-                      src={litter.coverImageUrl}
-                      alt={isSerbian ? `${litter.name || "Leglo"} odgajivačnice Von Apalusso` : `${litter.name || "Upcoming litter"} from Von Apalusso poodle kennel`}
-                      loading="lazy"
-                    />
-                  </a>
-                )}
-                {!litter.coverImageUrl && (
-                  <div className={classes.imagePlaceholder}>
-                    <img src="/poodle.svg" alt="" />
-                    <span>{isSerbian ? "Fotografija legla uskoro" : "Litter photo coming soon"}</span>
-                  </div>
-                )}
-                <div className={classes.cardBody}>
-                  <div className={classes.cardTopLine}>
-                    <h3>{litter.name || (isSerbian ? "Planirano leglo" : "Upcoming litter")}</h3>
-                    <span>{puppyStatus(litter.status || "Planned", language)}</span>
-                  </div>
-                  <p>{litterDescription(litter, language)}</p>
-                  <dl>
-                    <div>
-                      <dt>{isSerbian ? "Rođeni" : "Born"}</dt>
-                      <dd>{formatDate(litter.dateOfBirth)}</dd>
-                    </div>
-                    <div>
-                      <dt>{isSerbian ? "Otac" : "Father"}</dt>
-                      <dd>
-                        {litter.fatherId && litter.fatherName ? (
-                          <Link className={classes.poodleLink} to={poodlePath(language, litter.fatherId)}>
-                            {litter.fatherName}
-                          </Link>
-                        ) : (
-                            isSerbian ? "Biće objavljeno" : "To be announced"
-                        )}
-                      </dd>
-                    </div>
-                    <div>
-                      <dt>{isSerbian ? "Majka" : "Mother"}</dt>
-                      <dd>
-                        {litter.motherId && litter.motherName ? (
-                          <Link className={classes.poodleLink} to={poodlePath(language, litter.motherId)}>
-                            {litter.motherName}
-                          </Link>
-                        ) : (
-                            isSerbian ? "Biće objavljeno" : "To be announced"
-                        )}
-                      </dd>
-                    </div>
-                    <div>
-                      <dt>{isSerbian ? "Dostupno" : "Available"}</dt>
-                      <dd>{litter.availablePuppyCount}</dd>
-                    </div>
-                  </dl>
-                  {authContext.isAdmin && (
-                    <div className={classes.cardActions}>
-                      <button type="button" onClick={() => startLitterEdit(litter)}>
-                        Edit
-                      </button>
-                      <button
-                        type="button"
-                        className={classes.dangerButton}
-                        onClick={() => deleteLitterHandler(litter)}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-      )}
-
       {!loading && !error && (
         <section className={classes.section}>
           <div className={classes.sectionHeader}>
@@ -831,7 +746,9 @@ const Puppies: React.FC<{ language: PuppyLanguage }> = ({ language }) => {
                       </div>
                       <div>
                         <dt>{isSerbian ? "Leglo" : "Litter"}</dt>
-                        <dd>{puppy.litterName || (isSerbian ? "Nije dodeljeno" : "Not assigned")}</dd>
+                        <dd>{puppy.litterId && puppy.litterName
+                          ? <Link className={classes.poodleLink} to={litterDetailPath(language, puppy.litterId)}>{puppy.litterName}</Link>
+                          : (isSerbian ? "Nije dodeljeno" : "Not assigned")}</dd>
                       </div>
                     </dl>
                     <Link className={classes.inquiryLink} to={puppyDetailPath(language, puppy.id)}>
@@ -858,6 +775,94 @@ const Puppies: React.FC<{ language: PuppyLanguage }> = ({ language }) => {
           )}
         </section>
       )}
+      {!loading && !error && litters.length > 0 && (
+        <section className={classes.section}>
+          <div className={classes.sectionHeader}>
+            <h2>{isSerbian ? "Legla" : "Litters"}</h2>
+            <span>{litters.length}</span>
+          </div>
+          <div className={classes.litterGrid}>
+            {litters.map((litter) => (
+              <article key={litter.id} className={classes.litterCard}>
+                {litter.coverImageUrl && (
+                  <Link className={classes.imageLink} to={litterDetailPath(language, litter.id)} aria-label={isSerbian ? `Pogledaj leglo ${litter.name || ""}` : `View litter ${litter.name || ""}`}>
+                    <img
+                      src={litter.coverImageUrl}
+                      alt={isSerbian ? `${litter.name || "Leglo"} odgajivačnice Von Apalusso` : `${litter.name || "Upcoming litter"} from Von Apalusso poodle kennel`}
+                      loading="lazy"
+                    />
+                  </Link>
+                )}
+                {!litter.coverImageUrl && (
+                  <Link className={classes.imagePlaceholder} to={litterDetailPath(language, litter.id)} aria-label={isSerbian ? `Pogledaj leglo ${litter.name || ""}` : `View litter ${litter.name || ""}`}>
+                    <img src="/poodle.svg" alt="" />
+                    <span>{isSerbian ? "Fotografija legla uskoro" : "Litter photo coming soon"}</span>
+                  </Link>
+                )}
+                <div className={classes.cardBody}>
+                  <div className={classes.cardTopLine}>
+                    <h3><Link className={classes.litterTitleLink} to={litterDetailPath(language, litter.id)}>{litter.name || (isSerbian ? "Planirano leglo" : "Upcoming litter")}</Link></h3>
+                    <span>{puppyStatus(litter.status || "Planned", language)}</span>
+                  </div>
+                  <p>{litterDescription(litter, language)}</p>
+                  <dl>
+                    <div>
+                      <dt>{isSerbian ? "Rođeni" : "Born"}</dt>
+                      <dd>{formatDate(litter.dateOfBirth)}</dd>
+                    </div>
+                    <div>
+                      <dt>{isSerbian ? "Otac" : "Father"}</dt>
+                      <dd>
+                        {litter.fatherId && litter.fatherName ? (
+                          <Link className={classes.poodleLink} to={poodlePath(language, litter.fatherId)}>
+                            {litter.fatherName}
+                          </Link>
+                        ) : (
+                            isSerbian ? "Biće objavljeno" : "To be announced"
+                        )}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>{isSerbian ? "Majka" : "Mother"}</dt>
+                      <dd>
+                        {litter.motherId && litter.motherName ? (
+                          <Link className={classes.poodleLink} to={poodlePath(language, litter.motherId)}>
+                            {litter.motherName}
+                          </Link>
+                        ) : (
+                            isSerbian ? "Biće objavljeno" : "To be announced"
+                        )}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>{isSerbian ? "Dostupno" : "Available"}</dt>
+                      <dd>{litter.availablePuppyCount}</dd>
+                    </div>
+                  </dl>
+                  <Link className={classes.inquiryLink} to={litterDetailPath(language, litter.id)}>
+                    {isSerbian ? "Pogledajte leglo i štence" : "View litter and puppies"}
+                  </Link>
+                  {authContext.isAdmin && (
+                    <div className={classes.cardActions}>
+                      <button type="button" onClick={() => startLitterEdit(litter)}>
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        className={classes.dangerButton}
+                        onClick={() => deleteLitterHandler(litter)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
       <PuppyGuide initialLanguage={language} />
       </main>
     </>

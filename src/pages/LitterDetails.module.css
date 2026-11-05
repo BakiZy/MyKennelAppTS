@@ -1,0 +1,88 @@
+.page {
+  width: min(1180px, calc(100% - 2rem));
+  min-height: 65vh;
+  margin: 1.5rem auto 4rem;
+  color: #20201d;
+}
+
+.backLink {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: #8d2f3f;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.backLink:hover { text-decoration: underline; }
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(19rem, 0.9fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.photoPanel,
+.details,
+.puppyCard {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid rgba(32, 32, 29, 0.1);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 16px 40px rgba(31, 35, 29, 0.08);
+}
+
+.photoPanel { background: #e8e2da; }
+.photoPanel a { display: block; }
+.photoPanel > a > img,
+.placeholder { display: block; width: 100%; height: min(65vh, 38rem); min-height: 20rem; }
+.photoPanel > a > img { object-fit: contain; }
+
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
+  color: #5c625b;
+  font-weight: 700;
+}
+.placeholder img { width: 7rem; }
+
+.details { padding: clamp(1.25rem, 3vw, 2rem); }
+.kicker { margin: 0; color: #8d2f3f; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; }
+.details h1 { margin: 0.35rem 0 0.8rem; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.1; }
+.status { display: inline-block; border-radius: 999px; background: #f4f7f0; padding: 0.4rem 0.8rem; font-weight: 800; }
+.description { margin: 1.3rem 0; color: #5c625b; line-height: 1.65; white-space: pre-wrap; }
+.details dl { display: grid; gap: 0.7rem; margin: 0; }
+.details dl div { display: flex; justify-content: space-between; gap: 1rem; border-bottom: 1px solid rgba(32, 32, 29, 0.1); padding-bottom: 0.6rem; }
+.details dt { color: #6b7069; font-weight: 700; }
+.details dd { margin: 0; font-weight: 800; text-align: right; }
+.details dd a { color: #8d2f3f; text-decoration: none; }
+.details dd a:hover { text-decoration: underline; }
+
+.puppySection { margin-top: 2.5rem; }
+.puppySection h2 { margin-bottom: 1rem; font-size: 1.5rem; font-weight: 800; }
+.puppyGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.puppyCard img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; background: #e8e2da; }
+.puppyCard .puppyPlaceholder { object-fit: contain; padding: 20%; }
+.puppyInfo { padding: 1rem; }
+.puppyInfo span { color: #8d2f3f; font-size: 0.85rem; font-weight: 800; }
+.puppyInfo h3 { margin: 0.4rem 0; font-size: 1.2rem; font-weight: 800; }
+.puppyInfo p { color: #5c625b; line-height: 1.55; }
+.puppyInfo a { display: inline-block; border-radius: 999px; background: #20201d; color: #fff; padding: 0.65rem 1rem; font-weight: 800; text-decoration: none; }
+.puppyInfo a:hover { background: #8d2f3f; color: #fff; }
+
+@media (max-width: 900px) {
+  .puppyGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 760px) {
+  .layout,
+  .puppyGrid { grid-template-columns: 1fr; }
+  .photoPanel > a > img { height: min(55vh, 28rem); }
+  .placeholder { height: 13rem; min-height: 13rem; }
+  .details dl div { flex-direction: column; gap: 0.2rem; }
+  .details dd { text-align: left; }
+}

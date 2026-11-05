@@ -3,6 +3,7 @@ const https = require("https");
 const origin = "https://poodlesvonapalusso.com";
 const listPath = (lang) => lang === "sr" ? "/stenci-pudle" : "/puppies";
 const profilePath = (lang, id) => `${listPath(lang)}/${id}`;
+const litterPath = (lang, id) => lang === "sr" ? `/stenci-pudle/legla/${id}` : `/puppies/litters/${id}`;
 const imageUrl = (value) => /^https:\/\/[^\s"'<>]+$/i.test(value || "") ? value : "";
 const photos = (puppy) => [puppy.imageUrl, puppy.imageUrl2, puppy.imageUrl3].map(imageUrl).filter(Boolean);
 const description = (puppy, lang) => {
@@ -112,17 +113,17 @@ const renderList = (lang, puppies, litters, escapeHtml) => {
     </article>`).join("\n");
   const litterCards = litters.map((litter) => `
     <article>
-      <h3>${escapeHtml(litter.name || (sr ? "Leglo" : "Litter"))}</h3>
-      ${imageUrl(litter.coverImageUrl) ? `<img src="${escapeHtml(litter.coverImageUrl)}" alt="${escapeHtml(litter.name || (sr ? "Leglo" : "Litter"))}" loading="lazy" />` : ""}
+      <h3><a href="${litterPath(lang, litter.id)}">${escapeHtml(litter.name || (sr ? "Leglo" : "Litter"))}</a></h3>
+      ${imageUrl(litter.coverImageUrl) ? `<a href="${litterPath(lang, litter.id)}"><img src="${escapeHtml(litter.coverImageUrl)}" alt="${escapeHtml(litter.name || (sr ? "Leglo" : "Litter"))}" loading="lazy" /></a>` : ""}
       <p>${escapeHtml((sr ? litter.descriptionSr : litter.description) || (sr ? "Više informacija o leglu uskoro." : "More details coming soon."))}</p>
       <p>${sr ? "Otac" : "Father"}: ${escapeHtml(litter.fatherName || (sr ? "Biće objavljeno" : "To be announced"))}; ${sr ? "Majka" : "Mother"}: ${escapeHtml(litter.motherName || (sr ? "Biće objavljeno" : "To be announced"))}</p>
     </article>`).join("\n");
   return `<main>
     <nav aria-label="Language / Jezik"><a href="/puppies">English</a> <a href="/stenci-pudle">Srpski</a></nav>
     <h1>${sr ? "Štenci toy i patuljastih pudli u Novom Sadu" : "Toy and miniature poodle puppies in Serbia"}</h1>
-    <p>${sr ? "Pogledajte naša legla, roditelje i fotografije štenaca. Za informacije o dostupnosti i rezervaciji, kontaktirajte odgajivačnicu Von Apalusso." : "Explore our litters, parents and puppy photos. Contact Von Apalusso kennel to ask about availability and reservations."}</p>
-    <section><h2>${sr ? "Legla" : "Litters"}</h2>${litterCards}</section>
+    <p>${sr ? "Upoznajte naše štence i pogledajte njihove fotografije. Ispod možete istražiti legla i roditelje, a za informacije o rezervaciji kontaktirajte odgajivačnicu Von Apalusso." : "Meet our puppies and explore their photos. Browse litters and parents below, then contact Von Apalusso kennel to ask about reservations."}</p>
     <section><h2>${sr ? "Štenci" : "Puppies"}</h2>${puppyCards}</section>
+    <section><h2>${sr ? "Legla" : "Litters"}</h2>${litterCards}</section>
   </main>`;
 };
 
@@ -138,10 +139,37 @@ const renderProfile = (puppy, lang, escapeHtml) => {
       <p>${sr ? "Status" : "Status"}: ${escapeHtml(status(puppy.status, lang))}</p>
       <p>${sr ? "Rođeno" : "Born"}: ${escapeHtml(date(puppy.dateOfBirth, lang))}</p>
       <p>${sr ? "Pol" : "Sex"}: ${escapeHtml(sex(puppy.sex, lang))}; ${sr ? "Boja" : "Color"}: ${escapeHtml(color(puppy.color, lang))}</p>
-      <p>${sr ? "Leglo" : "Litter"}: ${escapeHtml(puppy.litterName || (sr ? "Nije dodeljeno" : "Not assigned"))}</p>
+      <p>${sr ? "Leglo" : "Litter"}: ${puppy.litterId && puppy.litterName ? `<a href="${litterPath(lang, puppy.litterId)}">${escapeHtml(puppy.litterName)}</a>` : (sr ? "Nije dodeljeno" : "Not assigned")}</p>
       ${photos(puppy).map((photo, index) => `<img src="${escapeHtml(photo)}" alt="${escapeHtml(name)} ${sr ? "fotografija" : "photo"} ${index + 1}" loading="lazy" />`).join("\n")}
       <a href="${sr ? "/o-nama" : "/about"}">${sr ? "Pitajte nas o ovom štenetu" : "Ask about this puppy"}</a>
     </article>
+  </main>`;
+};
+
+const renderLitterProfile = (litter, puppies, lang, escapeHtml) => {
+  const sr = lang === "sr";
+  const name = litter.name || (sr ? "Leglo Von Apalusso" : "Von Apalusso litter");
+  const summary = (sr ? litter.descriptionSr : litter.description)?.trim()
+    || (sr ? "Više informacija o leglu uskoro." : "More details coming soon.");
+  const puppyCards = puppies.filter((puppy) => puppy.litterId === litter.id).map((puppy) => `
+    <article>
+      <h3><a href="${profilePath(lang, puppy.id)}">${escapeHtml(puppy.name || (sr ? "Štene" : "Puppy"))}</a></h3>
+      ${photos(puppy)[0] ? `<img src="${escapeHtml(photos(puppy)[0])}" alt="${escapeHtml(puppy.name || (sr ? "Štene" : "Puppy"))}" loading="lazy" />` : ""}
+      <p>${escapeHtml(description(puppy, lang))}</p>
+    </article>`).join("\n");
+  return `<main>
+    <nav aria-label="Language / Jezik"><a href="${litterPath("en", litter.id)}">English</a> <a href="${litterPath("sr", litter.id)}">Srpski</a></nav>
+    <a href="${listPath(lang)}">${sr ? "Svi štenci i legla" : "All puppies and litters"}</a>
+    <article>
+      <h1>${escapeHtml(name)}</h1>
+      <p>${escapeHtml(summary)}</p>
+      ${imageUrl(litter.coverImageUrl) ? `<img src="${escapeHtml(litter.coverImageUrl)}" alt="${escapeHtml(name)}" />` : ""}
+      <p>${sr ? "Datum rođenja" : "Born"}: ${escapeHtml(date(litter.dateOfBirth, lang))}</p>
+      <p>${sr ? "Otac" : "Father"}: ${litter.fatherId && litter.fatherName ? `<a href="${poodlePath(lang, litter.fatherId)}">${escapeHtml(litter.fatherName)}</a>` : (sr ? "Biće objavljeno" : "To be announced")}</p>
+      <p>${sr ? "Majka" : "Mother"}: ${litter.motherId && litter.motherName ? `<a href="${poodlePath(lang, litter.motherId)}">${escapeHtml(litter.motherName)}</a>` : (sr ? "Biće objavljeno" : "To be announced")}</p>
+      <p>${sr ? "Dostupno" : "Available"}: ${escapeHtml(litter.availablePuppyCount)}</p>
+    </article>
+    <section><h2>${sr ? "Štenci iz ovog legla" : "Puppies in this litter"}</h2>${puppyCards || `<p>${sr ? "Štenci iz ovog legla još nisu pojedinačno objavljeni." : "Puppies from this litter have not been listed individually yet."}</p>`}</section>
   </main>`;
 };
 
@@ -204,6 +232,27 @@ module.exports = async ({ fs, path, distDir, baseHtml, pages, applySeo, escapeHt
         alternates: alternateLinks(`${origin}${profilePath("en", puppy.id)}`, `${origin}${profilePath("sr", puppy.id)}`),
         structuredData: { "@context": "https://schema.org", "@type": "ProfilePage", name: puppy.name || "Puppy", url: canonical, inLanguage: lang, image: photos(puppy) },
         staticHtml: renderProfile(puppy, lang, escapeHtml),
+      });
+    }
+  }
+
+  for (const litter of data.litters) {
+    if (!Number.isSafeInteger(litter.id) || litter.id <= 0) continue;
+    for (const lang of ["en", "sr"]) {
+      const canonical = `${origin}${litterPath(lang, litter.id)}`;
+      const name = litter.name || (lang === "sr" ? "Leglo Von Apalusso" : "Von Apalusso litter");
+      const summary = (lang === "sr" ? litter.descriptionSr : litter.description)?.trim()
+        || (lang === "sr" ? "Više informacija o leglu uskoro." : "More details coming soon.");
+      pages.push({
+        outputPath: path.join(distDir, lang === "sr" ? "stenci-pudle" : "puppies", lang === "sr" ? "legla" : "litters", String(litter.id), "index.html"),
+        title: lang === "sr" ? `${name} | Leglo pudli | Von Apalusso` : `${name} | Poodle litter | Von Apalusso`,
+        description: summary,
+        canonical,
+        lang,
+        image: imageUrl(litter.coverImageUrl),
+        alternates: alternateLinks(`${origin}${litterPath("en", litter.id)}`, `${origin}${litterPath("sr", litter.id)}`),
+        structuredData: { "@context": "https://schema.org", "@type": "CollectionPage", name, url: canonical, inLanguage: lang },
+        staticHtml: renderLitterProfile(litter, data.puppies, lang, escapeHtml),
       });
     }
   }
