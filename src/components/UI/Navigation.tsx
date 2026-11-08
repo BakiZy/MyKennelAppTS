@@ -1,7 +1,7 @@
 import classes from "./Navigation.module.css";
 import { FaFacebook, FaInstagram, FaWhatsapp } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../store/auth-context";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -13,6 +13,11 @@ const Navigation = () => {
   const location = useLocation();
   const language = languageForPath(location.pathname);
   const isSerbian = language === "sr";
+  const [menuExpanded, setMenuExpanded] = useState(false);
+
+  useEffect(() => {
+    setMenuExpanded(false);
+  }, [location.key]);
 
   const logoutHandler = async () => {
     try {
@@ -23,7 +28,7 @@ const Navigation = () => {
   };
 
   return (
-    <Navbar variant="dark" expand="lg" className={classes.navMain}>
+    <Navbar variant="dark" expand="lg" expanded={menuExpanded} onToggle={setMenuExpanded} className={classes.navMain}>
       <Container fluid="xl" className={classes.navShell}>
         <Navbar.Brand className={classes.logoDivLeft}>
           <img src={logo} alt="Von Apalusso poodle kennel logo" className={classes.logo} />
@@ -37,7 +42,7 @@ const Navigation = () => {
         </nav>
 
         <Navbar.Toggle aria-controls="main-navigation" />
-        <Navbar.Collapse id="main-navigation" className={classes.navCollapse}>
+        <Navbar.Collapse id="main-navigation" className={classes.navCollapse} onClick={() => setMenuExpanded(false)}>
           <Nav className={classes.mainMenu}>
             <Nav.Link as={Link} to={homePath(language)}>
               {isSerbian ? "Početna" : "Home"}
