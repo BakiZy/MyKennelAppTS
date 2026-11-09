@@ -17,6 +17,9 @@ type SeoProps = {
 };
 
 const defaultImage = "https://i.imgur.com/6Ll5PQL.jpeg";
+const siteOrigin = "https://poodlesvonapalusso.com";
+const pageUrl = (url: string) =>
+  url.startsWith(`${siteOrigin}/`) && !url.endsWith("/") ? `${url}/` : url;
 
 const Seo: React.FC<SeoProps> = ({
   title,
@@ -29,23 +32,27 @@ const Seo: React.FC<SeoProps> = ({
   alternates = [],
   structuredData,
 }) => {
+  const canonicalPage = pageUrl(canonical);
+  const pageStructuredData = structuredData && JSON.stringify(structuredData, (key, value) =>
+    key === "url" && typeof value === "string" ? pageUrl(value) : value
+  );
   return (
     <Helmet>
       <html lang={lang} />
       <title>{title}</title>
       <meta name="description" content={description} />
       <meta name="robots" content={robots} />
-      <link rel="canonical" href={canonical} />
+      <link rel="canonical" href={canonicalPage} />
       {alternates.map((alternate) => (
         <link
           key={`${alternate.hrefLang}-${alternate.href}`}
           rel="alternate"
           hrefLang={alternate.hrefLang}
-          href={alternate.href}
+          href={pageUrl(alternate.href)}
         />
       ))}
 
-      <meta property="og:url" content={canonical} />
+      <meta property="og:url" content={canonicalPage} />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:type" content={type} />
@@ -59,7 +66,7 @@ const Seo: React.FC<SeoProps> = ({
       <meta name="referrer" content="origin-when-crossorigin" />
       {structuredData && (
         <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
+          {pageStructuredData}
         </script>
       )}
     </Helmet>

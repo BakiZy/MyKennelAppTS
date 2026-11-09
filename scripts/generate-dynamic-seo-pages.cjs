@@ -1,6 +1,7 @@
 const https = require("https");
 
 const origin = "https://poodlesvonapalusso.com";
+const pageUrl = (url) => url.startsWith(`${origin}/`) && !url.endsWith("/") ? `${url}/` : url;
 const listPath = (lang) => lang === "sr" ? "/stenci-pudle" : "/puppies";
 const profilePath = (lang, id) => `${listPath(lang)}/${id}`;
 const litterPath = (lang, id) => lang === "sr" ? `/stenci-pudle/legla/${id}` : `/puppies/litters/${id}`;
@@ -302,6 +303,9 @@ module.exports = async ({ fs, path, distDir, baseHtml, pages, applySeo, escapeHt
   }
 
   for (const page of pages) {
+    page.canonical = pageUrl(page.canonical);
+    page.alternates = page.alternates?.map((alternate) => ({ ...alternate, href: pageUrl(alternate.href) }));
+    if (page.structuredData?.url) page.structuredData.url = pageUrl(page.structuredData.url);
     fs.mkdirSync(path.dirname(page.outputPath), { recursive: true });
     fs.writeFileSync(page.outputPath, applySeo(baseHtml, page));
   }
