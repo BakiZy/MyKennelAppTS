@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import emailjs from "@emailjs/browser";
 import classes from "./Reservation.module.css";
@@ -8,8 +8,10 @@ import { AxiosResponse } from "axios";
 import api from "../api/client";
 import Seo from "../components/SEO/Seo";
 import { localizedColor, localizedSex, localizedSize, poodlePath, SiteLanguage } from "../i18n/siteLanguage";
+import AuthContext from "../store/auth-context";
 
 const Reservation = ({ language }: { language: SiteLanguage }) => {
+  const authContext = useContext(AuthContext);
   const sr = language === "sr";
   const [loading, setLoading] = useState(true);
   const [isSending, setIsSending] = useState(false);
@@ -191,10 +193,12 @@ const Reservation = ({ language }: { language: SiteLanguage }) => {
               <dt>{sr ? "Datum rođenja" : "Date of birth"}</dt>
               <dd>{birthDate}</dd>
             </div>
-            <div>
-              <dt>{sr ? "Rodovnik" : "Pedigree"}</dt>
-              <dd>{poodle.pedigreeNumber || (sr ? "Dostupno na upit" : "Available on request")}</dd>
-            </div>
+            {authContext.isLoggedIn && (
+              <div>
+                <dt>{sr ? "Rodovnik" : "Pedigree"}</dt>
+                <dd>{poodle.pedigreeNumber || (sr ? "Dostupno na upit" : "Available on request")}</dd>
+              </div>
+            )}
             <div>
               <dt>{sr ? "Genetski testovi" : "Genetic testing"}</dt>
               <dd>{poodle.geneticTests ? (sr ? "Da" : "Yes") : (sr ? "Ne" : "No")}</dd>

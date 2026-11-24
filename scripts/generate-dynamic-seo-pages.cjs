@@ -102,7 +102,6 @@ const renderPoodleProfile = (poodle, lang, escapeHtml) => {
       <dt>${sr ? "Veličina" : "Size"}</dt><dd>${escapeHtml(localizedSize(poodle.poodleSizeName, lang))}</dd>
       <dt>${sr ? "Boja" : "Color"}</dt><dd>${escapeHtml(localizedColor(poodle.poodleColorName, lang))}</dd>
       <dt>${sr ? "Datum rođenja" : "Date of birth"}</dt><dd>${escapeHtml(date(poodle.dateOfBirth, lang))}</dd>
-      <dt>${sr ? "Rodovnik" : "Pedigree"}</dt><dd>${escapeHtml(poodle.pedigreeNumber || (sr ? "Dostupno na upit" : "Available on request"))}</dd>
     </dl>
     <p>${poodle.isRetired ? (sr ? "Za informacije o ovom psu pošaljite nam upit preko formulara na ovoj stranici." : "For information about this dog, send an inquiry using the form on this page.") : (sr ? "Za informacije o ovom psu ili štencima, pošaljite nam upit preko formulara na ovoj stranici." : "For information about this dog or puppies, send an inquiry using the form on this page.")}</p>
   </article></main>`;
