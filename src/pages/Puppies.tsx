@@ -378,10 +378,10 @@ const Puppies: React.FC<{ language: PuppyLanguage }> = ({ language }) => {
       <main className={classes.page}>
         <section className={classes.hero}>
         <p className={classes.eyebrow}>{isSerbian ? "Štenci Von Apalusso" : "Von Apalusso puppies"}</p>
-        <h1>{isSerbian ? "Štenci toy i patuljastih pudli u Novom Sadu" : "Toy and miniature poodle puppies in Serbia"}</h1>
+        <h1>{isSerbian ? "Štenci pudle u Srbiji" : "Poodle Puppies in Serbia"}</h1>
         <p>{isSerbian
-          ? "Upoznajte naše štence i pogledajte njihove fotografije. Ispod možete istražiti legla i roditelje, a za informacije o rezervaciji kontaktirajte odgajivačnicu Von Apalusso."
-          : "Meet our puppies and explore their photos. Browse litters and parents below, then contact Von Apalusso kennel to ask about reservations."}</p>
+          ? "Upoznajte naše štence toy i patuljastih pudli u Srbiji. Pogledajte fotografije, boje, dostupnost i legla, pa upoznajte roditelje i podatke o njihovim genetskim testovima gde su dostupni."
+          : "Meet our toy and miniature poodle puppies in Serbia. Explore photos, colors, availability and litters, then meet their parents and view available genetic test information."}</p>
         </section>
 
       {loading && <p className={classes.statusMessage}>{isSerbian ? "Učitavanje štenaca..." : "Loading puppies..."}</p>}
@@ -701,7 +701,7 @@ const Puppies: React.FC<{ language: PuppyLanguage }> = ({ language }) => {
       {!loading && !error && (
         <section className={classes.section}>
           <div className={classes.sectionHeader}>
-            <h2>{isSerbian ? "Štenci" : "Puppies"}</h2>
+              <h2>{isSerbian ? "Štenci toy i patuljastih pudli" : "Toy and miniature poodle puppies"}</h2>
             <span>{puppies.length}</span>
           </div>
           {puppies.length === 0 ? (

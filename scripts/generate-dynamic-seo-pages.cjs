@@ -57,6 +57,8 @@ const localizedColor = (value, lang) => lang === "sr"
   : (value || "").trim().toLowerCase() === "appricot" ? "Apricot" : value || "";
 const poodleDescription = (poodle, lang) => {
   const name = poodle.nickName || poodle.name || (lang === "sr" ? "Pudla Von Apalusso" : "Von Apalusso poodle");
+  const written = (lang === "sr" ? poodle.descriptionSr : poodle.description)?.trim();
+  if (written) return written;
   return lang === "sr"
     ? `${name} je ${localizedColor(poodle.poodleColorName, lang)} ${localizedSize(poodle.poodleSizeName, lang)} pudla odgajivačnice Von Apalusso u Novom Sadu.`.replace(/\s+/g, " ")
     : `${name} is a ${poodle.poodleColorName || ""} ${poodle.poodleSizeName || ""} poodle from Von Apalusso kennel in Serbia.`.replace(/\s+/g, " ");
@@ -69,6 +71,8 @@ const renderHome = (lang, poodles, escapeHtml) => {
       <h2><a href="${poodlePath(lang, poodle.id)}">${escapeHtml(poodle.name)}</a></h2>
       ${imageUrl(poodle.imageUrl) ? `<img src="${escapeHtml(poodle.imageUrl)}" alt="${escapeHtml(poodle.name)}" loading="lazy" />` : ""}
       <p>${escapeHtml(localizedSize(poodle.poodleSizeName, lang))} · ${escapeHtml(localizedColor(poodle.poodleColorName, lang))}</p>
+      ${poodle.isRetired ? `<p>${sr ? (poodle.sex === "Female" ? "Penzionisana" : "Penzionisan") : "Retired"}</p>` : ""}
+      ${(sr ? poodle.descriptionSr : poodle.description)?.trim() ? `<p>${escapeHtml((sr ? poodle.descriptionSr : poodle.description).trim().slice(0, 180))}</p>` : ""}
     </article>`).join("\n");
   return `<main>
     <section>
@@ -91,6 +95,7 @@ const renderPoodleProfile = (poodle, lang, escapeHtml) => {
   return `<main><article>
     <a href="${sr ? "/sr" : "/"}">${sr ? "Sve pudle" : "All poodles"}</a>
     <h1>${escapeHtml(name)}</h1>
+    ${poodle.isRetired ? `<p>${sr ? `${poodle.sex === "Female" ? "Penzionisana" : "Penzionisan"}. Više ne učestvuje u uzgoju. I dalje brinemo o ovom psu i pratimo njegovu dobrobit.` : "Retired. We continue to care for this dog and its wellbeing."}</p>` : ""}
     <p>${escapeHtml(poodleDescription(poodle, lang))}</p>
     ${imageUrl(poodle.imageUrl) ? `<img src="${escapeHtml(poodle.imageUrl)}" alt="${escapeHtml(name)}" />` : ""}
     <dl>
@@ -99,7 +104,7 @@ const renderPoodleProfile = (poodle, lang, escapeHtml) => {
       <dt>${sr ? "Datum rođenja" : "Date of birth"}</dt><dd>${escapeHtml(date(poodle.dateOfBirth, lang))}</dd>
       <dt>${sr ? "Rodovnik" : "Pedigree"}</dt><dd>${escapeHtml(poodle.pedigreeNumber || (sr ? "Dostupno na upit" : "Available on request"))}</dd>
     </dl>
-    <p>${sr ? "Za informacije o ovom psu ili štencima, pošaljite nam upit preko formulara na ovoj stranici." : "For information about this dog or puppies, send an inquiry using the form on this page."}</p>
+    <p>${poodle.isRetired ? (sr ? "Za informacije o ovom psu pošaljite nam upit preko formulara na ovoj stranici." : "For information about this dog, send an inquiry using the form on this page.") : (sr ? "Za informacije o ovom psu ili štencima, pošaljite nam upit preko formulara na ovoj stranici." : "For information about this dog or puppies, send an inquiry using the form on this page.")}</p>
   </article></main>`;
 };
 
@@ -121,9 +126,9 @@ const renderList = (lang, puppies, litters, escapeHtml) => {
     </article>`).join("\n");
   return `<main>
     <nav aria-label="Language / Jezik"><a href="/puppies">English</a> <a href="/stenci-pudle">Srpski</a></nav>
-    <h1>${sr ? "Štenci toy i patuljastih pudli u Novom Sadu" : "Toy and miniature poodle puppies in Serbia"}</h1>
-    <p>${sr ? "Upoznajte naše štence i pogledajte njihove fotografije. Ispod možete istražiti legla i roditelje, a za informacije o rezervaciji kontaktirajte odgajivačnicu Von Apalusso." : "Meet our puppies and explore their photos. Browse litters and parents below, then contact Von Apalusso kennel to ask about reservations."}</p>
-    <section><h2>${sr ? "Štenci" : "Puppies"}</h2>${puppyCards}</section>
+    <h1>${sr ? "Štenci pudle u Srbiji" : "Poodle Puppies in Serbia"}</h1>
+    <p>${sr ? "Upoznajte naše štence toy i patuljastih pudli u Srbiji. Pogledajte fotografije, boje, dostupnost i legla, pa upoznajte roditelje i podatke o njihovim genetskim testovima gde su dostupni." : "Meet our toy and miniature poodle puppies in Serbia. Explore photos, colors, availability and litters, then meet their parents and view available genetic test information."}</p>
+    <section><h2>${sr ? "Štenci toy i patuljastih pudli" : "Toy and miniature poodle puppies"}</h2>${puppyCards}</section>
     <section><h2>${sr ? "Legla" : "Litters"}</h2>${litterCards}</section>
   </main>`;
 };
@@ -205,14 +210,14 @@ module.exports = async ({ fs, path, distDir, baseHtml, pages, applySeo, escapeHt
     const canonical = `${origin}${listPath(lang)}`;
     const page = lang === "en" ? pages.find((candidate) => candidate.canonical === canonical) : {
       outputPath: path.join(distDir, "stenci-pudle", "index.html"),
-      title: "Štenci toy i patuljastih pudli u Novom Sadu | Von Apalusso",
-      description: "Upoznajte štence toy i patuljastih pudli odgajivačnice Von Apalusso u Novom Sadu. Pogledajte legla, roditelje, fotografije i dostupnost štenaca.",
+      title: "Štenci pudle u Srbiji",
+      description: "Štenci toy i patuljastih pudli u Srbiji: fotografije, boje, dostupnost, legla, roditelji i podaci o genetskim testovima.",
       canonical,
       lang,
       alternates: alternateLinks(`${origin}/puppies`, `${origin}/stenci-pudle`),
     };
     if (lang === "sr") pages.push(page);
-    page.title = lang === "en" ? "Toy and miniature poodle puppies in Serbia | Von Apalusso" : page.title;
+    page.title = lang === "en" ? "Poodle Puppies in Serbia" : page.title;
     page.staticHtml = renderList(lang, data.puppies, data.litters, escapeHtml);
     page.structuredData = { "@context": "https://schema.org", "@type": "CollectionPage", name: page.title, url: canonical, inLanguage: lang };
   }

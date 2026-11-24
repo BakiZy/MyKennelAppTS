@@ -101,9 +101,9 @@ const pages = [
   },
   {
     outputPath: path.join(distDir, "puppies", "index.html"),
-    title: "Available red toy and miniature poodle puppies | Von Apalusso",
+    title: "Poodle Puppies in Serbia",
     description:
-      "Meet toy and miniature poodle puppies from Von Apalusso kennel in Novi Sad, Serbia. Explore litters, parents, photos and availability.",
+      "Explore toy and miniature poodle puppies in Serbia: photos, colors, availability, litters, parents and genetic test information.",
     canonical: "https://poodlesvonapalusso.com/puppies",
     alternates: [
       { hrefLang: "en", href: "https://poodlesvonapalusso.com/puppies" },
@@ -114,7 +114,7 @@ const pages = [
       <main>
         <section>
           <p>Von Apalusso puppies</p>
-          <h1>Toy and miniature poodle puppies in Serbia</h1>
+          <h1>Poodle Puppies in Serbia</h1>
           <p>Follow current and upcoming litters from Von Apalusso kennel in Serbia.</p>
           <p>Our puppies are raised in home conditions and are prepared for families that understand the grooming, social and care needs of poodles.</p>
           <p>Contact us to ask about available puppies, planned litters, parent dogs, pedigree information and reservation details.</p>

@@ -121,8 +121,8 @@ const Reservation = ({ language }: { language: SiteLanguage }) => {
     ? new Date(poodle.dateOfBirth).toLocaleDateString(sr ? "sr-RS" : "en-GB")
     : (sr ? "Nepoznato" : "Unknown");
   const poodleDescription = sr
-    ? `${displayName} je ${localizedColor(poodle.poodleColorName, language).toLowerCase()} ${localizedSize(poodle.poodleSizeName, language).toLowerCase()} pudla odgajivačnice Von Apalusso u Novom Sadu.`
-    : `${displayName} is a ${poodle.poodleColorName || ""} ${poodle.poodleSizeName || ""} poodle from Von Apalusso kennel in Serbia.`.replace(/\s+/g, " ");
+    ? poodle.descriptionSr?.trim() || `${displayName} je ${localizedColor(poodle.poodleColorName, language).toLowerCase()} ${localizedSize(poodle.poodleSizeName, language).toLowerCase()} pudla odgajivačnice Von Apalusso u Novom Sadu.`
+    : poodle.description?.trim() || `${displayName} is a ${poodle.poodleColorName || ""} ${poodle.poodleSizeName || ""} poodle from Von Apalusso kennel in Serbia.`.replace(/\s+/g, " ");
   const poodleStructuredData = {
     "@context": "https://schema.org",
     "@type": "ProfilePage",
@@ -162,9 +162,17 @@ const Reservation = ({ language }: { language: SiteLanguage }) => {
         </div>
 
         <div className={classes.detailsPanel}>
-          <p className={classes.kicker}>{sr ? (poodle.isPuppy ? "Dostupno štene" : "Pudla Von Apalusso") : (poodle.isPuppy ? "Available puppy" : "Von Apalusso poodle")}</p>
+          <p className={classes.kicker}>{poodle.isRetired ? (sr ? (poodle.sex === "Female" ? "Penzionisana" : "Penzionisan") : "Retired") : sr ? (poodle.isPuppy ? "Dostupno štene" : "Pudla Von Apalusso") : (poodle.isPuppy ? "Available puppy" : "Von Apalusso poodle")}</p>
           <h1 id="poodle-title">{displayName}</h1>
           {poodle.nickName && <p className={classes.registeredName}>{poodle.name}</p>}
+
+          {poodle.isRetired && <p className={classes.retiredNote}>{sr ? "Više ne učestvuje u uzgoju. I dalje brinemo o ovom psu i pratimo njegovu dobrobit." : "No longer part of our breeding program. We continue to care for this dog and its wellbeing."}</p>}
+          {(sr ? poodle.descriptionSr : poodle.description)?.trim() && (
+            <section className={classes.biography} aria-label={sr ? "O psu" : "About this dog"}>
+              <h2>{sr ? "O psu" : "About this dog"}</h2>
+              <p>{(sr ? poodle.descriptionSr : poodle.description)?.trim()}</p>
+            </section>
+          )}
 
           <dl className={classes.metaGrid}>
             <div>
@@ -213,8 +221,8 @@ const Reservation = ({ language }: { language: SiteLanguage }) => {
           <p className={classes.kicker}>{sr ? "Upit" : "Inquiry"}</p>
           <h2 id="contact-title">
             {sr
-              ? (poodle.isPuppy ? `Zanima vas ${displayName}?` : `Zanimaju vas štenci psa ${displayName}?`)
-              : (poodle.isPuppy ? `Interested in ${displayName}?` : `Interested in ${displayName}'s puppies?`)}
+              ? (poodle.isRetired ? `Pitajte nas o psu ${displayName}` : poodle.isPuppy ? `Zanima vas ${displayName}?` : `Zanimaju vas štenci psa ${displayName}?`)
+              : (poodle.isRetired ? `Ask us about ${displayName}` : poodle.isPuppy ? `Interested in ${displayName}?` : `Interested in ${displayName}'s puppies?`)}
           </h2>
         </div>
 
@@ -270,7 +278,9 @@ const Reservation = ({ language }: { language: SiteLanguage }) => {
                 className={classes.textarea}
                 name="message"
                 maxLength={1200}
-                placeholder={sr ? "Napišite kakvo štene tražite" : "Tell us what kind of puppy would you like"}
+                placeholder={poodle.isRetired
+                  ? (sr ? "Napišite pitanje o ovom psu" : "Ask a question about this dog")
+                  : (sr ? "Napišite kakvo štene tražite" : "Tell us what kind of puppy you would like")}
                 required
               />
             </div>

@@ -16,6 +16,9 @@ export interface PoodleModel {
   imagePedigreeUrl: string;
   isPuppy: boolean;
   nickName: string;
+  description?: string | null;
+  descriptionSr?: string | null;
+  isRetired?: boolean;
   children?: React.ReactNode | React.PropsWithChildren;
 }
 

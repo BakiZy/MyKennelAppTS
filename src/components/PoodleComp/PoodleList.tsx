@@ -14,6 +14,7 @@ const PoodleList: React.FC<PoodleListProps> = (props) => {
         const parseDate = new Date(poodle.dateOfBirth).toLocaleDateString(
           props.language === "sr" ? "sr-RS" : "en-GB"
         );
+        const description = (props.language === "sr" ? poodle.descriptionSr : poodle.description)?.trim() || "";
 
         //change date format from yyyy-mm-dd to dd-mm-yyyy
 
@@ -35,9 +36,11 @@ const PoodleList: React.FC<PoodleListProps> = (props) => {
                     {localizedSize(poodle.poodleSizeName, props.language)} / {localizedColor(poodle.poodleColorName, props.language)}
                   </p>
                   <h2>{poodle.name}</h2>
+                  {poodle.isRetired && <p>{props.language === "sr" ? (poodle.sex === "Female" ? "Penzionisana" : "Penzionisan") : "Retired"}</p>}
                 </div>
                 <span className={classes.sexBadge}>{localizedSex(poodle.sex, props.language)}</span>
               </div>
+              {description && <p>{description.slice(0, 180)}{description.length > 180 ? "…" : ""}</p>}
               <dl className={classes.metaList}>
                 <div>
                   <dt>{props.language === "sr" ? "Rođena/rođen" : "Born"}</dt>

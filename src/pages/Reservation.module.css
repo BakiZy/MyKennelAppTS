@@ -75,6 +75,30 @@
   font-weight: 700;
 }
 
+.retiredNote {
+  margin: 1rem 0 0;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  background: #f5eee8;
+  color: #633c37;
+  line-height: 1.5;
+}
+
+.biography {
+  margin-top: 1.2rem;
+}
+
+.biography h2 {
+  margin: 0 0 0.4rem;
+  font-size: 1.1rem;
+}
+
+.biography p {
+  margin: 0;
+  white-space: pre-line;
+  line-height: 1.6;
+}
+
 .metaGrid {
   display: grid;
   gap: 0.7rem;

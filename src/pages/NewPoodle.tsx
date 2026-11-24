@@ -19,6 +19,9 @@ const NewPoodle: React.FC = () => {
     pedigreeNumber: "",
     sex: "Female",
     geneticTests: false,
+    description: "",
+    descriptionSr: "",
+    isRetired: false,
     poodleSizeId: "",
     poodleColorId: "",
     imageId: "",
@@ -56,6 +59,9 @@ const NewPoodle: React.FC = () => {
         name: form.name,
         dateOfBirth: form.dateOfBirth,
         geneticTests: form.geneticTests,
+        description: form.description,
+        descriptionSr: form.descriptionSr,
+        isRetired: form.isRetired,
         imageId: form.imageId ? parseInt(form.imageId) : null,
         pedigreeNumber: form.pedigreeNumber,
         poodleSizeId: form.poodleSizeId ? parseInt(form.poodleSizeId) : null,
@@ -83,6 +89,9 @@ const NewPoodle: React.FC = () => {
         pedigreeNumber: "",
         sex: "Female",
         geneticTests: false,
+        description: "",
+        descriptionSr: "",
+        isRetired: false,
         poodleSizeId: "",
         poodleColorId: "",
         imageId: "",
@@ -204,6 +213,19 @@ const NewPoodle: React.FC = () => {
               onChange={changeHandler}
             />
             Genetic tests completed
+          </label>
+
+          <div className={classes.field}>
+            <label htmlFor="description">Description in English</label>
+            <textarea id="description" name="description" value={form.description} onChange={changeHandler} maxLength={2000} placeholder="Height, temperament and specific health tests" />
+          </div>
+          <div className={classes.field}>
+            <label htmlFor="descriptionSr">Opis na srpskom</label>
+            <textarea id="descriptionSr" name="descriptionSr" value={form.descriptionSr} onChange={changeHandler} maxLength={2000} placeholder="Visina, karakter i konkretni zdravstveni testovi" />
+          </div>
+          <label className={classes.checkbox}>
+            <input type="checkbox" name="isRetired" checked={form.isRetired} onChange={changeHandler} />
+            Retired (still shown on the site)
           </label>
 
           <label className={classes.checkbox}>

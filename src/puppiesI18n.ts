@@ -13,12 +13,12 @@ export const litterDetailPath = (language: PuppyLanguage, id: number | string) =
   language === "sr" ? `/stenci-pudle/legla/${id}` : `/puppies/litters/${id}`;
 
 export const puppyListTitle = (language: PuppyLanguage) => language === "sr"
-  ? "Štenci toy i patuljastih pudli u Novom Sadu | Von Apalusso"
-  : "Toy and miniature poodle puppies in Serbia | Von Apalusso";
+  ? "Štenci pudle u Srbiji"
+  : "Poodle Puppies in Serbia";
 
 export const puppyListDescription = (language: PuppyLanguage) => language === "sr"
-  ? "Upoznajte štence toy i patuljastih pudli odgajivačnice Von Apalusso u Novom Sadu. Pogledajte legla, roditelje, fotografije i dostupnost štenaca."
-  : "Meet toy and miniature poodle puppies from Von Apalusso kennel in Novi Sad, Serbia. Explore litters, parents, photos and availability.";
+  ? "Štenci toy i patuljastih pudli u Srbiji: fotografije, boje, dostupnost, legla, roditelji i podaci o genetskim testovima."
+  : "Explore toy and miniature poodle puppies in Serbia: photos, colors, availability, litters, parents and genetic test information.";
 
 export const puppyDescription = (puppy: PuppyModel, language: PuppyLanguage) => {
   const name = puppy.name || (language === "sr" ? "Štene Von Apalusso" : "Von Apalusso puppy");
