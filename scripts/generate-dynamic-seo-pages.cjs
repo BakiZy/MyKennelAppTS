@@ -186,9 +186,20 @@ module.exports = async ({ fs, path, distDir, baseHtml, pages, applySeo, escapeHt
         puppies: await fetchJson(`${apiBase}/api/puppies`),
         litters: await fetchJson(`${apiBase}/api/puppies/litters`),
         poodles: await fetchJson(`${apiBase}/api/poodles`),
+        aboutSlider: await fetchJson(`${apiBase}/api/Images/about-slider`),
       };
   if (!Array.isArray(data.puppies) || !Array.isArray(data.litters) || !Array.isArray(data.poodles))
     throw new Error("SEO site data has an unexpected shape.");
+
+  const aboutSlides = Array.isArray(data.aboutSlider) ? data.aboutSlider : [];
+  const aboutGallery = (lang) => aboutSlides.length ? `<section aria-label="${lang === "sr" ? "Neki od naših štenaca" : "Some of our puppies"}">
+    <h2>${lang === "sr" ? "Neki od naših štenaca" : "Some of our puppies"}</h2>
+    ${aboutSlides.filter((slide) => imageUrl(slide.url)).map((slide) => `<img src="${escapeHtml(slide.url)}" alt="${escapeHtml(slide.name || (lang === "sr" ? "Štene pudle Von Apalusso" : "Von Apalusso poodle puppy"))}" loading="lazy" />`).join("\n")}
+  </section>` : "";
+  for (const [canonical, lang] of [[`${origin}/about`, "en"], [`${origin}/o-nama`, "sr"]]) {
+    const page = pages.find((candidate) => candidate.canonical === canonical);
+    if (page) page.staticHtml = page.staticHtml.replace("</main>", `${aboutGallery(lang)}</main>`);
+  }
 
   const englishHome = pages.find((candidate) => candidate.canonical === `${origin}/`);
   englishHome.alternates = alternateLinks(`${origin}/`, `${origin}/sr`);

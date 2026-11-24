@@ -1,9 +1,10 @@
 export interface ISliderProps {
   slides: ISliderImage[];
+  language: "en" | "sr";
 }
 
 export interface ISliderImage {
-  currentIndex: number;
+  id: number;
   url: string;
-  sex: string;
+  name: string;
 }

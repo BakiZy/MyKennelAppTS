@@ -7,10 +7,6 @@
   width: 100%;
 }
 
-.slider p {
-  margin: 0;
-}
-
 .sliderImage {
   display: block;
   width: 100%;
@@ -43,18 +39,6 @@
 
 .rightArrow {
   right: 0.75rem;
-}
-
-.symbol {
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
-  z-index: 1;
-  padding: 0.25rem;
-  border-radius: 50%;
-  background: #212529;
-  color: #ffe2ed;
-  font-size: 2.5rem;
 }
 
 @media (max-width: 601px) {

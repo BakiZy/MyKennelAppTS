@@ -17,6 +17,12 @@ const ImagePage: React.FC = () => {
   const [search, setSearch] = useState("");
   const [editingId, setEditingId] = useState<number | null>(null);
   const [busyId, setBusyId] = useState<number | null>(null);
+  const [sliderIds, setSliderIds] = useState<number[]>([]);
+  const [savedSliderIds, setSavedSliderIds] = useState<number[]>([]);
+  const [sliderLoading, setSliderLoading] = useState(true);
+  const [sliderSaving, setSliderSaving] = useState(false);
+  const [sliderMessage, setSliderMessage] = useState("");
+  const [sliderError, setSliderError] = useState("");
   const photoInputRef = useRef<HTMLInputElement>(null);
   const pedigreeInputRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState({
@@ -38,6 +44,51 @@ const ImagePage: React.FC = () => {
   };
 
   useEffect(() => { void loadImages(); }, []);
+
+  useEffect(() => {
+    api.get<Array<{ id: number }>>("/api/Images/about-slider")
+      .then((response) => {
+        const ids = response.data.map((image) => image.id);
+        setSliderIds(ids);
+        setSavedSliderIds(ids);
+      })
+      .catch(() => setSliderError("Could not load the About slider selection."))
+      .finally(() => setSliderLoading(false));
+  }, []);
+
+  const toggleSliderImage = (id: number) => {
+    setSliderMessage("");
+    setSliderError("");
+    setSliderIds((current) => current.includes(id)
+      ? current.filter((item) => item !== id)
+      : current.length < 20 ? [...current, id] : current);
+  };
+
+  const moveSliderImage = (index: number, direction: -1 | 1) => {
+    setSliderIds((current) => {
+      const next = [...current];
+      const other = index + direction;
+      if (other < 0 || other >= next.length) return current;
+      [next[index], next[other]] = [next[other], next[index]];
+      return next;
+    });
+    setSliderMessage("");
+  };
+
+  const saveSlider = async () => {
+    setSliderSaving(true);
+    setSliderMessage("");
+    setSliderError("");
+    try {
+      await api.put("/api/Images/about-slider", { imageIds: sliderIds });
+      setSavedSliderIds([...sliderIds]);
+      setSliderMessage("About slider saved. The public page updates immediately.");
+    } catch (requestError) {
+      setSliderError(getApiErrorMessage(requestError, { fallback: "Could not save the About slider." }));
+    } finally {
+      setSliderSaving(false);
+    }
+  };
 
   const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -74,7 +125,7 @@ const ImagePage: React.FC = () => {
         await api.post("/api/Images", form);
       }
 
-      setMessage("Image added. You can now select it when adding or editing a poodle.");
+      setMessage("Image added. You can now select it for the About slider or a poodle.");
       setForm({
         name: "",
         url: "",
@@ -111,7 +162,7 @@ const ImagePage: React.FC = () => {
     } catch (requestError) {
       setListError(getApiErrorMessage(requestError, {
         fallback: "Could not delete image.",
-        statusMessages: { 409: "This image is assigned to a poodle. Change the poodle's image first." },
+        statusMessages: { 409: "This image is assigned to a poodle or used in the About slider. Remove it from use first." },
       }));
     } finally {
       setBusyId(null);
@@ -179,6 +230,38 @@ const ImagePage: React.FC = () => {
           </button>
         </form>
       </section>
+      <section className={`${classes.panel} ${classes.listPanel}`} aria-labelledby="about-slider-heading">
+        <div className={classes.header}>
+          <p>Admin</p>
+          <h2 id="about-slider-heading">About page slider</h2>
+        </div>
+        <p>Upload a photo above or choose existing images below. Select up to 20 and set their display order.</p>
+        {sliderError && <p role="alert" className={classes.error}>{sliderError}</p>}
+        {sliderMessage && <p role="status" className={classes.message}>{sliderMessage}</p>}
+        {sliderLoading ? <p>Loading slider selection...</p> : (
+          <>
+            <p>{sliderIds.length} selected</p>
+            {sliderIds.length > 0 && <ol className={classes.sliderSelection}>
+              {sliderIds.map((id, index) => {
+                const image = images.find((item) => item.id === id);
+                return <li key={id}>
+                  {image?.url && <img src={image.url} alt="" />}
+                  <span>{image?.name || `Image ${id}`}</span>
+                  <div className={classes.sliderControls}>
+                    <button type="button" onClick={() => moveSliderImage(index, -1)} disabled={index === 0} aria-label={`Move ${image?.name || `image ${id}`} earlier`}>↑</button>
+                    <button type="button" onClick={() => moveSliderImage(index, 1)} disabled={index === sliderIds.length - 1} aria-label={`Move ${image?.name || `image ${id}`} later`}>↓</button>
+                    <button type="button" onClick={() => toggleSliderImage(id)} aria-label={`Remove ${image?.name || `image ${id}`} from slider`}>Remove</button>
+                  </div>
+                </li>;
+              })}
+            </ol>}
+            <button className={classes.saveSliderButton} type="button" onClick={() => void saveSlider()}
+              disabled={sliderSaving || sliderIds.join(",") === savedSliderIds.join(",")}>
+              {sliderSaving ? "Saving..." : "Save slider selection"}
+            </button>
+          </>
+        )}
+      </section>
       <section className={`${classes.panel} ${classes.listPanel}`}>
         <div className={classes.header}>
           <p>Admin</p>
@@ -193,6 +276,12 @@ const ImagePage: React.FC = () => {
           <div className={classes.imageList}>
             {visibleImages.map((image) => (
               <article className={classes.imageCard} key={image.id}>
+                {image.url && <label className={classes.sliderCheckbox}>
+                  <input type="checkbox" checked={sliderIds.includes(image.id)}
+                    disabled={sliderLoading || sliderSaving || (!sliderIds.includes(image.id) && sliderIds.length >= 20)}
+                    onChange={() => toggleSliderImage(image.id)} />
+                  Show in About slider
+                </label>}
                 <div className={classes.imageSummary}>
                   {image.url && <img src={image.url} alt={image.name || `Image ${image.id}`} loading="lazy" />}
                   <div>

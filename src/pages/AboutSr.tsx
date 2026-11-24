@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import classes from "./About.module.css";
 import ImageSlider from "../components/UI/ImageSlider";
-import imageData from "../components/UI/ImageData";
+import useAboutSlider from "../hooks/useAboutSlider";
 import { Card, Container } from "react-bootstrap";
 import Seo from "../components/SEO/Seo";
 import { Link } from "react-router-dom";
-
-const images = imageData;
+import AuthContext from "../store/auth-context";
 
 const AboutSr: React.FC = () => {
+  const authContext = useContext(AuthContext);
+  const images = useAboutSlider();
   const aboutDescription =
     "Von Apalusso je porodična odgajivačnica toy i patuljastih pudli u Novom Sadu, sa tradicijom od 1984. godine.";
   const aboutStructuredData = {
@@ -77,10 +78,13 @@ const AboutSr: React.FC = () => {
           </Container>
         </Card>
       </section>
-      <div className={classes.sliderWrap}>
-        <h2>Neki od naših štenaca</h2>
-        <ImageSlider slides={images} />
-      </div>
+      {(images.length > 0 || authContext.isAdmin) && <div className={classes.sliderWrap}>
+        {images.length > 0 && <>
+          <h2>Neki od naših štenaca</h2>
+          <ImageSlider slides={images} language="sr" />
+        </>}
+        {authContext.isAdmin && <p><Link to="/images">Uredi fotografije u slajderu</Link></p>}
+      </div>}
       <Card.Footer className={classes.footer}>
         Ako ste zainteresovani za naše pudle ili štence, možete nas kontaktirati
         preko društvenih mreža u gornjem delu sajta.

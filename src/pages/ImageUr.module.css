@@ -121,6 +121,64 @@
   margin-top: 1.25rem;
 }
 
+.sliderSelection {
+  display: grid;
+  gap: 0.65rem;
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.sliderSelection li {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+}
+
+.sliderSelection img {
+  width: 3.5rem;
+  height: 3.5rem;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.sliderSelection span {
+  flex: 1 1 9rem;
+}
+
+.sliderControls {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.sliderControls button,
+.saveSliderButton {
+  border: 1px solid #20201d;
+  border-radius: 8px;
+  background: #20201d;
+  color: #fff;
+  padding: 0.45rem 0.7rem;
+  cursor: pointer;
+}
+
+.sliderControls button:disabled,
+.saveSliderButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sliderCheckbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 750;
+}
+
+.sliderCheckbox input {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
 .imageCard {
   display: grid;
   gap: 1rem;

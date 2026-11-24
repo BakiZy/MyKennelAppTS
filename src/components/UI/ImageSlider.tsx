@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { ISliderProps } from "../../interfaces/ISliderModel";
 import classes from "./ImageSlider.module.css";
 import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from "react-icons/fa";
-import { MdMale, MdFemale } from "react-icons/md";
 
 const ImageSlider: React.FC<ISliderProps> = (props) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -10,16 +9,14 @@ const ImageSlider: React.FC<ISliderProps> = (props) => {
     return null;
   }
 
+  const visibleIndex = currentIndex % props.slides.length;
+
   const nextSlide = () => {
-    setCurrentIndex(
-      currentIndex === props.slides.length - 1 ? 0 : currentIndex + 1
-    );
+    setCurrentIndex((visibleIndex + 1) % props.slides.length);
   };
 
   const previousSlide = () => {
-    setCurrentIndex(
-      currentIndex === 0 ? props.slides.length - 1 : currentIndex - 1
-    );
+    setCurrentIndex((visibleIndex + props.slides.length - 1) % props.slides.length);
   };
 
   return (
@@ -28,7 +25,7 @@ const ImageSlider: React.FC<ISliderProps> = (props) => {
         className={classes.leftArrow}
         onClick={previousSlide}
         type="button"
-        aria-label="Previous puppy image"
+        aria-label={props.language === "sr" ? "Prethodna fotografija šteneta" : "Previous puppy image"}
       >
         <FaArrowAltCircleLeft />
       </button>
@@ -36,29 +33,19 @@ const ImageSlider: React.FC<ISliderProps> = (props) => {
         className={classes.rightArrow}
         onClick={nextSlide}
         type="button"
-        aria-label="Next puppy image"
+        aria-label={props.language === "sr" ? "Sledeća fotografija šteneta" : "Next puppy image"}
       >
         <FaArrowAltCircleRight />
       </button>
       {props.slides.map((image, index) => {
         return (
-          <div key={index}>
-            {index === currentIndex && (
-              <>
-                <p>
-                  {image.sex === "male" ? (
-                    <MdMale className={classes.symbol}></MdMale>
-                  ) : (
-                    <MdFemale className={classes.symbol}></MdFemale>
-                  )}
-                </p>
-                <img
-                  key={image.currentIndex}
-                  src={image.url}
-                  alt={`${image.sex} red poodle puppy from Von Apalusso kennel`}
-                  className={classes.sliderImage}
-                />
-              </>
+          <div key={image.id}>
+            {index === visibleIndex && (
+              <img
+                src={image.url}
+                alt={image.name || (props.language === "sr" ? "Štene pudle Von Apalusso" : "Von Apalusso poodle puppy")}
+                className={classes.sliderImage}
+              />
             )}
           </div>
         );

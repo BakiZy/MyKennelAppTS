@@ -1,15 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import classes from "./About.module.css";
 //import { ISliderImage } from "../interfaces/ISliderModel";
 import ImageSlider from "../components/UI/ImageSlider";
-import imageData from "../components/UI/ImageData";
+import useAboutSlider from "../hooks/useAboutSlider";
 import { Card, Container } from "react-bootstrap";
 import Seo from "../components/SEO/Seo";
 import { Link } from "react-router-dom";
-
-const images = imageData;
+import AuthContext from "../store/auth-context";
 
 const About: React.FC = () => {
+  const authContext = useContext(AuthContext);
+  const images = useAboutSlider();
   const aboutDescription =
     "About Von Apalusso, a kennel in Novi Sad, Serbia, focused on red, fawn, toy and miniature poodles raised in home conditions.";
   const aboutStructuredData = {
@@ -76,10 +77,13 @@ const About: React.FC = () => {
           </Container>
         </Card>
       </section>
-      <div className={classes.sliderWrap}>
-        <h2>Some of our beautiful puppies</h2>
-        <ImageSlider slides={images} />
-      </div>
+      {(images.length > 0 || authContext.isAdmin) && <div className={classes.sliderWrap}>
+        {images.length > 0 && <>
+          <h2>Some of our beautiful puppies</h2>
+          <ImageSlider slides={images} language="en" />
+        </>}
+        {authContext.isAdmin && <p><Link to="/images">Manage slider photos</Link></p>}
+      </div>}
       <Card.Footer className={classes.footer}>
         If you are interested in any of our puppies, you can contact us through
         our social media links in the upper corner or through our{" "}
