@@ -8,6 +8,7 @@ import api from "../api/client";
 import { PoodleModel } from "../interfaces/IPoodleModel";
 import classes from "./Edit.module.css";
 import ImageAssetEditor, { ImageRecord } from "../components/ImageAssetEditor";
+import { getApiErrorMessage } from "../api/errorMessage";
 
 const toInputDate = (value: string | Date) => {
   if (!value) {
@@ -29,6 +30,10 @@ const EditPoodle: React.FC = () => {
   const [message, setMessage] = useState("");
   const [savedImageId, setSavedImageId] = useState("");
   const [imageOverride, setImageOverride] = useState<ImageRecord | null>(null);
+  const [extraPhotos, setExtraPhotos] = useState<(string | null)[]>([null, null]);
+  const [photoFiles, setPhotoFiles] = useState<File[]>([]);
+  const [savingPhotos, setSavingPhotos] = useState(false);
+  const photoInputRef = React.useRef<HTMLInputElement>(null);
   const [form, setForm] = useState({
     name: "",
     dateOfBirth: "",
@@ -64,6 +69,7 @@ const EditPoodle: React.FC = () => {
         });
         setSavedImageId(poodle.imageId ? poodle.imageId.toString() : "");
         setImageOverride(null);
+        setExtraPhotos([poodle.imageUrl2 ?? null, poodle.imageUrl3 ?? null]);
       } catch (error) {
         console.log(error);
         setMessage("Could not load poodle.");
@@ -116,6 +122,43 @@ const EditPoodle: React.FC = () => {
       setMessage("Could not update poodle.");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const uploadPhotos = async () => {
+    const freeSlots = extraPhotos.filter((url) => !url).length;
+    if (!photoFiles.length || photoFiles.length > freeSlots || photoFiles.some((file) => file.size === 0 || file.size > 5 * 1024 * 1024)) {
+      setMessage(`Choose 1 to ${freeSlots} photos, up to 5 MB each.`);
+      return;
+    }
+    setSavingPhotos(true);
+    setMessage("");
+    try {
+      const data = new FormData();
+      photoFiles.forEach((file) => data.append("photos", file));
+      const response = await api.post<{ imageUrl2?: string; imageUrl3?: string }>(`/api/poodles/${poodleId}/photos`, data);
+      setExtraPhotos([response.data.imageUrl2 ?? null, response.data.imageUrl3 ?? null]);
+      setPhotoFiles([]);
+      if (photoInputRef.current) photoInputRef.current.value = "";
+      setMessage("Photos uploaded.");
+    } catch (error) {
+      setMessage(getApiErrorMessage(error, { fallback: "Could not upload photos." }));
+    } finally {
+      setSavingPhotos(false);
+    }
+  };
+
+  const removePhoto = async (slot: number) => {
+    if (!window.confirm(`Remove photo ${slot}?`)) return;
+    setSavingPhotos(true);
+    try {
+      await api.delete(`/api/poodles/${poodleId}/photos/${slot}`);
+      setExtraPhotos((current) => slot === 2 ? [current[1], null] : [current[0], null]);
+      setMessage("Photo removed.");
+    } catch (error) {
+      setMessage(getApiErrorMessage(error, { fallback: "Could not remove photo." }));
+    } finally {
+      setSavingPhotos(false);
     }
   };
 
@@ -259,6 +302,28 @@ const EditPoodle: React.FC = () => {
             {saving ? "Saving..." : "Update poodle"}
           </button>
         </form>
+        <section className={classes.imageSection} aria-label="Additional poodle photos">
+          <h2>Additional photos</h2>
+          <p>The main photo and one pedigree image are managed below. Add up to two more photos here.</p>
+          <div className={classes.extraPhotos}>
+            {extraPhotos.map((url, index) => url && (
+              <div key={`${index}-${url}`}>
+                <img src={url} alt={`${form.name} photo ${index + 2}`} />
+                <button type="button" onClick={() => removePhoto(index + 2)} disabled={savingPhotos}>Remove</button>
+              </div>
+            ))}
+          </div>
+          {savedImageId && form.imageId === savedImageId && extraPhotos.some((url) => !url) && (
+            <div className={classes.photoUpload}>
+              <label htmlFor="poodleExtraPhotos">Upload photos (5 MB each)</label>
+              <input ref={photoInputRef} id="poodleExtraPhotos" type="file" accept="image/jpeg,image/png,image/webp" multiple
+                onChange={(event) => setPhotoFiles(Array.from(event.target.files ?? []))} />
+              <button type="button" onClick={uploadPhotos} disabled={savingPhotos || !photoFiles.length}>
+                {savingPhotos ? "Uploading..." : "Upload photos"}
+              </button>
+            </div>
+          )}
+        </section>
         <section className={classes.imageSection} aria-labelledby="image-details-heading">
           <h2 id="image-details-heading">Photo and pedigree image</h2>
           {form.imageId !== savedImageId ? (

@@ -7,6 +7,7 @@ const profilePath = (lang, id) => `${listPath(lang)}/${id}`;
 const litterPath = (lang, id) => lang === "sr" ? `/stenci-pudle/legla/${id}` : `/puppies/litters/${id}`;
 const imageUrl = (value) => /^https:\/\/[^\s"'<>]+$/i.test(value || "") ? value : "";
 const photos = (puppy) => [puppy.imageUrl, puppy.imageUrl2, puppy.imageUrl3].map(imageUrl).filter(Boolean);
+const poodlePhotos = (poodle) => [poodle.imageUrl, poodle.imageUrl2, poodle.imageUrl3].map(imageUrl).filter(Boolean);
 const description = (puppy, lang) => {
   const name = puppy.name || (lang === "sr" ? "Štene Von Apalusso" : "Von Apalusso puppy");
   if (lang === "sr") return puppy.descriptionSr?.trim()
@@ -97,7 +98,7 @@ const renderPoodleProfile = (poodle, lang, escapeHtml) => {
     <h1>${escapeHtml(name)}</h1>
     ${poodle.isRetired ? `<p>${sr ? `${poodle.sex === "Female" ? "Penzionisana" : "Penzionisan"}. Više ne učestvuje u uzgoju. I dalje brinemo o ovom psu i pratimo njegovu dobrobit.` : "Retired. We continue to care for this dog and its wellbeing."}</p>` : ""}
     <p>${escapeHtml(poodleDescription(poodle, lang))}</p>
-    ${imageUrl(poodle.imageUrl) ? `<img src="${escapeHtml(poodle.imageUrl)}" alt="${escapeHtml(name)}" />` : ""}
+    ${poodlePhotos(poodle).map((photo, index) => `<img src="${escapeHtml(photo)}" alt="${escapeHtml(name)}, ${sr ? "fotografija" : "photo"} ${index + 1}" />`).join("\n")}
     <dl>
       <dt>${sr ? "Veličina" : "Size"}</dt><dd>${escapeHtml(localizedSize(poodle.poodleSizeName, lang))}</dd>
       <dt>${sr ? "Boja" : "Color"}</dt><dd>${escapeHtml(localizedColor(poodle.poodleColorName, lang))}</dd>
@@ -288,7 +289,7 @@ module.exports = async ({ fs, path, distDir, baseHtml, pages, applySeo, escapeHt
         lang,
         image: imageUrl(poodle.imageUrl),
         alternates: alternateLinks(`${origin}${poodlePath("en", poodle.id)}`, `${origin}${poodlePath("sr", poodle.id)}`),
-        structuredData: { "@context": "https://schema.org", "@type": "ProfilePage", name: displayName, url: canonical, inLanguage: lang, image: imageUrl(poodle.imageUrl) },
+        structuredData: { "@context": "https://schema.org", "@type": "ProfilePage", name: displayName, url: canonical, inLanguage: lang, image: poodlePhotos(poodle) },
         staticHtml: renderPoodleProfile(poodle, lang, escapeHtml),
       });
     }

@@ -101,7 +101,7 @@ const Navigation = () => {
               <FaFacebook className={classes.faFacebook} size={30} />
             </Nav.Link>
             <Nav.Link
-              href="https://www.instagram.com/vonappalusso/"
+              href="https://www.instagram.com/vonapalusso/"
               target="_blank"
               rel="noreferrer"
               aria-label="Instagram"

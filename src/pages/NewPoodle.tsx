@@ -1,10 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import api from "../api/client";
 import classes from "./NewPoodle.module.css";
 import AuthContext from "../store/auth-context";
 import useGetSizes from "../hooks/getSizesHook";
 import useGetColors from "../hooks/getColorsHook";
 import useGetImgUr from "../hooks/getImgUrHook";
+import { PoodleModel } from "../interfaces/IPoodleModel";
+import { getApiErrorMessage } from "../api/errorMessage";
 
 const NewPoodle: React.FC = () => {
   const authContext = useContext(AuthContext);
@@ -13,6 +15,13 @@ const NewPoodle: React.FC = () => {
   const { colors } = useGetColors();
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
+  const [photoFiles, setPhotoFiles] = useState<File[]>([]);
+  const [pedigreeFile, setPedigreeFile] = useState<File | null>(null);
+  const [createdPoodleId, setCreatedPoodleId] = useState<number | null>(null);
+  const [photosUploaded, setPhotosUploaded] = useState(false);
+  const [uploadedMainPhotoUrl, setUploadedMainPhotoUrl] = useState("");
+  const photoInputRef = useRef<HTMLInputElement>(null);
+  const pedigreeInputRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState({
     name: "",
     dateOfBirth: "",
@@ -41,21 +50,36 @@ const NewPoodle: React.FC = () => {
       ...current,
       [name]: type === "checkbox" ? checked : value,
     }));
+    if (name === "imageId" && value) {
+      setPedigreeFile(null);
+      if (pedigreeInputRef.current) pedigreeInputRef.current.value = "";
+    }
   };
 
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setSaving(true);
     setMessage("");
+    const availableSlots = form.imageId ? 2 : 3;
+    if (photoFiles.length > availableSlots || (pedigreeFile && (form.imageId || photoFiles.length === 0))) {
+      setMessage(`Choose up to ${availableSlots} photos. A new pedigree image needs a new main photo.`);
+      return;
+    }
+    if ([...photoFiles, ...(pedigreeFile ? [pedigreeFile] : [])]
+      .some((file) => file.size === 0 || file.size > 5 * 1024 * 1024)) {
+      setMessage("Each image must be between 1 byte and 5 MB.");
+      return;
+    }
+    setSaving(true);
     const selectedColor = colors.find(
       (color) => color.id === parseInt(form.poodleColorId)
     );
     const selectedImage = images.find(
       (image) => image.id === parseInt(form.imageId)
     );
+    let savedPoodleId = createdPoodleId;
 
     try {
-      await api.post("/api/poodles", {
+      const payload = {
         name: form.name,
         dateOfBirth: form.dateOfBirth,
         geneticTests: form.geneticTests,
@@ -67,7 +91,25 @@ const NewPoodle: React.FC = () => {
         poodleSizeId: form.poodleSizeId ? parseInt(form.poodleSizeId) : null,
         poodleColorId: form.poodleColorId ? parseInt(form.poodleColorId) : null,
         sex: form.sex,
-      });
+      };
+      if (savedPoodleId) {
+        await api.put(`/api/poodles/${savedPoodleId}`, payload);
+      } else {
+        const response = await api.post<PoodleModel>("/api/poodles", payload);
+        savedPoodleId = response.data.id;
+        setCreatedPoodleId(savedPoodleId);
+      }
+
+      let mainPhotoUrl = uploadedMainPhotoUrl || selectedImage?.url || "";
+      if (photoFiles.length > 0 && savedPoodleId && !photosUploaded) {
+        const data = new FormData();
+        photoFiles.forEach((file) => data.append("photos", file));
+        if (pedigreeFile) data.append("pedigree", pedigreeFile);
+        const response = await api.post<{ imageUrl?: string }>(`/api/poodles/${savedPoodleId}/photos`, data);
+        mainPhotoUrl = response.data.imageUrl ?? mainPhotoUrl;
+        setUploadedMainPhotoUrl(mainPhotoUrl);
+        setPhotosUploaded(true);
+      }
 
       if (form.listAsPuppy) {
         await api.post("/api/puppies", {
@@ -77,12 +119,19 @@ const NewPoodle: React.FC = () => {
           dateOfBirth: form.dateOfBirth || null,
           status: form.puppyStatus,
           description: form.puppyDescription,
-          imageUrl: selectedImage?.url ?? "",
+          imageUrl: mainPhotoUrl,
           litterId: null,
         });
       }
 
       setMessage(form.listAsPuppy ? "Poodle added and listed as puppy." : "Poodle added.");
+      setCreatedPoodleId(null);
+      setPhotosUploaded(false);
+      setUploadedMainPhotoUrl("");
+      setPhotoFiles([]);
+      setPedigreeFile(null);
+      if (photoInputRef.current) photoInputRef.current.value = "";
+      if (pedigreeInputRef.current) pedigreeInputRef.current.value = "";
       setForm({
         name: "",
         dateOfBirth: "",
@@ -100,8 +149,9 @@ const NewPoodle: React.FC = () => {
         puppyDescription: "",
       });
     } catch (error) {
-      console.log(error);
-      setMessage("Could not add poodle. Check admin session and required fields.");
+      setMessage(getApiErrorMessage(error, { fallback: savedPoodleId
+        ? "Poodle was saved, but photos or puppy listing could not be completed. Try saving again."
+        : "Could not add poodle. Check admin session and required fields." }));
     } finally {
       setSaving(false);
     }
@@ -194,7 +244,7 @@ const NewPoodle: React.FC = () => {
           </div>
 
           <div className={classes.field}>
-            <label htmlFor="imageId">Image</label>
+            <label htmlFor="imageId">Existing main image (optional)</label>
             <select id="imageId" name="imageId" value={form.imageId} onChange={changeHandler}>
               <option value="">Select image</option>
               {images.map((image) => (
@@ -204,6 +254,20 @@ const NewPoodle: React.FC = () => {
               ))}
             </select>
           </div>
+
+          <div className={classes.field}>
+            <label htmlFor="poodlePhotos">Photos ({form.imageId ? "up to 2 additional" : "up to 3"}, 5 MB each)</label>
+            <input ref={photoInputRef} id="poodlePhotos" type="file" accept="image/jpeg,image/png,image/webp" multiple
+              onChange={(event) => setPhotoFiles(Array.from(event.target.files ?? []))} />
+            <p className={classes.helperText}>The first uploaded photo becomes the main image when no existing image is selected.</p>
+          </div>
+          {!form.imageId && (
+            <div className={classes.field}>
+              <label htmlFor="poodlePedigree">Pedigree image (one, optional)</label>
+              <input ref={pedigreeInputRef} id="poodlePedigree" type="file" accept="image/jpeg,image/png,image/webp"
+                onChange={(event) => setPedigreeFile(event.target.files?.[0] ?? null)} />
+            </div>
+          )}
 
           <label className={classes.checkbox}>
             <input

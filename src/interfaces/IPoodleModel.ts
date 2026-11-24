@@ -13,6 +13,8 @@ export interface PoodleModel {
   imageId?: number;
   sex: string;
   imageUrl: string;
+  imageUrl2?: string | null;
+  imageUrl3?: string | null;
   imagePedigreeUrl: string;
   isPuppy: boolean;
   nickName: string;

@@ -267,7 +267,7 @@ const Home: React.FC<{ language: SiteLanguage }> = ({ language }) => {
       logo: "https://poodlesvonapalusso.com/logo512.png",
       sameAs: [
         "https://www.facebook.com/milos.petrov.10/photos_by",
-        "https://www.instagram.com/vonappalusso/",
+        "https://www.instagram.com/vonapalusso/",
       ],
       contactPoint: {
         "@type": "ContactPoint",

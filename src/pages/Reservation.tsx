@@ -17,6 +17,7 @@ const Reservation = ({ language }: { language: SiteLanguage }) => {
   const [isSending, setIsSending] = useState(false);
   const [formMessage, setFormMessage] = useState("");
   const [formError, setFormError] = useState("");
+  const [activePhoto, setActivePhoto] = useState(0);
   const formInputRef = useRef<HTMLFormElement>(null);
   const { poodleId } = useParams();
   const [poodle, setPoodle] = useState<PoodleModel>({
@@ -39,6 +40,7 @@ const Reservation = ({ language }: { language: SiteLanguage }) => {
 
     const fetchReservedPoodle = async () => {
       setLoading(true);
+      setActivePhoto(0);
       api
         .get<PoodleModel>(`/api/poodles/${poodleId}`)
         .then((response: AxiosResponse<PoodleModel>) => {
@@ -119,6 +121,9 @@ const Reservation = ({ language }: { language: SiteLanguage }) => {
   }
 
   const displayName = poodle.nickName || poodle.name;
+  const photos = [poodle.imageUrl, poodle.imageUrl2, poodle.imageUrl3]
+    .filter((url): url is string => !!url);
+  const photoIndex = Math.min(activePhoto, Math.max(photos.length - 1, 0));
   const birthDate = poodle.dateOfBirth
     ? new Date(poodle.dateOfBirth).toLocaleDateString(sr ? "sr-RS" : "en-GB")
     : (sr ? "Nepoznato" : "Unknown");
@@ -131,7 +136,7 @@ const Reservation = ({ language }: { language: SiteLanguage }) => {
     name: `${displayName} | Von Apalusso`,
     url: `https://poodlesvonapalusso.com${poodlePath(language, poodle.id)}`,
     description: poodleDescription,
-    image: poodle.imageUrl,
+    image: photos,
     inLanguage: language,
   };
 
@@ -156,11 +161,36 @@ const Reservation = ({ language }: { language: SiteLanguage }) => {
       <main className={classes.page}>
         <section className={classes.profilePanel} aria-labelledby="poodle-title">
         <div className={classes.photoPanel}>
-          <img
-            src={poodle.imageUrl}
-            alt={sr ? `${displayName}, pudla Von Apalusso` : `${displayName}, ${poodle.poodleColorName || "poodle"} ${poodle.poodleSizeName || ""} from Von Apalusso kennel`}
-            className={classes.imageProp}
-          />
+          {photos.length > 0 && (
+            <>
+              <a href={photos[photoIndex]} target="_blank" rel="noopener noreferrer"
+                aria-label={sr ? "Otvori fotografiju u punoj veličini" : "Open photo in full size"}>
+                <img src={photos[photoIndex]}
+                  alt={sr ? `${displayName}, fotografija ${photoIndex + 1} od ${photos.length}` : `${displayName}, photo ${photoIndex + 1} of ${photos.length}`}
+                  className={classes.imageProp} />
+              </a>
+              {photos.length > 1 && (
+                <>
+                  <div className={classes.galleryControls}>
+                    <button type="button" onClick={() => setActivePhoto((photoIndex + photos.length - 1) % photos.length)}
+                      aria-label={sr ? "Prethodna fotografija" : "Previous photo"}>‹</button>
+                    <span>{photoIndex + 1} / {photos.length}</span>
+                    <button type="button" onClick={() => setActivePhoto((photoIndex + 1) % photos.length)}
+                      aria-label={sr ? "Sledeća fotografija" : "Next photo"}>›</button>
+                  </div>
+                  <div className={classes.thumbnails}>
+                    {photos.map((photo, index) => (
+                      <button key={photo} type="button" className={index === photoIndex ? classes.selected : ""}
+                        onClick={() => setActivePhoto(index)} aria-label={sr ? `Prikaži fotografiju ${index + 1}` : `Show photo ${index + 1}`}
+                        aria-pressed={index === photoIndex}>
+                        <img src={photo} alt="" loading="lazy" />
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </>
+          )}
         </div>
 
         <div className={classes.detailsPanel}>
