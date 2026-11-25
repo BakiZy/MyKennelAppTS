@@ -253,7 +253,7 @@ module.exports = async ({ fs, path, distDir, baseHtml, pages, applySeo, escapeHt
         lang,
         image: photos(puppy)[0],
         alternates: alternateLinks(`${origin}${profilePath("en", puppy.id)}`, `${origin}${profilePath("sr", puppy.id)}`),
-        structuredData: { "@context": "https://schema.org", "@type": "ProfilePage", name: puppy.name || "Puppy", url: canonical, inLanguage: lang, image: photos(puppy) },
+        structuredData: { "@context": "https://schema.org", "@type": "WebPage", name: puppy.name || "Puppy", url: canonical, inLanguage: lang, image: photos(puppy) },
         staticHtml: renderProfile(puppy, lang, escapeHtml),
       });
     }
@@ -295,7 +295,7 @@ module.exports = async ({ fs, path, distDir, baseHtml, pages, applySeo, escapeHt
         lang,
         image: imageUrl(poodle.imageUrl),
         alternates: alternateLinks(`${origin}${poodlePath("en", poodle.id)}`, `${origin}${poodlePath("sr", poodle.id)}`),
-        structuredData: { "@context": "https://schema.org", "@type": "ProfilePage", name: displayName, url: canonical, inLanguage: lang, image: poodlePhotos(poodle) },
+        structuredData: { "@context": "https://schema.org", "@type": "WebPage", name: displayName, url: canonical, inLanguage: lang, image: poodlePhotos(poodle) },
         staticHtml: renderPoodleProfile(poodle, lang, escapeHtml),
       });
     }

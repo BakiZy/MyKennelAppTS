@@ -132,7 +132,7 @@ const Reservation = ({ language }: { language: SiteLanguage }) => {
     : poodle.description?.trim() || `${displayName} is a ${poodle.poodleColorName || ""} ${poodle.poodleSizeName || ""} poodle from Von Apalusso kennel in Serbia.`.replace(/\s+/g, " ");
   const poodleStructuredData = {
     "@context": "https://schema.org",
-    "@type": "ProfilePage",
+    "@type": "WebPage",
     name: `${displayName} | Von Apalusso`,
     url: `https://poodlesvonapalusso.com${poodlePath(language, poodle.id)}`,
     description: poodleDescription,

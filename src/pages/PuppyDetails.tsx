@@ -59,7 +59,7 @@ const PuppyDetails: React.FC<{ language: PuppyLanguage }> = ({ language }) => {
         ]}
         structuredData={{
           "@context": "https://schema.org",
-          "@type": "ProfilePage",
+          "@type": "WebPage",
           name: `${name} | Von Apalusso`,
           url: canonical,
           description,
