@@ -58,7 +58,7 @@ const pages = [
           <h1>About Von Apalusso poodle kennel in Serbia</h1>
           <p>Von Apalusso is a kennel in Novi Sad, Serbia, with a long family tradition in dogs and dog shows. The kennel was founded in 1984, first through German Shepherd Dogs, and poodles have been part of our family since the early 1990s.</p>
           <p>Today we are focused on red, fawn, toy and miniature poodles. Our dogs are raised in home conditions, live with us as family, and are selected with temperament, health, structure and breed standards in mind.</p>
-          <p>Our poodles take part in dog shows, have completed health checks, and their patellas are checked. We care about responsible breeding, good socialization and finding suitable homes for every puppy.</p>
+          <p>Our poodles take part in dog shows and have health checks. We care about responsible breeding, good socialization and finding suitable homes for every puppy.</p>
           <p>On our site you can learn about our dogs, litters, available puppies and how to make a reservation.</p>
           <a href="/o-nama">O nama</a>
         </article>
@@ -92,7 +92,7 @@ const pages = [
           <h1>O nama - odgajivačnica pudli Von Apalusso u Srbiji</h1>
           <p>Von Apalusso je odgajivačnica u Novom Sadu, u Srbiji, sa dugom porodičnom tradicijom u odgoju i izlaganju pasa. Osnovana je 1984. godine, najpre sa nemačkim ovčarima, a pudle su deo naše porodice od početka devedesetih godina.</p>
           <p>Danas se bavimo prvenstveno crvenim i aprikot toy i patuljastim pudlama. Naši psi odrastaju u kućnim uslovima, žive sa nama kao deo porodice, a pri odabiru vodimo računa o temperamentu, zdravlju, građi i standardu rase.</p>
-          <p>Naše pudle učestvuju na izložbama pasa, imaju obavljene zdravstvene preglede i proverene čašice kolena. Važni su nam odgovoran odgoj, dobra socijalizacija i pronalaženje odgovarajućeg doma za svako štene.</p>
+          <p>Naše pudle učestvuju na izložbama pasa i imaju zdravstvene preglede. Važni su nam odgovoran odgoj, dobra socijalizacija i pronalaženje odgovarajućeg doma za svako štene.</p>
           <p>Na našem sajtu možete pronaći informacije o našim psima, leglima, dostupnim štencima i načinu rezervacije.</p>
           <a href="/about">English</a>
         </article>

@@ -65,8 +65,8 @@ const About: React.FC = () => {
               standards in mind.
             </p>
             <p>
-              Our poodles take part in dog shows, have completed health checks,
-              and their patellas are checked. We care about responsible
+              Our poodles take part in dog shows and have health checks.
+              We care about responsible
               breeding, good socialization and finding suitable homes for every
               puppy.
             </p>

@@ -66,8 +66,8 @@ const AboutSr: React.FC = () => {
               građi i standardu rase.
             </p>
             <p>
-              Naše pudle učestvuju na izložbama pasa, imaju obavljene zdravstvene
-              preglede i proverene čašice kolena. Važni su nam odgovoran odgoj,
+              Naše pudle učestvuju na izložbama pasa i imaju zdravstvene preglede.
+              Važni su nam odgovoran odgoj,
               dobra socijalizacija i pronalaženje odgovarajućeg doma za svako
               štene.
             </p>
