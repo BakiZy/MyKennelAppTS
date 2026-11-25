@@ -5,7 +5,7 @@ import Seo from "../components/SEO/Seo";
 import { LitterModel, PuppyModel } from "../interfaces/IPuppyModel";
 import { poodlePath } from "../i18n/siteLanguage";
 import {
-  litterDescription, litterDetailPath, puppyColor, puppyDescription,
+  litterDescription, litterDetailPath, litterStatus, puppyColor, puppyDescription,
   puppyDetailPath, puppyListPath, puppyStatus, PuppyLanguage,
 } from "../puppiesI18n";
 import classes from "./LitterDetails.module.css";
@@ -104,13 +104,12 @@ const LitterDetails: React.FC<{ language: PuppyLanguage }> = ({ language }) => {
           <article className={classes.details}>
             <p className={classes.kicker}>{isSerbian ? "Leglo Von Apalusso" : "Von Apalusso litter"}</p>
             <h1>{name}</h1>
-            <span className={classes.status}>{puppyStatus(litter.status, language)}</span>
+            <span className={classes.status}>{litterStatus(litter.status, language)}</span>
             <p className={classes.description}>{description}</p>
             <dl>
               <div><dt>{isSerbian ? "Datum rođenja" : "Born"}</dt><dd>{date}</dd></div>
               <div><dt>{isSerbian ? "Otac" : "Father"}</dt><dd>{litter.fatherId && litter.fatherName ? <Link to={poodlePath(language, litter.fatherId)}>{litter.fatherName}</Link> : (isSerbian ? "Biće objavljeno" : "To be announced")}</dd></div>
               <div><dt>{isSerbian ? "Majka" : "Mother"}</dt><dd>{litter.motherId && litter.motherName ? <Link to={poodlePath(language, litter.motherId)}>{litter.motherName}</Link> : (isSerbian ? "Biće objavljeno" : "To be announced")}</dd></div>
-              <div><dt>{isSerbian ? "Štenaca u leglu" : "Puppies in litter"}</dt><dd>{litter.puppyCount}</dd></div>
               <div><dt>{isSerbian ? "Dostupno" : "Available"}</dt><dd>{litter.availablePuppyCount}</dd></div>
             </dl>
           </article>

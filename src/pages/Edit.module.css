@@ -163,6 +163,13 @@
 .photoUpload button { justify-self: start; }
 .photoUpload button:disabled { opacity: 0.6; cursor: not-allowed; }
 
+.libraryChoices { display: grid; grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr)); gap: 0.7rem; border: 1px solid rgba(32, 32, 29, 0.14); border-radius: 8px; padding: 0.8rem; }
+.libraryChoices legend { padding: 0 0.4rem; font-weight: 800; }
+.libraryChoices label { display: grid; gap: 0.3rem; cursor: pointer; min-width: 0; }
+.libraryChoices label input { justify-self: start; }
+.libraryChoices img { width: 100%; height: 6rem; object-fit: cover; border-radius: 6px; }
+.libraryChoices span { overflow-wrap: anywhere; font-size: 0.85rem; }
+
 @media only screen and (max-width: 640px) {
   .page {
     padding: 1rem 0.75rem 3rem;

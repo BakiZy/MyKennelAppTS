@@ -18,9 +18,13 @@ const description = (puppy, lang) => {
 const date = (value, lang) => value
   ? new Date(value).toLocaleDateString(lang === "sr" ? "sr-RS" : "en-GB")
   : (lang === "sr" ? "Biće objavljeno" : "To be announced");
-const status = (value, lang) => lang === "sr"
-  ? ({ Available: "Dostupno", Reserved: "Rezervisano", Sold: "Prodato", Planned: "Planirano", Born: "Oštenjeno", Closed: "Zatvoreno" })[value] || value || "Dostupno"
-  : value || "Available";
+const puppyStatus = (value, lang) => value === "Available"
+  ? (lang === "sr" ? "Dostupno" : "Available")
+  : value === "Reserved" ? (lang === "sr" ? "Rezervisano" : "Reserved")
+  : (lang === "sr" ? "Nije dostupno" : "Unavailable");
+const litterStatus = (value, lang) => value === "Closed"
+  ? (lang === "sr" ? "Zatvoreno" : "Closed")
+  : (lang === "sr" ? "Aktivno" : "Active");
 const sex = (value, lang) => lang === "sr"
   ? ({ Male: "Mužjak", Female: "Ženka" })[value] || value || "Biće potvrđeno"
   : value || "To be confirmed";
@@ -115,13 +119,14 @@ const renderList = (lang, puppies, litters, escapeHtml) => {
       <h3><a href="${profilePath(lang, puppy.id)}">${escapeHtml(puppy.name || (sr ? "Štene" : "Puppy"))}</a></h3>
       ${photos(puppy)[0] ? `<img src="${escapeHtml(photos(puppy)[0])}" alt="${escapeHtml(puppy.name || (sr ? "Štene pudle" : "Poodle puppy"))}" loading="lazy" />` : ""}
       <p>${escapeHtml(description(puppy, lang))}</p>
-      <p>${escapeHtml(status(puppy.status, lang))} · ${escapeHtml(color(puppy.color, lang))} · ${escapeHtml(date(puppy.dateOfBirth, lang))}</p>
+      <p>${escapeHtml(puppyStatus(puppy.status, lang))} · ${escapeHtml(color(puppy.color, lang))} · ${escapeHtml(date(puppy.dateOfBirth, lang))}</p>
     </article>`).join("\n");
   const litterCards = litters.map((litter) => `
     <article>
       <h3><a href="${litterPath(lang, litter.id)}">${escapeHtml(litter.name || (sr ? "Leglo" : "Litter"))}</a></h3>
       ${imageUrl(litter.coverImageUrl) ? `<a href="${litterPath(lang, litter.id)}"><img src="${escapeHtml(litter.coverImageUrl)}" alt="${escapeHtml(litter.name || (sr ? "Leglo" : "Litter"))}" loading="lazy" /></a>` : ""}
       <p>${escapeHtml((sr ? litter.descriptionSr : litter.description) || (sr ? "Više informacija o leglu uskoro." : "More details coming soon."))}</p>
+      <p>${escapeHtml(litterStatus(litter.status, lang))} · ${sr ? "Dostupno" : "Available"}: ${escapeHtml(litter.availablePuppyCount)}</p>
       <p>${sr ? "Otac" : "Father"}: ${escapeHtml(litter.fatherName || (sr ? "Biće objavljeno" : "To be announced"))}; ${sr ? "Majka" : "Mother"}: ${escapeHtml(litter.motherName || (sr ? "Biće objavljeno" : "To be announced"))}</p>
     </article>`).join("\n");
   return `<main>
@@ -142,7 +147,7 @@ const renderProfile = (puppy, lang, escapeHtml) => {
     <article>
       <h1>${escapeHtml(name)}</h1>
       <p>${escapeHtml(description(puppy, lang))}</p>
-      <p>${sr ? "Status" : "Status"}: ${escapeHtml(status(puppy.status, lang))}</p>
+      <p>Status: ${escapeHtml(puppyStatus(puppy.status, lang))}</p>
       <p>${sr ? "Rođeno" : "Born"}: ${escapeHtml(date(puppy.dateOfBirth, lang))}</p>
       <p>${sr ? "Pol" : "Sex"}: ${escapeHtml(sex(puppy.sex, lang))}; ${sr ? "Boja" : "Color"}: ${escapeHtml(color(puppy.color, lang))}</p>
       <p>${sr ? "Leglo" : "Litter"}: ${puppy.litterId && puppy.litterName ? `<a href="${litterPath(lang, puppy.litterId)}">${escapeHtml(puppy.litterName)}</a>` : (sr ? "Nije dodeljeno" : "Not assigned")}</p>
@@ -169,6 +174,7 @@ const renderLitterProfile = (litter, puppies, lang, escapeHtml) => {
     <article>
       <h1>${escapeHtml(name)}</h1>
       <p>${escapeHtml(summary)}</p>
+      <p>Status: ${escapeHtml(litterStatus(litter.status, lang))}</p>
       ${imageUrl(litter.coverImageUrl) ? `<img src="${escapeHtml(litter.coverImageUrl)}" alt="${escapeHtml(name)}" />` : ""}
       <p>${sr ? "Datum rođenja" : "Born"}: ${escapeHtml(date(litter.dateOfBirth, lang))}</p>
       <p>${sr ? "Otac" : "Father"}: ${litter.fatherId && litter.fatherName ? `<a href="${poodlePath(lang, litter.fatherId)}">${escapeHtml(litter.fatherName)}</a>` : (sr ? "Biće objavljeno" : "To be announced")}</p>

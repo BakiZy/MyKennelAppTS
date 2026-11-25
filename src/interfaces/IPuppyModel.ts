@@ -26,6 +26,5 @@ export interface LitterModel {
   descriptionSr?: string;
   status?: string;
   coverImageUrl?: string;
-  puppyCount: number;
   availablePuppyCount: number;
 }

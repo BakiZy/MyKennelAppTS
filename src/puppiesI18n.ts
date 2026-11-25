@@ -33,13 +33,15 @@ export const litterDescription = (litter: LitterModel, language: PuppyLanguage) 
   || (language === "sr" ? "Više informacija o leglu uskoro." : "More details coming soon.");
 
 export const puppyStatus = (status: string | undefined, language: PuppyLanguage) => {
-  if (language === "en") return status || "Available";
-  const values: Record<string, string> = {
-    Available: "Dostupno", Reserved: "Rezervisano", Sold: "Prodato",
-    Planned: "Planirano", Born: "Oštenjeno", Closed: "Zatvoreno",
-  };
-  return values[status || "Available"] || status || "Dostupno";
+  if (status === "Available") return language === "sr" ? "Dostupno" : "Available";
+  if (status === "Reserved") return language === "sr" ? "Rezervisano" : "Reserved";
+  return language === "sr" ? "Nije dostupno" : "Unavailable";
 };
+
+export const litterStatus = (status: string | undefined, language: PuppyLanguage) =>
+  status === "Closed"
+    ? (language === "sr" ? "Zatvoreno" : "Closed")
+    : (language === "sr" ? "Aktivno" : "Active");
 
 export const puppySex = (sex: string | undefined, language: PuppyLanguage) => {
   if (!sex) return language === "sr" ? "Biće potvrđeno" : "To be confirmed";

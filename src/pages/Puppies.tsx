@@ -11,7 +11,7 @@ import { ImageRecord } from "../components/ImageAssetEditor";
 import { getApiErrorMessage } from "../api/errorMessage";
 import { poodlePath } from "../i18n/siteLanguage";
 import {
-  litterDescription, litterDetailPath, puppyColor, puppyDescription, puppyDetailPath, puppyListDescription,
+  litterDescription, litterDetailPath, litterStatus, puppyColor, puppyDescription, puppyDetailPath, puppyListDescription,
   puppyListPath, puppyListTitle, puppySex, puppyStatus, PuppyLanguage,
 } from "../puppiesI18n";
 
@@ -45,7 +45,7 @@ const emptyLitterForm: LitterFormState = {
   dateOfBirth: "",
   fatherId: "",
   motherId: "",
-  status: "Available",
+  status: "Active",
   coverImageUrl: "",
   description: "",
   descriptionSr: "",
@@ -298,7 +298,7 @@ const Puppies: React.FC<{ language: PuppyLanguage }> = ({ language }) => {
       dateOfBirth: toDateInputValue(litter.dateOfBirth),
       fatherId: litter.fatherId ? String(litter.fatherId) : "",
       motherId: litter.motherId ? String(litter.motherId) : "",
-      status: litter.status ?? "Available",
+      status: litter.status === "Closed" ? "Closed" : "Active",
       coverImageUrl: litter.coverImageUrl ?? "",
       description: litter.description ?? "",
       descriptionSr: litter.descriptionSr ?? "",
@@ -477,9 +477,7 @@ const Puppies: React.FC<{ language: PuppyLanguage }> = ({ language }) => {
                   }))
                 }
               >
-                <option value="Planned">Planned</option>
-                <option value="Born">Born</option>
-                <option value="Available">Available</option>
+                <option value="Active">Active</option>
                 <option value="Closed">Closed</option>
               </select>
               <label htmlFor="coverImageUrl">Cover image</label>
@@ -636,7 +634,9 @@ const Puppies: React.FC<{ language: PuppyLanguage }> = ({ language }) => {
               >
                 <option value="Available">Available</option>
                 <option value="Reserved">Reserved</option>
-                <option value="Sold">Sold</option>
+                {editingPuppyId && puppyForm.status === "Sold" && (
+                  <option value="Sold">Unavailable (existing record)</option>
+                )}
               </select>
               {editingPuppyId && (() => {
                 const current = puppies.find((puppy) => puppy.id === editingPuppyId);
@@ -802,7 +802,7 @@ const Puppies: React.FC<{ language: PuppyLanguage }> = ({ language }) => {
                 <div className={classes.cardBody}>
                   <div className={classes.cardTopLine}>
                     <h3><Link className={classes.litterTitleLink} to={litterDetailPath(language, litter.id)}>{litter.name || (isSerbian ? "Planirano leglo" : "Upcoming litter")}</Link></h3>
-                    <span>{puppyStatus(litter.status || "Planned", language)}</span>
+                    <span>{litterStatus(litter.status, language)}</span>
                   </div>
                   <p>{litterDescription(litter, language)}</p>
                   <dl>

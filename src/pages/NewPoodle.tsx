@@ -315,7 +315,6 @@ const NewPoodle: React.FC = () => {
                   >
                     <option value="Available">Available</option>
                     <option value="Reserved">Reserved</option>
-                    <option value="Sold">Sold</option>
                   </select>
                 </div>
                 <div className={classes.field}>

@@ -18,6 +18,8 @@ const toInputDate = (value: string | Date) => {
   return new Date(value).toISOString().slice(0, 10);
 };
 
+type ExtraPhotoResponse = { imageUrl2?: string | null; imageUrl3?: string | null };
+
 const EditPoodle: React.FC = () => {
   const { poodleId } = useParams();
   const navigate = useNavigate();
@@ -32,6 +34,7 @@ const EditPoodle: React.FC = () => {
   const [imageOverride, setImageOverride] = useState<ImageRecord | null>(null);
   const [extraPhotos, setExtraPhotos] = useState<(string | null)[]>([null, null]);
   const [photoFiles, setPhotoFiles] = useState<File[]>([]);
+  const [selectedLibraryIds, setSelectedLibraryIds] = useState<number[]>([]);
   const [savingPhotos, setSavingPhotos] = useState(false);
   const photoInputRef = React.useRef<HTMLInputElement>(null);
   const [form, setForm] = useState({
@@ -70,6 +73,7 @@ const EditPoodle: React.FC = () => {
         setSavedImageId(poodle.imageId ? poodle.imageId.toString() : "");
         setImageOverride(null);
         setExtraPhotos([poodle.imageUrl2 ?? null, poodle.imageUrl3 ?? null]);
+        setSelectedLibraryIds([]);
       } catch (error) {
         console.log(error);
         setMessage("Could not load poodle.");
@@ -92,11 +96,24 @@ const EditPoodle: React.FC = () => {
       ...current,
       [name]: type === "checkbox" ? checked : value,
     }));
-    if (name === "imageId") setImageOverride(null);
+    if (name === "imageId") {
+      setImageOverride(null);
+      setSelectedLibraryIds((current) => current.filter((id) => id.toString() !== value));
+    }
   };
 
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const freeSlots = extraPhotos.filter((url) => !url).length;
+    if (photoFiles.length + selectedLibraryIds.length > freeSlots ||
+        (photoFiles.length + selectedLibraryIds.length > 0 && !form.imageId)) {
+      setMessage(`Choose up to ${freeSlots} additional photos and a main image.`);
+      return;
+    }
+    if (photoFiles.some((file) => file.size === 0 || file.size > 5 * 1024 * 1024)) {
+      setMessage("Each photo must be between 1 byte and 5 MB.");
+      return;
+    }
     setSaving(true);
     setMessage("");
 
@@ -114,38 +131,33 @@ const EditPoodle: React.FC = () => {
         poodleColorId: form.poodleColorId ? parseInt(form.poodleColorId) : null,
         sex: form.sex,
       });
-
-      setMessage("Poodle updated.");
       setSavedImageId(form.imageId);
+      if (selectedLibraryIds.length) {
+        const response = await api.post<ExtraPhotoResponse>(`/api/poodles/${poodleId}/photos/library`,
+          { imageIds: selectedLibraryIds });
+        setExtraPhotos([response.data.imageUrl2 ?? null, response.data.imageUrl3 ?? null]);
+        setSelectedLibraryIds([]);
+      }
+      if (photoFiles.length) {
+        const data = new FormData();
+        photoFiles.forEach((file) => data.append("photos", file));
+        const response = await api.post<ExtraPhotoResponse>(`/api/poodles/${poodleId}/photos`, data);
+        setExtraPhotos([response.data.imageUrl2 ?? null, response.data.imageUrl3 ?? null]);
+        setPhotoFiles([]);
+        if (photoInputRef.current) photoInputRef.current.value = "";
+      }
+      setMessage("Poodle and photos updated.");
     } catch (error) {
-      console.log(error);
-      setMessage("Could not update poodle.");
+      setMessage(getApiErrorMessage(error, { fallback: "Poodle details may be saved, but photos could not be added. Try saving again." }));
     } finally {
       setSaving(false);
     }
   };
 
-  const uploadPhotos = async () => {
-    const freeSlots = extraPhotos.filter((url) => !url).length;
-    if (!photoFiles.length || photoFiles.length > freeSlots || photoFiles.some((file) => file.size === 0 || file.size > 5 * 1024 * 1024)) {
-      setMessage(`Choose 1 to ${freeSlots} photos, up to 5 MB each.`);
-      return;
-    }
-    setSavingPhotos(true);
-    setMessage("");
-    try {
-      const data = new FormData();
-      photoFiles.forEach((file) => data.append("photos", file));
-      const response = await api.post<{ imageUrl2?: string; imageUrl3?: string }>(`/api/poodles/${poodleId}/photos`, data);
-      setExtraPhotos([response.data.imageUrl2 ?? null, response.data.imageUrl3 ?? null]);
-      setPhotoFiles([]);
-      if (photoInputRef.current) photoInputRef.current.value = "";
-      setMessage("Photos uploaded.");
-    } catch (error) {
-      setMessage(getApiErrorMessage(error, { fallback: "Could not upload photos." }));
-    } finally {
-      setSavingPhotos(false);
-    }
+  const toggleLibraryImage = (imageId: number) => {
+    setSelectedLibraryIds((current) => current.includes(imageId)
+      ? current.filter((id) => id !== imageId)
+      : [...current, imageId]);
   };
 
   const removePhoto = async (slot: number) => {
@@ -298,32 +310,42 @@ const EditPoodle: React.FC = () => {
             Retired (still shown on the site)
           </label>
 
-          <button type="submit" disabled={saving}>
+          <section className={classes.imageSection} aria-label="Additional poodle photos">
+            <h2>Additional photos</h2>
+            <p>Select photos here, then use Update poodle to save the details and photos together. The pedigree remains one image.</p>
+            <div className={classes.extraPhotos}>
+              {extraPhotos.map((url, index) => url && (
+                <div key={`${index}-${url}`}>
+                  <img src={url} alt={`${form.name} photo ${index + 2}`} />
+                  <button type="button" onClick={() => removePhoto(index + 2)} disabled={saving || savingPhotos}>Remove</button>
+                </div>
+              ))}
+            </div>
+            {extraPhotos.some((url) => !url) && (
+              <div className={classes.photoUpload}>
+                <label htmlFor="poodleExtraPhotos">Upload additional photos (5 MB each)</label>
+                <input ref={photoInputRef} id="poodleExtraPhotos" type="file" accept="image/jpeg,image/png,image/webp" multiple
+                  onChange={(event) => setPhotoFiles(Array.from(event.target.files ?? []))} />
+                <fieldset className={classes.libraryChoices}>
+                  <legend>Or choose already uploaded photos</legend>
+                  {images.filter((image) => image.url && image.id.toString() !== form.imageId &&
+                    !extraPhotos.includes(image.url)).map((image) => (
+                    <label key={image.id}>
+                      <input type="checkbox" checked={selectedLibraryIds.includes(image.id)}
+                        onChange={() => toggleLibraryImage(image.id)} />
+                      <img src={image.url} alt="" loading="lazy" />
+                      <span>{image.name || `Image ${image.id}`}</span>
+                    </label>
+                  ))}
+                </fieldset>
+              </div>
+            )}
+          </section>
+
+          <button type="submit" disabled={saving || savingPhotos}>
             {saving ? "Saving..." : "Update poodle"}
           </button>
         </form>
-        <section className={classes.imageSection} aria-label="Additional poodle photos">
-          <h2>Additional photos</h2>
-          <p>The main photo and one pedigree image are managed below. Add up to two more photos here.</p>
-          <div className={classes.extraPhotos}>
-            {extraPhotos.map((url, index) => url && (
-              <div key={`${index}-${url}`}>
-                <img src={url} alt={`${form.name} photo ${index + 2}`} />
-                <button type="button" onClick={() => removePhoto(index + 2)} disabled={savingPhotos}>Remove</button>
-              </div>
-            ))}
-          </div>
-          {savedImageId && form.imageId === savedImageId && extraPhotos.some((url) => !url) && (
-            <div className={classes.photoUpload}>
-              <label htmlFor="poodleExtraPhotos">Upload photos (5 MB each)</label>
-              <input ref={photoInputRef} id="poodleExtraPhotos" type="file" accept="image/jpeg,image/png,image/webp" multiple
-                onChange={(event) => setPhotoFiles(Array.from(event.target.files ?? []))} />
-              <button type="button" onClick={uploadPhotos} disabled={savingPhotos || !photoFiles.length}>
-                {savingPhotos ? "Uploading..." : "Upload photos"}
-              </button>
-            </div>
-          )}
-        </section>
         <section className={classes.imageSection} aria-labelledby="image-details-heading">
           <h2 id="image-details-heading">Photo and pedigree image</h2>
           {form.imageId !== savedImageId ? (
