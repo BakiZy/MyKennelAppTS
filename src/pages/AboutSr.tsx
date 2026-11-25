@@ -80,7 +80,10 @@ const AboutSr: React.FC = () => {
       </section>
       {(images.length > 0 || authContext.isAdmin) && <div className={classes.sliderWrap}>
         {images.length > 0 && <>
-          <h2>Neki od naših štenaca</h2>
+          <div className={classes.sliderIntro}>
+            <h2>Naši štenci u novim domovima</h2>
+            <p>Fotografije štenaca iz prethodnih legala koje su nam njihove porodice poslale iz novih domova.</p>
+          </div>
           <ImageSlider slides={images} language="sr" />
         </>}
         {authContext.isAdmin && <p><Link to="/images">Uredi fotografije u slajderu</Link></p>}

@@ -79,7 +79,10 @@ const About: React.FC = () => {
       </section>
       {(images.length > 0 || authContext.isAdmin) && <div className={classes.sliderWrap}>
         {images.length > 0 && <>
-          <h2>Some of our beautiful puppies</h2>
+          <div className={classes.sliderIntro}>
+            <h2>Our puppies in their new homes</h2>
+            <p>Photos of puppies from previous litters, sent to us by their families from their new homes.</p>
+          </div>
           <ImageSlider slides={images} language="en" />
         </>}
         {authContext.isAdmin && <p><Link to="/images">Manage slider photos</Link></p>}

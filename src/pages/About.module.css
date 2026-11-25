@@ -25,6 +25,19 @@
   margin: 2rem auto;
 }
 
+.sliderIntro {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.sliderIntro h2 {
+  margin-bottom: 0.5rem;
+}
+
+.sliderIntro p {
+  margin: 0;
+}
+
 @media only screen and (max-width: 601px) {
   .container {
     margin-left: 1rem;
