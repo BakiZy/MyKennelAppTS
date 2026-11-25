@@ -66,10 +66,11 @@ const AboutSr: React.FC = () => {
               građi i standardu rase.
             </p>
             <p>
-              Naše pudle učestvuju na izložbama pasa i imaju zdravstvene preglede.
-              Važni su nam odgovoran odgoj,
-              dobra socijalizacija i pronalaženje odgovarajućeg doma za svako
-              štene.
+              Imamo izložbene pse, a njihovi potomci su postali i lepi izložbeni
+              primerci i voljeni porodični ljubimci. Naši psi imaju zdravstvene
+              preglede, a važni su nam odgovoran odgoj, dobra socijalizacija i
+              pronalaženje odgovarajućeg doma za svako štene. Fotografije nekih
+              od naših štenaca u novim domovima možete pogledati ispod.
             </p>
             <p>
               Na našem sajtu možete pronaći informacije o našim psima, leglima,
@@ -82,7 +83,6 @@ const AboutSr: React.FC = () => {
         {images.length > 0 && <>
           <div className={classes.sliderIntro}>
             <h2>Naši štenci u novim domovima</h2>
-            <p>Fotografije štenaca iz prethodnih legala koje su nam njihove porodice poslale iz novih domova.</p>
           </div>
           <ImageSlider slides={images} language="sr" />
         </>}

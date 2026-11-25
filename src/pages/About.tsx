@@ -65,10 +65,11 @@ const About: React.FC = () => {
               standards in mind.
             </p>
             <p>
-              Our poodles take part in dog shows and have health checks.
-              We care about responsible
-              breeding, good socialization and finding suitable homes for every
-              puppy.
+              Our kennel is home to show dogs, and their offspring have become
+              both beautiful show dogs and much-loved family companions. Our
+              dogs have health checks, and we care about responsible breeding,
+              good socialization and finding the right home for every puppy.
+              You can see photos of some of our puppies in their new homes below.
             </p>
             <p>
               On our site you can learn about our dogs, litters, available
@@ -81,7 +82,6 @@ const About: React.FC = () => {
         {images.length > 0 && <>
           <div className={classes.sliderIntro}>
             <h2>Our puppies in their new homes</h2>
-            <p>Photos of puppies from previous litters, sent to us by their families from their new homes.</p>
           </div>
           <ImageSlider slides={images} language="en" />
         </>}
