@@ -289,7 +289,7 @@ const NewPoodle: React.FC = () => {
           </div>
           <label className={classes.checkbox}>
             <input type="checkbox" name="isRetired" checked={form.isRetired} onChange={changeHandler} />
-            Retired (still shown on the site)
+            Retired and spayed/neutered (still shown on the site)
           </label>
 
           <label className={classes.checkbox}>

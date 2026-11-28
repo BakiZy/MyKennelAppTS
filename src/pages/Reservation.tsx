@@ -130,6 +130,9 @@ const Reservation = ({ language }: { language: SiteLanguage }) => {
   const poodleDescription = sr
     ? poodle.descriptionSr?.trim() || `${displayName} je ${localizedColor(poodle.poodleColorName, language).toLowerCase()} ${localizedSize(poodle.poodleSizeName, language).toLowerCase()} pudla odgajivačnice Von Apalusso u Novom Sadu.`
     : poodle.description?.trim() || `${displayName} is a ${poodle.poodleColorName || ""} ${poodle.poodleSizeName || ""} poodle from Von Apalusso kennel in Serbia.`.replace(/\s+/g, " ");
+  const retiredNote = sr
+    ? `Više ne učestvuje u uzgoju. ${poodle.sex === "Female" ? "Sterilizovana je" : "Sterilizovan je"} i sada uživa u penziji sa nama, kao voljeni član naše porodice.`
+    : `No longer part of our breeding program. ${poodle.sex === "Female" ? "She has been spayed" : "He has been neutered"} and now enjoys retirement with us as a beloved member of our family.`;
   const poodleStructuredData = {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -198,7 +201,7 @@ const Reservation = ({ language }: { language: SiteLanguage }) => {
           <h1 id="poodle-title">{displayName}</h1>
           {poodle.nickName && <p className={classes.registeredName}>{poodle.name}</p>}
 
-          {poodle.isRetired && <p className={classes.retiredNote}>{sr ? "Više ne učestvuje u uzgoju. I dalje brinemo o ovom psu i pratimo njegovu dobrobit." : "No longer part of our breeding program. We continue to care for this dog and its wellbeing."}</p>}
+          {poodle.isRetired && <p className={classes.retiredNote}>{retiredNote}</p>}
           {(sr ? poodle.descriptionSr : poodle.description)?.trim() && (
             <section className={classes.biography} aria-label={sr ? "O psu" : "About this dog"}>
               <h2>{sr ? "O psu" : "About this dog"}</h2>

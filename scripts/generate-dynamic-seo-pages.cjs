@@ -68,6 +68,9 @@ const poodleDescription = (poodle, lang) => {
     ? `${name} je ${localizedColor(poodle.poodleColorName, lang)} ${localizedSize(poodle.poodleSizeName, lang)} pudla odgajivačnice Von Apalusso u Novom Sadu.`.replace(/\s+/g, " ")
     : `${name} is a ${poodle.poodleColorName || ""} ${poodle.poodleSizeName || ""} poodle from Von Apalusso kennel in Serbia.`.replace(/\s+/g, " ");
 };
+const retiredNote = (poodle, lang) => lang === "sr"
+  ? `Više ne učestvuje u uzgoju. ${poodle.sex === "Female" ? "Sterilizovana je" : "Sterilizovan je"} i sada uživa u penziji sa nama, kao voljeni član naše porodice.`
+  : `No longer part of our breeding program. ${poodle.sex === "Female" ? "She has been spayed" : "He has been neutered"} and now enjoys retirement with us as a beloved member of our family.`;
 
 const renderHome = (lang, poodles, escapeHtml) => {
   const sr = lang === "sr";
@@ -100,7 +103,7 @@ const renderPoodleProfile = (poodle, lang, escapeHtml) => {
   return `<main><article>
     <a href="${sr ? "/sr" : "/"}">${sr ? "Sve pudle" : "All poodles"}</a>
     <h1>${escapeHtml(name)}</h1>
-    ${poodle.isRetired ? `<p>${sr ? `${poodle.sex === "Female" ? "Penzionisana" : "Penzionisan"}. Više ne učestvuje u uzgoju. I dalje brinemo o ovom psu i pratimo njegovu dobrobit.` : "Retired. We continue to care for this dog and its wellbeing."}</p>` : ""}
+    ${poodle.isRetired ? `<p>${sr ? `${poodle.sex === "Female" ? "Penzionisana" : "Penzionisan"}. ` : "Retired. "}${retiredNote(poodle, lang)}</p>` : ""}
     <p>${escapeHtml(poodleDescription(poodle, lang))}</p>
     ${poodlePhotos(poodle).map((photo, index) => `<img src="${escapeHtml(photo)}" alt="${escapeHtml(name)}, ${sr ? "fotografija" : "photo"} ${index + 1}" />`).join("\n")}
     <dl>
